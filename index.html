@@ -274,10 +274,10 @@
       <div class="card">
         <div class="card-title">Importar Lista em Lote (Arquivo)</div>
         <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">
-          Selecione o arquivo CSV/Texto contendo Matrícula/Chapa e Nome Completo:
+          Selecione um arquivo CSV ou Excel (.xlsx/.xls) contendo Matrícula/Chapa e Nome Completo:
         </p>
         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-          <input type="file" id="file-colab" accept=".csv,.txt" style="background:#0b1120; padding:6px; border-radius:6px; border:1px solid var(--card-border); color:var(--text);">
+          <input type="file" id="file-colab" accept=".csv,.xlsx,.xls" style="background:#0b1120; padding:6px; border-radius:6px; border:1px solid var(--card-border); color:var(--text);">
           <button class="btn btn-primary" onclick="importarArquivoColab()">Processar Arquivo</button>
         </div>
       </div>
@@ -813,26 +813,59 @@
       const firstSector = firstUnit?.setores?.[0];
       if (!firstSector) return alert('Cadastre pelo menos um setor antes de importar.');
 
-      const text = await input.files[0].text();
-      const rows = text.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
-      const payload = [];
+      const file = input.files[0];
+      const ext = file.name.split('.').pop().toLowerCase();
+      let rows = [];
 
-      for (const line of rows) {
-        const parts = line.split(/[;,\t]/);
-        if (parts.length >= 2) {
-          const chapa = parts[0].trim(), nome = parts[1].trim();
-          if (chapa && nome) payload.push({
-            chapa,nome,sector_id:firstSector.id,status:'Ativo',trans:false,intra:false
-          });
+      try {
+        if (ext === 'xlsx' || ext === 'xls') {
+          if (typeof XLSX === 'undefined') {
+            return alert('Não foi possível carregar o leitor de Excel. Recarregue a página e tente novamente.');
+          }
+          const buffer = await file.arrayBuffer();
+          const workbook = XLSX.read(buffer, { type: 'array' });
+          const sheet = workbook.Sheets[workbook.SheetNames[0]];
+          rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+        } else {
+          const text = await file.text();
+          rows = text.split(/\r?\n/).map(line => line.split(/[;\t,]/));
         }
-      }
 
-      if (!payload.length) return alert('Nenhum registro válido encontrado.');
-      const { error } = await db.from('colaboradores').insert(payload);
-      if (error) return alert('Não foi possível importar os colaboradores.');
-      alert(`${payload.length} colaboradores importados com sucesso.`);
-      input.value = '';
-      await loadCollaborators(); renderColaboradores(); renderDashboard();
+        const payload = [];
+        rows.forEach((row, index) => {
+          if (!Array.isArray(row) || row.length < 2) return;
+          const chapa = String(row[0] ?? '').trim();
+          const nome = String(row[1] ?? '').trim();
+          // Ignora a linha de cabeçalho quando existir.
+          if (index === 0 && /^(matr[ií]cula|chapa|matricula)$/i.test(chapa)) return;
+          if (chapa && nome) {
+            payload.push({
+              chapa,
+              nome,
+              setor_id: firstSector.id,
+              status: 'Ativo',
+              trans: false,
+              intra: false
+            });
+          }
+        });
+
+        if (!payload.length) {
+          return alert('Nenhum registro válido encontrado. A primeira coluna deve ser Matrícula/Chapa e a segunda, Nome Completo.');
+        }
+
+        const { error } = await db.from('colaboradores').insert(payload);
+        if (error) return alert('Não foi possível importar os colaboradores: ' + (error.message || 'verifique o arquivo.'));
+
+        alert(`${payload.length} colaboradores importados com sucesso.`);
+        input.value = '';
+        await loadCollaborators();
+        renderColaboradores();
+        renderDashboard();
+      } catch (err) {
+        console.error(err);
+        alert('Não foi possível ler o arquivo. Verifique se ele é um CSV ou Excel válido.');
+      }
     }
 
     function renderUnidades() {
