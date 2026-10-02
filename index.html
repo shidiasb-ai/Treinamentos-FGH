@@ -285,7 +285,10 @@
       <div class="card">
         <div class="card-title">
           <span>Checklist Mensal da Equipe</span>
-          <button class="btn btn-primary" onclick="modalNovoColaborador()">+ Adicionar Manual</button>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-secondary" onclick="baixarColaboradoresExcel()">Baixar Excel</button>
+            <button class="btn btn-primary" onclick="modalNovoColaborador()">+ Adicionar Manual</button>
+          </div>
         </div>
         <div class="table-container">
           <table>
@@ -344,6 +347,7 @@
 
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     // ============================================================
@@ -679,6 +683,46 @@
       if (a.file_path) await db.storage.from('atas-treinamentos').remove([a.file_path]);
 
       await loadAtas(); renderAtas();
+    }
+
+    function baixarColaboradoresExcel() {
+      if (!canManage()) {
+        alert('Você não possui permissão para baixar esta lista.');
+        return;
+      }
+
+      if (!colaboradores.length) {
+        alert('Não há colaboradores cadastrados para exportar.');
+        return;
+      }
+
+      const linhas = colaboradores.map(c => ({
+        'Chapa/Matrícula': c.chapa || '',
+        'Nome Completo': c.nome || '',
+        'Setor': c.setores?.nome || '',
+        'Status': c.status || '',
+        'Treinamento Transversal': c.trans ? 'Concluído' : 'Pendente',
+        'Treinamento Intrasetorial': c.intra ? 'Concluído' : 'Pendente'
+      }));
+
+      const ws = XLSX.utils.json_to_sheet(linhas);
+
+      // Ajusta a largura das colunas para facilitar a leitura no Excel.
+      ws['!cols'] = [
+        { wch: 18 },
+        { wch: 35 },
+        { wch: 28 },
+        { wch: 16 },
+        { wch: 28 },
+        { wch: 28 }
+      ];
+
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Colaboradores');
+
+      const hoje = new Date();
+      const data = hoje.toLocaleDateString('pt-BR').replace(/\//g, '-');
+      XLSX.writeFile(wb, `Colaboradores_Checklist_${data}.xlsx`);
     }
 
     function renderColaboradores() {
