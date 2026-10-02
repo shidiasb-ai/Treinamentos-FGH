@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Gestão de Treinamentos FGH</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --accent: #38bdf8;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --purple: #a855f7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 16px; min-height: 100vh; }
+    .container { max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+    
+    /* Login */
+    #login-overlay {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.95);
+      display: flex; align-items: center; justify-content: center; z-index: 1000;
+    }
+    .login-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 12px; padding: 32px; width: 100%; max-width: 400px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5); text-align: center;
+    }
+    .login-card h2 { font-size: 20px; color: var(--accent); margin-bottom: 6px; }
+    .login-card p { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+    .login-field { margin-bottom: 16px; text-align: left; }
+    .login-field label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+    .login-field input {
+      width: 100%; padding: 10px 12px; border-radius: 6px;
+      border: 1px solid var(--card-border); background: #0b1120; color: var(--text); font-size: 14px;
+    }
+    .btn {
+      padding: 8px 16px; border-radius: 6px; border: none; font-weight: 600;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 13px; transition: 0.2s;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-warning { background: var(--warning); color: #000; }
+    .btn-secondary { background: var(--card-border); color: var(--text); }
+    .btn-full { width: 100%; justify-content: center; padding: 12px; font-size: 14px; }
+    
+    /* Topbar */
+    header {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 10px; padding: 12px 20px; display: flex;
+      justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+    }
+    .brand h1 { font-size: 18px; color: var(--accent); }
+    .brand p { font-size: 12px; color: var(--text-muted); }
+    .user-tag { font-size: 12px; background: #0b1120; padding: 6px 12px; border-radius: 20px; border: 1px solid var(--card-border); }
+
+    /* Nav Tabs */
+    .tabs { display: flex; gap: 8px; flex-wrap: wrap; border-bottom: 1px solid var(--card-border); padding-bottom: 8px; }
+    .tab-btn {
+      background: transparent; color: var(--text-muted); border: none;
+      padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 13px;
+    }
+    .tab-btn.active { background: var(--primary); color: #fff; }
+
+    /* Views */
+    .view-panel { display: none; }
+    .view-panel.active { display: block; }
+    
+    .card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 10px; padding: 18px; margin-bottom: 16px;
+    }
+    .card-title { font-size: 15px; font-weight: 600; color: var(--accent); margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
+    
+    /* Form controls */
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    .form-group label { font-size: 12px; color: var(--text-muted); }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 8px 10px; border-radius: 6px; border: 1px solid var(--card-border);
+      background: #0b1120; color: var(--text); font-size: 13px;
+    }
+
+    /* Tables */
+    .table-container { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+    th { background: #0b1120; padding: 10px; color: var(--text-muted); border-bottom: 1px solid var(--card-border); font-weight: 600; }
+    td { padding: 10px; border-bottom: 1px solid var(--card-border); }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+
+    /* Badges */
+    .badge { padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+    .badge-success { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+    .badge-warning { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+    .badge-danger { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+    .badge-info { background: rgba(56, 189, 248, 0.2); color: var(--accent); }
+
+    /* Dashboard Metrics */
+    .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 16px; }
+    .metric-card { background: #0b1120; padding: 14px; border-radius: 8px; border: 1px solid var(--card-border); text-align: center; }
+    .metric-card .num { font-size: 24px; font-weight: 700; margin: 4px 0; }
+    .metric-card .label { font-size: 12px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+  <!-- Login Modal -->
+  <div id="login-overlay">
+    <div class="login-card">
+      <h2>Gestão de Treinamentos FGH</h2>
+      <p>Educação Permanente</p>
+      <form id="form-login" onsubmit="handleLogin(event)">
+        <div class="login-field">
+          <label>E-mail institucional</label>
+          <input type="email" id="login-user" placeholder="nome@hospital.com.br" required autocomplete="username">
+        </div>
+        <div class="login-field">
+          <label>Senha</label>
+          <input type="password" id="login-pass" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Entrar no Sistema</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="container">
+    <header>
+      <div class="brand">
+        <h1>Sistema de Gestão de Treinamentos FGH</h1>
+        <p>Educação Permanente</p>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span class="user-tag" id="user-display">Perfil: Administrador</span>
+        <button class="btn btn-secondary" onclick="logout()">Sair</button>
+      </div>
+    </header>
+
+    <!-- Navigation -->
+    <div class="tabs" id="nav-tabs">
+      <button class="tab-btn active" onclick="switchTab('dashboard')">Dashboard & Indicadores</button>
+      <button class="tab-btn" id="tab-atas" onclick="switchTab('atas')">Inserir Atas</button>
+      <button class="tab-btn" id="tab-colab" onclick="switchTab('colaboradores')">Colaboradores & Checklist</button>
+      <button class="tab-btn" id="tab-unidades" onclick="switchTab('unidades')">Unidades & Setores</button>
+      <button class="tab-btn" id="tab-usuarios" onclick="switchTab('usuarios')">Cadastro de Usuários</button>
+    </div>
+
+    <!-- VIEW 1: Dashboard -->
+    <div id="view-dashboard" class="view-panel active">
+      <div class="card">
+        <div class="card-title">Filtros de Análise</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Unidade</label>
+            <select id="dash-unidade" onchange="updateDashFilters()"></select>
+          </div>
+          <div class="form-group">
+            <label>Setor</label>
+            <select id="dash-setor" onchange="renderDashboard()"></select>
+          </div>
+          <div class="form-group">
+            <label>Mês</label>
+            <select id="dash-mes" onchange="renderDashboard()">
+              <option value="10">Outubro / 2026</option>
+              <option value="09">Setembro / 2026</option>
+              <option value="08">Agosto / 2026</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="label">Público Ativo Elegível</div>
+          <div class="num" id="metric-elegivel" style="color: var(--accent);">0</div>
+          <div class="label">(Exclui férias e afastados)</div>
+        </div>
+        <div class="metric-card">
+          <div class="label">Treinamento Transversal</div>
+          <div class="num" id="metric-transversal">0%</div>
+          <div class="label" id="metric-trans-status">Meta: >90%</div>
+        </div>
+        <div class="metric-card">
+          <div class="label">Treinamento Intrasetorial</div>
+          <div class="num" id="metric-intrasetorial">0%</div>
+          <div class="label" id="metric-intra-status">Meta: >90%</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Ranking de Treinados por Setor</div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Setor</th>
+                <th>Elegíveis</th>
+                <th>Transversal</th>
+                <th>Intrasetorial</th>
+                <th>Média Geral</th>
+                <th>Status da Meta (>90%)</th>
+              </tr>
+            </thead>
+            <tbody id="ranking-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 2: Inserir Atas -->
+    <div id="view-atas" class="view-panel">
+      <div class="card">
+        <div class="card-title">Registrar Nova Ata de Treinamento</div>
+        <form onsubmit="salvarAta(event)">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Unidade</label>
+              <select id="ata-unidade" required onchange="carregarSetoresAta()"></select>
+            </div>
+            <div class="form-group">
+              <label>Setor</label>
+              <select id="ata-setor" required></select>
+            </div>
+            <div class="form-group">
+              <label>Tipo de Treinamento</label>
+              <select id="ata-tipo" required>
+                <option value="Transversal NEP">Transversal NEP</option>
+                <option value="Institucional">Institucional</option>
+                <option value="Intrasetorial">Intrasetorial</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Tema / Título</label>
+              <input type="text" id="ata-tema" required placeholder="Ex: Protocolo de Sepse">
+            </div>
+            <div class="form-group">
+              <label>Arquivo da Ata (PDF/Imagem)</label>
+              <input type="file" id="ata-arquivo" accept=".pdf,image/*">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Registrar Ata</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Histórico de Atas Registradas</div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Unidade / Setor</th>
+                <th>Tipo</th>
+                <th>Tema</th>
+                <th>Arquivo</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="historico-atas-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 3: Colaboradores & Checklist -->
+    <div id="view-colaboradores" class="view-panel">
+      <div class="card">
+        <div class="card-title">Importar Lista em Lote (Arquivo)</div>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">
+          Selecione o arquivo CSV/Texto contendo Matrícula/Chapa e Nome Completo:
+        </p>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <input type="file" id="file-colab" accept=".csv,.txt" style="background:#0b1120; padding:6px; border-radius:6px; border:1px solid var(--card-border); color:var(--text);">
+          <button class="btn btn-primary" onclick="importarArquivoColab()">Processar Arquivo</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Checklist Mensal da Equipe</span>
+          <button class="btn btn-primary" onclick="modalNovoColaborador()">+ Adicionar Manual</button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Chapa/Matrícula</th>
+                <th>Nome Completo</th>
+                <th>Setor</th>
+                <th>Status (Férias/Afastado)</th>
+                <th>Trein. Transversal</th>
+                <th>Trein. Intrasetorial</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="colab-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 4: Unidades & Setores -->
+    <div id="view-unidades" class="view-panel">
+      <div class="card">
+        <div class="card-title">Cadastrar Unidade Hospitalar</div>
+        <div style="display:flex; gap:10px;">
+          <input type="text" id="nova-unidade-nome" placeholder="Nome do Hospital/Unidade" style="flex:1; padding:8px; border-radius:6px; background:#0b1120; border:1px solid var(--card-border); color:#fff;">
+          <button class="btn btn-primary" onclick="adicionarUnidade()">Adicionar Unidade</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Estrutura de Unidades e Setores</div>
+        <div id="lista-unidades-setores"></div>
+      </div>
+    </div>
+
+    <!-- VIEW 5: Perfis de Acesso -->
+    <div id="view-usuarios" class="view-panel">
+      <div class="card">
+        <div class="card-title">Perfis de Acesso</div>
+        <p style="font-size:12px;color:var(--text-muted);line-height:1.6;">
+          As contas de acesso são criadas e administradas no Supabase Auth. Nesta tela, o administrador pode consultar os perfis cadastrados.
+          <br><strong>Importante:</strong> a senha nunca é armazenada nesta página nem no código do site.
+        </p>
+      </div>
+      <div class="card">
+        <div class="card-title">Usuários Cadastrados</div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>E-mail</th><th>Nome</th><th>Perfil</th></tr></thead>
+            <tbody id="usuarios-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // ============================================================
+    // Sistema de Gestão de Treinamentos FGH
+    // Versão preparada para GitHub Pages + Supabase
+    // IMPORTANTE: nunca coloque service_role key neste arquivo.
+    // ============================================================
+
+    const SUPABASE_URL = 'https://yzykqqowbzakaeetccii.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'COLE_AQUI_A_CHAVE_PUBLICAVEL';
+
+    let db = null;
+    let currentUser = null;
+    let currentProfile = null;
+    let unidades = [];
+    let colaboradores = [];
+    let atas = [];
+    let perfis = [];
+
+    const isConfigured = () =>
+      SUPABASE_URL.startsWith('https://') &&
+      !SUPABASE_URL.includes('COLE_AQUI') &&
+      !SUPABASE_PUBLISHABLE_KEY.includes('COLE_AQUI');
+
+    function esc(value) {
+      return String(value ?? '').replace(/[&<>"']/g, c => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+      }[c]));
+    }
+
+    function roleLabel(role) {
+      return ({ administrador:'Administrador', gestor:'Gestor', equipe:'Equipe' }[role] || role || '');
+    }
+
+    function canManage() {
+      return currentProfile && ['administrador','gestor'].includes(currentProfile.perfil);
+    }
+
+    function isAdmin() {
+      return currentProfile && currentProfile.perfil === 'administrador';
+    }
+
+    function showMessage(msg, type='info') {
+      alert(msg);
+    }
+
+    async function boot() {
+      if (!isConfigured) {
+        document.getElementById('login-overlay').style.display = 'flex';
+        document.querySelector('.login-card p').innerHTML =
+          'Educação Permanente<br><br><strong style="color:#f59e0b">Configuração pendente:</strong> conecte este arquivo ao Supabase antes de publicar.';
+        document.querySelector('#form-login button').disabled = true;
+        return;
+      }
+
+      db = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+        auth: { autoRefreshToken: true, persistSession: true, detectSessionInUrl: true }
+      });
+
+      const { data: { session } } = await db.auth.getSession();
+      if (session) await onSignedIn(session);
+      else document.getElementById('login-overlay').style.display = 'flex';
+
+      db.auth.onAuthStateChange(async (event, session) => {
+        if (event === 'SIGNED_IN' && session) await onSignedIn(session);
+        if (event === 'SIGNED_OUT') {
+          currentUser = null; currentProfile = null;
+          document.getElementById('login-overlay').style.display = 'flex';
+        }
+      });
+    }
+
+    async function onSignedIn(session) {
+      currentUser = session.user;
+      const { data: profile, error } = await db.from('profiles')
+        .select('id, full_name, perfil, email')
+        .eq('id', currentUser.id)
+        .single();
+
+      if (error || !profile) {
+        await db.auth.signOut();
+        alert('Sua conta foi autenticada, mas não possui perfil cadastrado no sistema. Solicite ao administrador o cadastro do perfil.');
+        return;
+      }
+
+      currentProfile = profile;
+      document.getElementById('login-overlay').style.display = 'none';
+      document.getElementById('user-display').innerText =
+        `${profile.full_name || currentUser.email} (${roleLabel(profile.perfil).toUpperCase()})`;
+
+      aplicarPermissoes();
+      await initData();
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      if (!db) return alert('O sistema ainda não foi configurado com o Supabase.');
+
+      const email = document.getElementById('login-user').value.trim();
+      const pass = document.getElementById('login-pass').value;
+
+      const { error } = await db.auth.signInWithPassword({ email, password: pass });
+      if (error) alert('Não foi possível entrar. Verifique o e-mail e a senha.');
+    }
+
+    async function logout() {
+      if (db) await db.auth.signOut();
+    }
+
+    function aplicarPermissoes() {
+      const p = currentProfile?.perfil;
+      document.getElementById('tab-atas').style.display = canManage() ? 'block' : 'none';
+      document.getElementById('tab-colab').style.display = canManage() ? 'block' : 'none';
+      document.getElementById('tab-unidades').style.display = isAdmin() ? 'block' : 'none';
+      document.getElementById('tab-usuarios').style.display = isAdmin() ? 'block' : 'none';
+      switchTab('dashboard');
+    }
+
+    async function initData() {
+      await Promise.all([loadUnits(), loadCollaborators(), loadAtas(), loadProfiles()]);
+      updateDashFilters();
+      renderDashboard();
+    }
+
+    async function loadUnits() {
+      const { data, error } = await db.from('units').select('id,nome,sectors(id,nome)').order('nome');
+      if (error) return console.error(error);
+      unidades = (data || []).map(u => ({
+        id: u.id, nome: u.nome, setores: (u.sectors || []).map(s => ({ id:s.id, nome:s.nome }))
+      }));
+    }
+
+    async function loadCollaborators() {
+      const { data, error } = await db.from('collaborators')
+        .select('id,chapa,nome,status,trans,intra,sector_id,sectors(nome,unit_id)')
+        .order('nome');
+      if (error) return console.error(error);
+      colaboradores = data || [];
+    }
+
+    async function loadAtas() {
+      const { data, error } = await db.from('training_records')
+        .select('id,created_at,tipo,tema,file_name,file_path,unit_id,sector_id,units(nome),sectors(nome)')
+        .order('created_at', { ascending:false });
+      if (error) return console.error(error);
+      atas = data || [];
+    }
+
+    async function loadProfiles() {
+      if (!isAdmin()) return;
+      const { data, error } = await db.from('profiles')
+        .select('id,email,full_name,perfil')
+        .order('full_name');
+      if (error) return console.error(error);
+      perfis = data || [];
+    }
+
+    function switchTab(view) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+      const targetPanel = document.getElementById(`view-${view}`);
+      if (targetPanel) targetPanel.classList.add('active');
+      const activeBtn = Array.from(document.querySelectorAll('.tab-btn'))
+        .find(b => (b.getAttribute('onclick') || '').includes(view));
+      if (activeBtn) activeBtn.classList.add('active');
+
+      if (view === 'dashboard') renderDashboard();
+      if (view === 'unidades') renderUnidades();
+      if (view === 'colaboradores') renderColaboradores();
+      if (view === 'usuarios') renderUsuarios();
+      if (view === 'atas') renderAtas();
+    }
+
+    function updateDashFilters() {
+      const selectU = document.getElementById('dash-unidade');
+      const selectS = document.getElementById('dash-setor');
+      const selectAtaU = document.getElementById('ata-unidade');
+
+      selectU.innerHTML = '<option value="todas">Todas as Unidades</option>' +
+        unidades.map(u => `<option value="${esc(u.id)}">${esc(u.nome)}</option>`).join('');
+
+      if (selectAtaU) {
+        selectAtaU.innerHTML = unidades.map(u =>
+          `<option value="${esc(u.id)}">${esc(u.nome)}</option>`).join('');
+      }
+
+      updateDashSectors();
+      carregarSetoresAta();
+    }
+
+    function updateDashSectors() {
+      const selectS = document.getElementById('dash-setor');
+      const unitId = document.getElementById('dash-unidade').value;
+      let sectors = [];
+      unidades.forEach(u => {
+        if (unitId === 'todas' || String(u.id) === String(unitId))
+          sectors.push(...u.setores);
+      });
+      selectS.innerHTML = '<option value="todos">Todos os Setores</option>' +
+        sectors.map(s => `<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');
+    }
+
+    function renderDashboard() {
+      const unitId = document.getElementById('dash-unidade')?.value || 'todas';
+      const sectorId = document.getElementById('dash-setor')?.value || 'todos';
+
+      const elegiveis = colaboradores.filter(c => {
+        const unitOk = unitId === 'todas' || String(c.sectors?.unit_id) === String(unitId);
+        const sectorOk = sectorId === 'todos' || String(c.sector_id) === String(sectorId);
+        return c.status === 'Ativo' && unitOk && sectorOk;
+      });
+
+      const total = elegiveis.length;
+      const trans = elegiveis.filter(c => c.trans).length;
+      const intra = elegiveis.filter(c => c.intra).length;
+      const pT = total ? Math.round(trans/total*100) : 0;
+      const pI = total ? Math.round(intra/total*100) : 0;
+
+      document.getElementById('metric-elegivel').innerText = total;
+      document.getElementById('metric-transversal').innerText = `${pT}%`;
+      document.getElementById('metric-intrasetorial').innerText = `${pI}%`;
+
+      document.getElementById('metric-transversal').style.color = pT >= 90 ? 'var(--success)' : 'var(--danger)';
+      document.getElementById('metric-intrasetorial').style.color = pI >= 90 ? 'var(--success)' : 'var(--danger)';
+
+      const tbody = document.getElementById('ranking-tbody');
+      tbody.innerHTML = '';
+
+      const sectors = [];
+      unidades.forEach(u => {
+        if (unitId !== 'todas' && String(u.id) !== String(unitId)) return;
+        u.setores.forEach(s => {
+          if (sectorId !== 'todos' && String(s.id) !== String(sectorId)) return;
+          sectors.push(s);
+        });
+      });
+
+      sectors.forEach(s => {
+        const cs = colaboradores.filter(c => c.sector_id === s.id && c.status === 'Ativo');
+        const tot = cs.length;
+        const t = tot ? Math.round(cs.filter(c=>c.trans).length/tot*100) : 0;
+        const i = tot ? Math.round(cs.filter(c=>c.intra).length/tot*100) : 0;
+        const media = Math.round((t+i)/2);
+        tbody.innerHTML += `<tr>
+          <td><strong>${esc(s.nome)}</strong></td>
+          <td>${tot}</td><td>${t}%</td><td>${i}%</td><td><strong>${media}%</strong></td>
+          <td>${media >= 90 ? '<span class="badge badge-success">Atingida</span>' : '<span class="badge badge-danger">Não Atingida</span>'}</td>
+        </tr>`;
+      });
+    }
+
+    function carregarSetoresAta() {
+      const unitId = document.getElementById('ata-unidade')?.value;
+      const sel = document.getElementById('ata-setor');
+      if (!sel) return;
+      const u = unidades.find(x => String(x.id) === String(unitId));
+      sel.innerHTML = (u?.setores || []).map(s =>
+        `<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');
+    }
+
+    async function salvarAta(e) {
+      e.preventDefault();
+      if (!canManage()) return alert('Você não possui permissão para registrar atas.');
+
+      const unitId = document.getElementById('ata-unidade').value;
+      const sectorId = document.getElementById('ata-setor').value;
+      const tipo = document.getElementById('ata-tipo').value;
+      const tema = document.getElementById('ata-tema').value.trim();
+      const file = document.getElementById('ata-arquivo').files[0];
+
+      if (!unitId || !sectorId || !tema) return alert('Preencha unidade, setor e tema.');
+
+      let filePath = null, fileName = null;
+
+      if (file) {
+        const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+        filePath = `${currentUser.id}/${Date.now()}_${safe}`;
+        const { error: uploadError } = await db.storage.from('atas-treinamentos').upload(filePath, file, {
+          cacheControl: '3600', upsert: false
+        });
+        if (uploadError) return alert('Não foi possível enviar o arquivo da ata.');
+        fileName = file.name;
+      }
+
+      const { error } = await db.from('training_records').insert({
+        unit_id: unitId, sector_id: sectorId, tipo, tema,
+        file_name: fileName, file_path: filePath, created_by: currentUser.id
+      });
+
+      if (error) {
+        if (filePath) await db.storage.from('atas-treinamentos').remove([filePath]);
+        return alert('Não foi possível registrar a ata.');
+      }
+
+      document.getElementById('ata-tema').value = '';
+      document.getElementById('ata-arquivo').value = '';
+      await loadAtas();
+      renderAtas();
+      alert('Ata registrada com sucesso.');
+    }
+
+    async function renderAtas() {
+      const tbody = document.getElementById('historico-atas-tbody');
+      tbody.innerHTML = '';
+
+      for (const a of atas) {
+        let action = '<span style="font-size:11px;color:var(--text-muted)">Sem arquivo</span>';
+        if (a.file_path) {
+          const { data } = await db.storage.from('atas-treinamentos').createSignedUrl(a.file_path, 3600);
+          if (data?.signedUrl) action = `<a class="btn btn-secondary" style="padding:4px 8px;font-size:11px;text-decoration:none" target="_blank" href="${esc(data.signedUrl)}">Abrir</a>`;
+        }
+
+        tbody.innerHTML += `<tr>
+          <td>${new Date(a.created_at).toLocaleDateString('pt-BR')}</td>
+          <td>${esc(a['sectors']?.nome || '')}</td>
+          <td><span class="badge badge-info">${esc(a.tipo)}</span></td>
+          <td><strong>${esc(a.tema)}</strong></td>
+          <td>${esc(a.file_name || '—')}</td>
+          <td>${action}
+            ${canManage() ? `<button class="btn btn-danger" style="padding:4px 8px;font-size:11px" onclick="excluirAta('${esc(a.id)}')">Excluir</button>` : ''}
+          </td>
+        </tr>`;
+      }
+    }
+
+    async function excluirAta(id) {
+      if (!canManage() || !confirm('Deseja realmente excluir esta ata?')) return;
+      const a = atas.find(x => String(x.id) === String(id));
+      if (!a) return;
+
+      const { error } = await db.from('training_records').delete().eq('id', id);
+      if (error) return alert('Não foi possível excluir a ata.');
+      if (a.file_path) await db.storage.from('atas-treinamentos').remove([a.file_path]);
+
+      await loadAtas(); renderAtas();
+    }
+
+    function renderColaboradores() {
+      const tbody = document.getElementById('colab-tbody');
+      tbody.innerHTML = '';
+      colaboradores.forEach(c => {
+        const sectorName = c.sectors?.nome || '';
+        tbody.innerHTML += `<tr>
+          <td>${esc(c.chapa)}</td>
+          <td><strong>${esc(c.nome)}</strong></td>
+          <td>${esc(sectorName)}</td>
+          <td><select onchange="alterarStatusColab('${esc(c.id)}',this.value)" style="background:#0b1120;color:#fff;border:1px solid var(--card-border);padding:4px;border-radius:4px">
+            <option value="Ativo" ${c.status==='Ativo'?'selected':''}>Ativo</option>
+            <option value="Férias" ${c.status==='Férias'?'selected':''}>Férias</option>
+            <option value="Afastado" ${c.status==='Afastado'?'selected':''}>Afastado</option>
+          </select></td>
+          <td><input type="checkbox" ${c.trans?'checked':''} ${c.status!=='Ativo'?'disabled':''} onchange="toggleCheck('${esc(c.id)}','trans')"></td>
+          <td><input type="checkbox" ${c.intra?'checked':''} ${c.status!=='Ativo'?'disabled':''} onchange="toggleCheck('${esc(c.id)}','intra')"></td>
+          <td>
+            <button class="btn btn-warning" style="padding:4px 8px;font-size:11px" onclick="editarColab('${esc(c.id)}')">Editar</button>
+            <button class="btn btn-danger" style="padding:4px 8px;font-size:11px" onclick="excluirColab('${esc(c.id)}')">Excluir</button>
+          </td>
+        </tr>`;
+      });
+    }
+
+    async function toggleCheck(id, field) {
+      if (!canManage()) return;
+      const c = colaboradores.find(x => String(x.id) === String(id));
+      if (!c) return;
+      const patch = {}; patch[field] = !c[field];
+      const { error } = await db.from('collaborators').update(patch).eq('id', id);
+      if (error) return alert('Não foi possível atualizar o checklist.');
+      await loadCollaborators(); renderColaboradores(); renderDashboard();
+    }
+
+    async function alterarStatusColab(id, status) {
+      if (!canManage()) return;
+      const patch = { status };
+      if (status !== 'Ativo') { patch.trans = false; patch.intra = false; }
+      const { error } = await db.from('collaborators').update(patch).eq('id', id);
+      if (error) return alert('Não foi possível atualizar o status.');
+      await loadCollaborators(); renderColaboradores(); renderDashboard();
+    }
+
+    async function excluirColab(id) {
+      if (!canManage() || !confirm('Deseja realmente remover este colaborador?')) return;
+      const { error } = await db.from('collaborators').delete().eq('id', id);
+      if (error) return alert('Não foi possível excluir o colaborador.');
+      await loadCollaborators(); renderColaboradores(); renderDashboard();
+    }
+
+    async function editarColab(id) {
+      if (!canManage()) return;
+      const c = colaboradores.find(x => String(x.id) === String(id));
+      if (!c) return;
+      const novoNome = prompt('Editar nome completo:', c.nome);
+      if (!novoNome || novoNome.trim() === c.nome) return;
+      const { error } = await db.from('collaborators').update({nome:novoNome.trim()}).eq('id', id);
+      if (error) return alert('Não foi possível editar o colaborador.');
+      await loadCollaborators(); renderColaboradores();
+    }
+
+    async function modalNovoColaborador() {
+      if (!canManage()) return;
+      const chapa = prompt('Matrícula/Chapa:');
+      const nome = prompt('Nome Completo:');
+      if (!chapa || !nome) return;
+
+      const firstUnit = unidades[0];
+      const firstSector = firstUnit?.setores?.[0];
+      if (!firstSector) return alert('Cadastre pelo menos um setor antes de adicionar colaboradores.');
+
+      const { error } = await db.from('collaborators').insert({
+        chapa: chapa.trim(), nome: nome.trim(), sector_id: firstSector.id,
+        status:'Ativo', trans:false, intra:false
+      });
+      if (error) return alert('Não foi possível adicionar o colaborador.');
+      await loadCollaborators(); renderColaboradores(); renderDashboard();
+    }
+
+    async function importarArquivoColab() {
+      if (!canManage()) return;
+      const input = document.getElementById('file-colab');
+      if (!input.files?.length) return alert('Selecione um arquivo primeiro.');
+
+      const firstUnit = unidades[0];
+      const firstSector = firstUnit?.setores?.[0];
+      if (!firstSector) return alert('Cadastre pelo menos um setor antes de importar.');
+
+      const text = await input.files[0].text();
+      const rows = text.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+      const payload = [];
+
+      for (const line of rows) {
+        const parts = line.split(/[;,\t]/);
+        if (parts.length >= 2) {
+          const chapa = parts[0].trim(), nome = parts[1].trim();
+          if (chapa && nome) payload.push({
+            chapa,nome,sector_id:firstSector.id,status:'Ativo',trans:false,intra:false
+          });
+        }
+      }
+
+      if (!payload.length) return alert('Nenhum registro válido encontrado.');
+      const { error } = await db.from('collaborators').insert(payload);
+      if (error) return alert('Não foi possível importar os colaboradores.');
+      alert(`${payload.length} colaboradores importados com sucesso.`);
+      input.value = '';
+      await loadCollaborators(); renderColaboradores(); renderDashboard();
+    }
+
+    function renderUnidades() {
+      const container = document.getElementById('lista-unidades-setores');
+      container.innerHTML = '';
+      unidades.forEach(u => {
+        const setoresHtml = u.setores.map(s => `
+          <span class="badge badge-info" style="margin-right:6px;margin-bottom:6px;display:inline-flex;align-items:center;gap:4px">
+            ${esc(s.nome)} <span style="cursor:pointer" onclick="removerSetor('${esc(u.id)}','${esc(s.id)}')">✕</span>
+          </span>`).join('');
+
+        container.innerHTML += `<div style="background:#0b1120;border:1px solid var(--card-border);padding:12px;border-radius:8px;margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <strong>${esc(u.nome)}</strong>
+            <div>
+              <button class="btn btn-warning" style="padding:2px 8px;font-size:11px" onclick="editarUnidade('${esc(u.id)}')">Editar Nome</button>
+              <button class="btn btn-danger" style="padding:2px 8px;font-size:11px" onclick="excluirUnidade('${esc(u.id)}')">Excluir</button>
+            </div>
+          </div>
+          <div style="margin-bottom:8px">${setoresHtml}</div>
+          <div style="display:flex;gap:6px">
+            <input type="text" id="novo-setor-${esc(u.id)}" placeholder="Novo setor..." style="background:#1e293b;border:1px solid var(--card-border);color:#fff;padding:4px 8px;border-radius:4px;font-size:12px">
+            <button class="btn btn-secondary" style="padding:4px 8px;font-size:12px" onclick="adicionarSetor('${esc(u.id)}')">+ Setor</button>
+          </div>
+        </div>`;
+      });
+    }
+
+    async function adicionarUnidade() {
+      if (!isAdmin()) return;
+      const nome = document.getElementById('nova-unidade-nome').value.trim();
+      if (!nome) return;
+      const { error } = await db.from('units').insert({nome});
+      if (error) return alert('Não foi possível adicionar a unidade.');
+      document.getElementById('nova-unidade-nome').value='';
+      await loadUnits(); updateDashFilters(); renderUnidades();
+    }
+
+    async function editarUnidade(id) {
+      if (!isAdmin()) return;
+      const u = unidades.find(x=>String(x.id)===String(id));
+      const nome = prompt('Novo nome da unidade:',u?.nome);
+      if (!nome) return;
+      const { error } = await db.from('units').update({nome:nome.trim()}).eq('id',id);
+      if (error) return alert('Não foi possível editar a unidade.');
+      await loadUnits(); updateDashFilters(); renderUnidades();
+    }
+
+    async function excluirUnidade(id) {
+      if (!isAdmin() || !confirm('Excluir esta unidade e seus setores?')) return;
+      const { error } = await db.from('units').delete().eq('id',id);
+      if (error) return alert('Não foi possível excluir a unidade. Verifique se existem colaboradores ou atas vinculados.');
+      await Promise.all([loadUnits(),loadCollaborators(),loadAtas()]);
+      updateDashFilters(); renderUnidades(); renderColaboradores(); renderDashboard();
+    }
+
+    async function adicionarSetor(unitId) {
+      if (!isAdmin()) return;
+      const input = document.getElementById(`novo-setor-${unitId}`);
+      const nome = input?.value.trim();
+      if (!nome) return;
+      const { error } = await db.from('sectors').insert({unit_id:unitId,nome});
+      if (error) return alert('Não foi possível adicionar o setor.');
+      input.value='';
+      await loadUnits(); updateDashFilters(); renderUnidades();
+    }
+
+    async function removerSetor(unitId, sectorId) {
+      if (!isAdmin() || !confirm('Remover este setor?')) return;
+      const { error } = await db.from('sectors').delete().eq('id',sectorId);
+      if (error) return alert('Não foi possível remover o setor. Verifique se existem vínculos.');
+      await Promise.all([loadUnits(),loadCollaborators(),loadAtas()]);
+      updateDashFilters(); renderUnidades(); renderColaboradores(); renderDashboard();
+    }
+
+    function renderUsuarios() {
+      const tbody = document.getElementById('usuarios-tbody');
+      tbody.innerHTML = perfis.map(p => `<tr>
+        <td>${esc(p.email || '')}</td>
+        <td><strong>${esc(p.full_name || '')}</strong></td>
+        <td><span class="badge badge-info">${esc(roleLabel(p.perfil))}</span></td>
+      </tr>`).join('');
+    }
+
+    // Atualiza os setores quando a unidade do dashboard muda.
+    document.getElementById('dash-unidade')?.addEventListener('change', () => {
+      updateDashSectors();
+      renderDashboard();
+    });
+    document.getElementById('ata-unidade')?.addEventListener('change', carregarSetoresAta);
+
+    boot();
+  </script>
+</body>
+</html>
