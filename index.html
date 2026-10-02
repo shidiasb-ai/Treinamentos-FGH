@@ -196,6 +196,14 @@
 
       <div class="card">
         <div class="card-title">Ranking de Treinados por Setor</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+          <input type="text" id="filtro-nome-colab" oninput="renderColaboradores()" placeholder="Filtrar por nome..." style="flex:1;min-width:240px;padding:9px;border-radius:6px;background:#0b1120;border:1px solid var(--card-border);color:#fff;">
+          <select id="filtro-situacao-colab" onchange="renderColaboradores()" style="padding:9px;border-radius:6px;background:#0b1120;border:1px solid var(--card-border);color:#fff;">
+            <option value="">Todos</option>
+            <option value="Ativo">Ativos</option>
+            <option value="Inativo">Inativos</option>
+          </select>
+        </div>
         <div class="table-container">
           <table>
             <thead>
@@ -294,12 +302,12 @@
           <table>
             <thead>
               <tr>
-                <th>Chapa/Matrícula</th>
+                <th>Matrícula</th>
                 <th>Nome Completo</th>
+                <th>Cargo</th>
+                <th>Categoria</th>
                 <th>Setor</th>
-                <th>Status (Férias/Afastado)</th>
-                <th>Trein. Transversal</th>
-                <th>Trein. Intrasetorial</th>
+                <th>Situação</th>
                 <th>Ações</th>
               </tr>
             </thead>
@@ -482,7 +490,7 @@
 
     async function loadCollaborators() {
       const { data, error } = await db.from('colaboradores')
-        .select('id,chapa,nome,status,trans,intra,setor_id,setores(nome,unidade_id)')
+        .select('id,unidade_id,setor_id,nome,matricula,cargo,categoria,ativo,created_at,updated_at,setores(nome,unidade_id)')
         .order('nome');
       if (error) return console.error(error);
       colaboradores = data || [];
@@ -557,12 +565,12 @@
       const elegiveis = colaboradores.filter(c => {
         const unitOk = unitId === 'todas' || String(c.setores?.unidade_id) === String(unitId);
         const sectorOk = sectorId === 'todos' || String(c.setor_id) === String(sectorId);
-        return c.status === 'Ativo' && unitOk && sectorOk;
+        return c.ativo === true && unitOk && sectorOk;
       });
 
       const total = elegiveis.length;
-      const trans = elegiveis.filter(c => c.trans).length;
-      const intra = elegiveis.filter(c => c.intra).length;
+      const trans = elegiveis.filter(c => c.trans === true).length;
+      const intra = elegiveis.filter(c => c.intra === true).length;
       const pT = total ? Math.round(trans/total*100) : 0;
       const pI = total ? Math.round(intra/total*100) : 0;
 
@@ -586,7 +594,7 @@
       });
 
       sectors.forEach(s => {
-        const cs = colaboradores.filter(c => c.setor_id === s.id && c.status === 'Ativo');
+        const cs = colaboradores.filter(c => c.setor_id === s.id && c.ativo === true);
         const tot = cs.length;
         const t = tot ? Math.round(cs.filter(c=>c.trans).length/tot*100) : 0;
         const i = tot ? Math.round(cs.filter(c=>c.intra).length/tot*100) : 0;
@@ -690,82 +698,59 @@
         alert('Você não possui permissão para baixar esta lista.');
         return;
       }
-
       if (!colaboradores.length) {
         alert('Não há colaboradores cadastrados para exportar.');
         return;
       }
-
       const linhas = colaboradores.map(c => ({
-        'Chapa/Matrícula': c.chapa || '',
-        'Nome Completo': c.nome || '',
+        'Matrícula': c.matricula || '',
+        'Nome': c.nome || '',
+        'Cargo': c.cargo || '',
+        'Categoria': c.categoria || '',
         'Setor': c.setores?.nome || '',
-        'Status': c.status || '',
-        'Treinamento Transversal': c.trans ? 'Concluído' : 'Pendente',
-        'Treinamento Intrasetorial': c.intra ? 'Concluído' : 'Pendente'
+        'Situação': c.ativo ? 'A' : 'F'
       }));
-
       const ws = XLSX.utils.json_to_sheet(linhas);
-
-      // Ajusta a largura das colunas para facilitar a leitura no Excel.
-      ws['!cols'] = [
-        { wch: 18 },
-        { wch: 35 },
-        { wch: 28 },
-        { wch: 16 },
-        { wch: 28 },
-        { wch: 28 }
-      ];
-
+      ws['!cols'] = [{wch:15},{wch:38},{wch:35},{wch:22},{wch:30},{wch:12}];
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, 'Colaboradores');
-
-      const hoje = new Date();
-      const data = hoje.toLocaleDateString('pt-BR').replace(/\//g, '-');
-      XLSX.writeFile(wb, `Colaboradores_Checklist_${data}.xlsx`);
+      const data = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
+      XLSX.writeFile(wb, `Colaboradores_${data}.xlsx`);
     }
 
     function renderColaboradores() {
       const tbody = document.getElementById('colab-tbody');
+      const filtro = (document.getElementById('filtro-nome-colab')?.value || '').trim().toLocaleLowerCase('pt-BR');
+      const situacao = document.getElementById('filtro-situacao-colab')?.value || '';
+      const lista = colaboradores.filter(c => {
+        const nome = String(c.nome || '').toLocaleLowerCase('pt-BR');
+        const ativo = c.ativo === true;
+        const nomeOk = !filtro || nome.includes(filtro);
+        const situacaoOk = !situacao || (situacao === 'Ativo' ? ativo : !ativo);
+        return nomeOk && situacaoOk;
+      });
+
       tbody.innerHTML = '';
-      colaboradores.forEach(c => {
+      if (!lista.length) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--text-muted)">Nenhum colaborador encontrado.</td></tr>';
+        return;
+      }
+
+      lista.forEach(c => {
         const sectorName = c.setores?.nome || '';
         tbody.innerHTML += `<tr>
-          <td>${esc(c.chapa)}</td>
-          <td><strong>${esc(c.nome)}</strong></td>
+          <td>${esc(c.matricula || '')}</td>
+          <td><strong>${esc(c.nome || '')}</strong></td>
+          <td>${esc(c.cargo || '')}</td>
+          <td>${esc(c.categoria || '')}</td>
           <td>${esc(sectorName)}</td>
-          <td><select onchange="alterarStatusColab('${esc(c.id)}',this.value)" style="background:#0b1120;color:#fff;border:1px solid var(--card-border);padding:4px;border-radius:4px">
-            <option value="Ativo" ${c.status==='Ativo'?'selected':''}>Ativo</option>
-            <option value="Férias" ${c.status==='Férias'?'selected':''}>Férias</option>
-            <option value="Afastado" ${c.status==='Afastado'?'selected':''}>Afastado</option>
-          </select></td>
-          <td><input type="checkbox" ${c.trans?'checked':''} ${c.status!=='Ativo'?'disabled':''} onchange="toggleCheck('${esc(c.id)}','trans')"></td>
-          <td><input type="checkbox" ${c.intra?'checked':''} ${c.status!=='Ativo'?'disabled':''} onchange="toggleCheck('${esc(c.id)}','intra')"></td>
+          <td>${c.ativo ? 'Ativo' : 'Inativo'}</td>
           <td>
             <button class="btn btn-warning" style="padding:4px 8px;font-size:11px" onclick="editarColab('${esc(c.id)}')">Editar</button>
             <button class="btn btn-danger" style="padding:4px 8px;font-size:11px" onclick="excluirColab('${esc(c.id)}')">Excluir</button>
           </td>
         </tr>`;
       });
-    }
-
-    async function toggleCheck(id, field) {
-      if (!canManage()) return;
-      const c = colaboradores.find(x => String(x.id) === String(id));
-      if (!c) return;
-      const patch = {}; patch[field] = !c[field];
-      const { error } = await db.from('colaboradores').update(patch).eq('id', id);
-      if (error) return alert('Não foi possível atualizar o checklist.');
-      await loadCollaborators(); renderColaboradores(); renderDashboard();
-    }
-
-    async function alterarStatusColab(id, status) {
-      if (!canManage()) return;
-      const patch = { status };
-      if (status !== 'Ativo') { patch.trans = false; patch.intra = false; }
-      const { error } = await db.from('colaboradores').update(patch).eq('id', id);
-      if (error) return alert('Não foi possível atualizar o status.');
-      await loadCollaborators(); renderColaboradores(); renderDashboard();
     }
 
     async function excluirColab(id) {
@@ -779,7 +764,7 @@
       if (!canManage()) return;
       const c = colaboradores.find(x => String(x.id) === String(id));
       if (!c) return;
-      const novoNome = prompt('Editar nome completo:', c.nome);
+      const novoNome = prompt('Editar nome completo:', c.nome || '');
       if (!novoNome || novoNome.trim() === c.nome) return;
       const { error } = await db.from('colaboradores').update({nome:novoNome.trim()}).eq('id', id);
       if (error) return alert('Não foi possível editar o colaborador.');
@@ -788,20 +773,38 @@
 
     async function modalNovoColaborador() {
       if (!canManage()) return;
-      const chapa = prompt('Matrícula/Chapa:');
+      const matricula = prompt('Matrícula/Chapa:');
       const nome = prompt('Nome Completo:');
-      if (!chapa || !nome) return;
+      if (!matricula || !nome) return;
 
       const firstUnit = unidades[0];
       const firstSector = firstUnit?.setores?.[0];
       if (!firstSector) return alert('Cadastre pelo menos um setor antes de adicionar colaboradores.');
 
       const { error } = await db.from('colaboradores').insert({
-        chapa: chapa.trim(), nome: nome.trim(), setor_id: firstSector.id,
-        status:'Ativo', trans:false, intra:false
+        unidade_id: firstUnit.id,
+        setor_id: firstSector.id,
+        matricula: matricula.trim(),
+        nome: nome.trim(),
+        cargo: '',
+        categoria: '',
+        ativo: true
       });
-      if (error) return alert('Não foi possível adicionar o colaborador.');
+      if (error) return alert('Não foi possível adicionar o colaborador: ' + error.message);
       await loadCollaborators(); renderColaboradores(); renderDashboard();
+    }
+
+    function normalizarTexto(valor) {
+      return String(valor ?? '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim()
+        .toLocaleLowerCase('pt-BR');
+    }
+
+    function encontrarColuna(headers, nomes) {
+      const alvo = nomes.map(normalizarTexto);
+      return headers.findIndex(h => alvo.includes(normalizarTexto(h)));
     }
 
     async function importarArquivoColab() {
@@ -810,88 +813,109 @@
       if (!input.files?.length) return alert('Selecione um arquivo primeiro.');
 
       const firstUnit = unidades[0];
-      const firstSector = firstUnit?.setores?.[0];
-      if (!firstSector) return alert('Cadastre pelo menos um setor antes de importar.');
+      if (!firstUnit) return alert('Cadastre pelo menos uma unidade antes de importar.');
 
       const file = input.files[0];
       const ext = file.name.split('.').pop().toLowerCase();
-      let rows = [];
 
       try {
+        let rows = [];
+
         if (ext === 'xlsx' || ext === 'xls') {
           if (typeof XLSX === 'undefined') {
             return alert('Não foi possível carregar o leitor de Excel. Recarregue a página e tente novamente.');
           }
           const buffer = await file.arrayBuffer();
-          const workbook = XLSX.read(buffer, { type: 'array' });
-          const sheet = workbook.Sheets[workbook.SheetNames[0]];
-          rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+          const workbook = XLSX.read(buffer, {type:'array'});
+          const nomeAba = workbook.SheetNames.find(n => normalizarTexto(n) === 'base geral') || workbook.SheetNames[0];
+          const sheet = workbook.Sheets[nomeAba];
+          rows = XLSX.utils.sheet_to_json(sheet, {defval:'', raw:false});
         } else {
           const text = await file.text();
-          rows = text.split(/\r?\n/).map(line => line.split(/[;\t,]/));
+          const linhas = text.replace(/^\uFEFF/, '').split(/\r?\n/).filter(l => l.trim());
+          if (!linhas.length) return alert('O arquivo está vazio.');
+
+          const separador = linhas[0].includes(';') ? ';' : (linhas[0].includes('\t') ? '\t' : ',');
+          const headers = linhas[0].split(separador).map(x => x.trim().replace(/^"|"$/g,''));
+          rows = linhas.slice(1).map(linha => {
+            const valores = linha.split(separador).map(x => x.trim().replace(/^"|"$/g,''));
+            const obj = {};
+            headers.forEach((h,i) => obj[h] = valores[i] ?? '');
+            return obj;
+          });
         }
+
+        if (!rows.length) return alert('Nenhum registro encontrado no arquivo.');
+
+        const headers = Object.keys(rows[0]);
+        const idxNome = encontrarColuna(headers, ['Nome']);
+        const idxMatricula = encontrarColuna(headers, ['Chapa', 'Matrícula', 'Matricula']);
+        const idxCargo = encontrarColuna(headers, ['Nome Funcão', 'Nome Função', 'Cargo']);
+        const idxSecao = encontrarColuna(headers, ['Descrição Seção', 'Descrição da Seção', 'DESCRIÇAO DA SEÇÃO']);
+        const idxSituacao = encontrarColuna(headers, ['Situação', 'Situação do Profissional', 'SITUAÇÃO DO PROFISSIONAL']);
+
+        if (idxNome < 0 || idxMatricula < 0) {
+          return alert('Não consegui identificar as colunas Nome e Chapa/Matrícula. Este arquivo precisa seguir o modelo original enviado.');
+        }
+
+        const setoresFlat = unidades.flatMap(u => (u.setores || []).map(s => ({
+          ...s,
+          unidade_id: u.id,
+          normalizado: normalizarTexto(s.nome)
+        })));
 
         const payload = [];
-        rows.forEach((row, index) => {
-          if (!Array.isArray(row) || row.length < 2) return;
-          const chapa = String(row[0] ?? '').trim();
-          const nome = String(row[1] ?? '').trim();
-          // Ignora a linha de cabeçalho quando existir.
-          if (index === 0 && /^(matr[ií]cula|chapa|matricula)$/i.test(chapa)) return;
-          if (chapa && nome) {
-            payload.push({
-              chapa,
-              nome,
-              setor_id: firstSector.id,
-              status: 'Ativo',
-              trans: false,
-              intra: false
-            });
+        let semSetor = 0;
+
+        rows.forEach(row => {
+          const valores = headers.map(h => row[h] ?? '');
+          const nome = String(valores[idxNome] || '').trim();
+          const matricula = String(valores[idxMatricula] || '').trim();
+          if (!nome || !matricula) return;
+
+          const cargo = idxCargo >= 0 ? String(valores[idxCargo] || '').trim() : '';
+          const secao = idxSecao >= 0 ? String(valores[idxSecao] || '').trim() : '';
+          const situacao = idxSituacao >= 0 ? String(valores[idxSituacao] || '').trim().toUpperCase() : 'A';
+          const ativo = situacao === 'A' || normalizarTexto(situacao) === 'ativo';
+
+          let setor = setoresFlat.find(s => s.normalizado === normalizarTexto(secao));
+          if (!setor) {
+            // Mantém a importação possível quando a seção do arquivo ainda não foi
+            // cadastrada no sistema, usando o primeiro setor da unidade.
+            setor = firstUnit.setores?.[0] ? {...firstUnit.setores[0], unidade_id:firstUnit.id} : null;
+            semSetor++;
           }
+          if (!setor) return;
+
+          payload.push({
+            unidade_id: setor.unidade_id,
+            setor_id: setor.id,
+            matricula,
+            nome,
+            cargo,
+            categoria: secao,
+            ativo
+          });
         });
 
-        if (!payload.length) {
-          return alert('Nenhum registro válido encontrado. A primeira coluna deve ser Matrícula/Chapa e a segunda, Nome Completo.');
-        }
+        if (!payload.length) return alert('Nenhum registro válido foi encontrado no arquivo.');
 
         const { error } = await db.from('colaboradores').insert(payload);
         if (error) return alert('Não foi possível importar os colaboradores: ' + (error.message || 'verifique o arquivo.'));
 
-        alert(`${payload.length} colaboradores importados com sucesso.`);
         input.value = '';
         await loadCollaborators();
         renderColaboradores();
         renderDashboard();
+
+        const avisoSetor = semSetor
+          ? `\n\nAtenção: ${semSetor} registro(s) não tiveram correspondência exata de setor e foram direcionados ao primeiro setor cadastrado da unidade.`
+          : '';
+        alert(`${payload.length} colaboradores importados com sucesso.${avisoSetor}`);
       } catch (err) {
         console.error(err);
-        alert('Não foi possível ler o arquivo. Verifique se ele é um CSV ou Excel válido.');
+        alert('Não foi possível ler o arquivo. Verifique se ele é um CSV válido no modelo original ou um Excel válido.');
       }
-    }
-
-    function renderUnidades() {
-      const container = document.getElementById('lista-unidades-setores');
-      container.innerHTML = '';
-      unidades.forEach(u => {
-        const setoresHtml = u.setores.map(s => `
-          <span class="badge badge-info" style="margin-right:6px;margin-bottom:6px;display:inline-flex;align-items:center;gap:4px">
-            ${esc(s.nome)} <span style="cursor:pointer" onclick="removerSetor('${esc(u.id)}','${esc(s.id)}')">✕</span>
-          </span>`).join('');
-
-        container.innerHTML += `<div style="background:#0b1120;border:1px solid var(--card-border);padding:12px;border-radius:8px;margin-bottom:10px">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-            <strong>${esc(u.nome)}</strong>
-            <div>
-              <button class="btn btn-warning" style="padding:2px 8px;font-size:11px" onclick="editarUnidade('${esc(u.id)}')">Editar Nome</button>
-              <button class="btn btn-danger" style="padding:2px 8px;font-size:11px" onclick="excluirUnidade('${esc(u.id)}')">Excluir</button>
-            </div>
-          </div>
-          <div style="margin-bottom:8px">${setoresHtml}</div>
-          <div style="display:flex;gap:6px">
-            <input type="text" id="novo-setor-${esc(u.id)}" placeholder="Novo setor..." style="background:#1e293b;border:1px solid var(--card-border);color:#fff;padding:4px 8px;border-radius:4px;font-size:12px">
-            <button class="btn btn-secondary" style="padding:4px 8px;font-size:12px" onclick="adicionarSetor('${esc(u.id)}')">+ Setor</button>
-          </div>
-        </div>`;
-      });
     }
 
     async function adicionarUnidade() {
