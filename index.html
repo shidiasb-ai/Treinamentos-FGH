@@ -415,7 +415,7 @@ async function excluirTreinamento(id){if(!confirm('Excluir este treinamento?'))r
 function encontrar(headers,arr){const hs=headers.map(norm);for(const a of arr){const i=hs.indexOf(norm(a));if(i>=0)return i}return -1}
 function codigoSituacao(s){const x=norm(String(s||'')).trim();if(!x)return '';const u=x.toUpperCase();if(/^(A)(?:\s|[-–—]|$)/.test(u)||u==='ATIVO')return 'A';if(/^(F)(?:\s|[-–—]|$)/.test(u)||u==='FERIAS')return 'F';if(/^(E)(?:\s|[-–—]|$)/.test(u)||u.startsWith('LICENCA'))return 'E';if(/^(V)(?:\s|[-–—]|$)/.test(u)||u.startsWith('AVISO PREVIO'))return 'V';if(/^(D)(?:\s|[-–—]|$)/.test(u)||u.startsWith('DEMISSAO'))return 'D';if(/^(U)(?:\s|[-–—]|$)/.test(u)||u.startsWith('OUTROS'))return 'U';if(/^(P)(?:\s|[-–—]|$)/.test(u)||u.startsWith('PREVIDENCIA SOCIAL'))return 'P';return ''}
 function statusConsiderado(s){const c=codigoSituacao(s);return (c==='A'||c==='V'||c==='F')?c:''}
-async function lerArquivo(file){const ext=file.name.split('.').pop().toLowerCase();if(ext==='xlsx'||ext==='xls'){const wb=XLSX.read(await file.arrayBuffer(),{type:'array',cellDates:false});const nomeAba=wb.SheetNames.find(n=>norm(n)==='base geral')||wb.SheetNames[0];return XLSX.utils.sheet_to_json(wb.Sheets[nomeAba],{defval:'',raw:false})}const txt=await file.text();const lines=txt.replace(/^\uFEFF/,'').split(/\r?\n/).filter(x=>x.trim());if(!lines.length)return[];const sep=lines[0].includes(';')?';':lines[0].includes('\t')?'\t':',';const parseLine=line=>{let arr=[],cur='',q=false;for(let i=0;i<line.length;i++){const c=line[i];if(c==='"'){if(q&&line[i+1]==='"'){cur+='"';i++}else q=!q}else if(c===sep&&!q){arr.push(cur);cur=''}else cur+=c}arr.push(cur);return arr};const h=parseLine(lines[0]);return lines.slice(1).map(l=>{const a=parseLine(l),o={};h.forEach((x,i)=>o[x]=a[i]??'');return o})}
+async function lerArquivo(file){const ext=file.name.split('.').pop().toLowerCase();if(ext==='xlsx'||ext==='xls'){const wb=XLSX.read(await file.arrayBuffer(),{type:'array',cellDates:false});const nomeAba=wb.SheetNames.find(n=>norm(n)==='base geral')||wb.SheetNames[0];return XLSX.utils.sheet_to_json(wb.Sheets[nomeAba],{defval:'',raw:false})}const buf=await file.arrayBuffer();let txt='';try{txt=new TextDecoder('windows-1252').decode(buf)}catch(e){txt=new TextDecoder('utf-8').decode(buf)}const lines=txt.replace(/^\uFEFF/,'').split(/\r?\n/).filter(x=>x.trim());if(!lines.length)return[];const sep=lines[0].includes(';')?';':lines[0].includes('\t')?'\t':',';const parseLine=line=>{let arr=[],cur='',q=false;for(let i=0;i<line.length;i++){const c=line[i];if(c==='"'){if(q&&line[i+1]==='"'){cur+='"';i++}else q=!q}else if(c===sep&&!q){arr.push(cur);cur=''}else cur+=c}arr.push(cur);return arr};const h=parseLine(lines[0]);return lines.slice(1).map(l=>{const a=parseLine(l),o={};h.forEach((x,i)=>o[x]=a[i]??'');return o})}
 async function salvarColaboradorIndividual(){const status=document.getElementById('cad-colab-status');const msg=(t,err=false)=>{if(status){status.style.display='block';status.style.color=err?'var(--danger)':'var(--ok)';status.textContent=t}};if(!isAdmin()&&!currentProfile?.setor_id)return msg('Seu usuário precisa ter um setor responsável cadastrado.',true);const competencia=v('cad-colab-mes'),matricula=v('cad-colab-matricula').trim(),nome=v('cad-colab-nome').trim(),cargo=v('cad-colab-cargo').trim(),descricao_secao=v('cad-colab-secao').trim(),situacao=v('cad-colab-situacao').trim().toUpperCase(),unidade_id=v('cad-colab-unidade'),setor_id=v('cad-colab-setor');if(!competencia||!matricula||!nome||!unidade_id||!setor_id)return msg('Preencha mês, matrícula, nome, unidade e setor.',true);if(!isAdmin()&&String(setor_id)!==String(currentProfile.setor_id))return msg('Seu usuário só pode inserir colaboradores do setor responsável pelo seu perfil.',true);const payload={competencia:competencia+'-01',matricula,nome,cargo,descricao_secao,situacao,unidade_id:Number(unidade_id),setor_id:Number(setor_id),ferias:codigoSituacao(situacao)==='F',ferias_marcada:false,origem_arquivo:'Inserção manual',criado_por:currentUser.id};const {data,error}=await db.from('colaboradores_mensal').upsert(payload,{onConflict:'competencia,matricula'}).select('id').single();if(error)return msg('Não foi possível inserir: '+error.message,true);const q=await db.from('checklist_mensal').select('tipo').eq('colaborador_mensal_id',data.id);if(!q.error){const existentes=new Set((q.data||[]).map(x=>x.tipo)),faltantes=TIPOS.filter(tipo=>!existentes.has(tipo)).map(tipo=>({colaborador_mensal_id:data.id,tipo,realizado:false}));if(faltantes.length)await db.from('checklist_mensal').insert(faltantes)}document.getElementById('cad-colab-matricula').value='';document.getElementById('cad-colab-nome').value='';document.getElementById('cad-colab-cargo').value='';document.getElementById('cad-colab-secao').value='';document.getElementById('cad-colab-situacao').value='';const dashMes=document.getElementById('dash-mes');if(dashMes&&competencia)dashMes.value=competencia;const checkMes=document.getElementById('check-mes');if(checkMes&&competencia)checkMes.value=competencia;await loadMesChecklist();await loadDashboard();msg('Colaborador inserido com sucesso.')}
 async function importarArquivoColab(){
   const status=document.getElementById('imp-colab-status');
@@ -433,8 +433,8 @@ async function importarArquivoColab(){
     const headers=Object.keys(rows[0]);
     const iNome=encontrar(headers,['Nome']);
     const iMat=encontrar(headers,['Chapa','Matrícula','Matricula']);
-    const iCargo=encontrar(headers,['Nome Funcão','Nome Função','Cargo']);
-    const iSec=encontrar(headers,['Descrição Seção','Descrição da Seção','DESCRIÇAO DA SEÇÃO','DESCRIÇÃO DA SEÇÃO']);
+    const iCargo=encontrar(headers,['Nome Funcão','Nome Função','Cargo','NOME FUNÇÃO']);
+    const iSec=encontrar(headers,['Descrição Seção','Descrição da Seção','DESCRIÇAO DA SEÇÃO','DESCRIÇÃO DA SEÇÃO','DESCRIÇÃO SEÇÃO']);
     let iSit=encontrar(headers,['Situação','SITUAÇÃO','SITUACAO','SITUAÇÃO SETEMBRO/ 26','SITUAÇÃO SETEMBRO/26','SITUAÇÃO DO PROFISSIONAL','SITUAÇÃO DO PROFISSIONAL...']);
     if(iSit<0){
       const candidatos=headers.map((h,i)=>({h,i,n:norm(h)})).filter(x=>x.n.includes('situacao'));
@@ -456,13 +456,26 @@ async function importarArquivoColab(){
       const situacaoCodigo=codigoSituacao(situ);
       const emFerias=situacaoCodigo==='F';
       let setor=setores.find(s=>norm(s.nome)===norm(sec));
-      if(!setor&&sec){const kw=norm(sec);setor=setores.find(s=>kw.includes(norm(s.nome))||norm(s.nome).includes(kw));}
+      if(!setor&&sec){
+        const kw=norm(sec);
+        setor=setores.find(s=>kw.includes(norm(s.nome))||norm(s.nome).includes(kw));
+      }
+      if(!setor&&sec){
+        const tokens=norm(sec).split(/\s+/).filter(x=>x.length>=3);
+        let melhor=null,melhorScore=0;
+        for(const cand of setores){
+          const ct=norm(cand.nome).split(/\s+/).filter(x=>x.length>=3);
+          const score=ct.reduce((n,t)=>n+(tokens.includes(t)?1:0),0);
+          if(score>melhorScore){melhorScore=score;melhor=cand;}
+        }
+        if(melhorScore>0)setor=melhor;
+      }
       if(!setor&&currentProfile?.setor_id)setor=setores.find(s=>String(s.id)===String(currentProfile.setor_id));
-      if(!setor){semSetor++;continue;}
-      porMatricula.set(matricula,{competencia:competencia+'-01',matricula,nome,cargo,descricao_secao:sec,unidade_id:Number(setor.unidade_id),setor_id:Number(setor.id),situacao:situ,ferias:emFerias,origem_arquivo:file.name,criado_por:currentUser.id});
+      if(!setor)semSetor++;
+      porMatricula.set(matricula,{competencia:competencia+'-01',matricula,nome,cargo,descricao_secao:sec,unidade_id:setor?.unidade_id?Number(setor.unidade_id):(unidades[0]?.id?Number(unidades[0].id):null),setor_id:setor?.id?Number(setor.id):null,situacao:situ,ferias:emFerias,origem_arquivo:file.name,criado_por:currentUser.id});
     }
     const payload=[...porMatricula.values()];
-    if(!payload.length)return mostrar('Nenhum registro pôde ser preparado. Verifique se as seções do arquivo correspondem aos setores cadastrados.',true);
+    if(!payload.length)return mostrar('Nenhum registro pôde ser preparado. Verifique se o arquivo possui Nome e Chapa/Matrícula.',true);
     if(btn)btn.textContent='Gravando no mês...';
     mostrar('Gravando '+payload.length+' colaboradores em '+competencia+'...');
     const {error}=await db.from('colaboradores_mensal').upsert(payload,{onConflict:'competencia,matricula'});
@@ -480,7 +493,7 @@ async function importarArquivoColab(){
     document.getElementById('file-colab').value='';
     const dashMes=document.getElementById('dash-mes');if(dashMes)dashMes.value=competencia;const checkMes=document.getElementById('check-mes');if(checkMes)checkMes.value=competencia;
     await loadMesChecklist();await loadDashboard();
-    mostrar(payload.length+' colaboradores importados para '+competencia+'. '+(duplicados?duplicados+' linhas repetidas por matrícula foram consolidadas. ':'')+(semSetor?semSetor+' registros ficaram de fora por não corresponderem a nenhum setor cadastrado. ':'')+'Todos os colaboradores importados permanecem no histórico; férias ficam fora do indicador de treinados.');
+    mostrar(payload.length+' colaboradores importados para '+competencia+'. '+(duplicados?duplicados+' linhas repetidas por matrícula foram consolidadas. ':'')+(semSetor?semSetor+' registros foram mantidos sem setor vinculado porque a descrição da seção não correspondeu aos setores cadastrados. ':'')+'Todos os colaboradores importados permanecem no histórico; férias ficam fora do indicador de treinados.');
   }catch(err){console.error('ERRO IMPORTAÇÃO COLABORADORES',err);mostrar('Erro inesperado na importação: '+(err?.message||err),true);}
   finally{if(btn){btn.disabled=false;btn.textContent='Importar / Atualizar mês';}}
 }
