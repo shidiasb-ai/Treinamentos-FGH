@@ -202,7 +202,25 @@ function updateDashSectors(){const u=document.getElementById('dash-unidade')?.va
 function carregarSetores(unitId,sectorId){const u=document.getElementById(unitId)?.value;const ss=unidades.find(x=>String(x.id)===String(u))?.setores||[];const el=document.getElementById(sectorId);if(el)el.innerHTML='<option value="">Selecione</option>'+ss.map(s=>`<option value="${s.id}">${esc(s.nome)}</option>`).join('')}
 function switchTab(view){document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.getElementById('tab-'+view)?.classList.add('active');document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+view)?.classList.add('active');if(view==='dashboard')loadDashboard();if(view==='colaboradores')loadMesChecklist();if(view==='atas'){renderHistoricoAtas();renderHistoricoEmentas();renderTreinamentos()}if(view==='usuarios')renderUsuarios()}
 function switchSub(group,name,btn){document.querySelectorAll('#view-'+group+' .subtab').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');document.querySelectorAll('#view-'+group+' .subview').forEach(x=>x.classList.remove('active'));document.getElementById('sub-'+group+'-'+name)?.classList.add('active')}
-async function loadDashboard(){const comp=ymDate(document.getElementById('dash-mes')?.value||currentYM());const {data,error}=await db.rpc('dashboard_mensal',{p_competencia:comp});if(error){console.error(error);dashboardRows=[];toast('Execute a migração SQL enviada junto com o sistema para ativar o Dashboard mensal.');return}dashboardRows=data||[];renderDashboard()}
+async function loadDashboard(){
+ const comp=ymDate(document.getElementById('dash-mes')?.value||currentYM());
+ let q=db.from('colaboradores_mensal').select('id,matricula,nome,cargo,descricao_secao,unidade_id,setor_id,ferias,ferias_marcada,checklist_mensal(tipo,realizado),setores(nome),unidades(nome)').eq('competencia',comp).order('nome');
+ if(!isAdmin()&&currentProfile?.setor_id)q=q.eq('setor_id',currentProfile.setor_id);
+ const {data,error}=await q;
+ if(error){console.error('Erro ao carregar Dashboard:',error);dashboardRows=[];renderDashboard();toast('Não foi possível atualizar o Dashboard: '+error.message);return}
+ dashboardRows=(data||[]).map(r=>{
+   const done=new Set((r.checklist_mensal||[]).filter(c=>c.realizado).map(c=>norm(c.tipo)));
+   const has=(tipo)=>done.has(norm(tipo));
+   return {
+     colaborador_id:r.id,matricula:r.matricula,nome:r.nome,cargo:r.cargo,descricao_secao:r.descricao_secao,
+     unidade_id:r.unidade_id,unidade_nome:r.unidades?.nome||'',setor_id:r.setor_id,setor_nome:r.setores?.nome||'',
+     ferias:!!r.ferias,ferias_marcada:!!r.ferias_marcada,
+     transversal_nep:has('Transversal NEP'),institucional:has('Institucional'),
+     intrasetorial_lnt:has('Intrasetorial LNT'),intrasetorial_adicional:has('Intrasetorial Adicional')
+   };
+ });
+ renderDashboard()
+}
 function filteredDash(){const u=document.getElementById('dash-unidade')?.value||'todos',s=document.getElementById('dash-setor')?.value||'todos';return dashboardRows.filter(r=>(u==='todos'||String(r.unidade_id)===String(u))&&(s==='todos'||String(r.setor_id)===String(s)))}
 function pct(rows,key){const n=rows.length;if(!n)return 0;return Math.round(rows.filter(r=>r[key]).length/n*100)}
 function renderDashboard(){
