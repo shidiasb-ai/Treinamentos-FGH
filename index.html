@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="app-version" content="2026-10-03-v8-historico-permanente-navegacao">
+<meta name="app-version" content="2026-10-03-v9-corrige-login-historico">
 <title>Sistema de Gestão de Treinamentos FGH — Versão Consolidada</title>
 <style>
 :root{--bg:#0f172a;--card:#1e293b;--border:#334155;--primary:#0284c7;--primary2:#0369a1;--accent:#38bdf8;--text:#f8fafc;--muted:#94a3b8;--ok:#10b981;--warn:#f59e0b;--danger:#ef4444}
@@ -105,7 +105,7 @@
 const SUPABASE_URL='https://yzykqqowbzakaeetccii.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_mqpR1gLc9NuWfBVhTK9SiA_FzI-KJUM';
 const EDGE_FUNCTION_ADMIN_USERS='admin-users';
-let db,currentUser,currentProfile,unidades=[],colaboradores=[],atas=[],ementas=[],treinamentos=[],perfis=[],dashboardRows=[],checkRows=[];
+let db,currentUser,currentProfile,initializedUserId=null,unidades=[],colaboradores=[],atas=[],ementas=[],treinamentos=[],perfis=[],dashboardRows=[],checkRows=[];
 const TIPOS=['Transversal NEP','Institucional','Intrasetorial LNT','Intrasetorial Adicional'];
 const meses=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
@@ -194,18 +194,44 @@ function preencherUnidadeSetorAdmin(){
 }
 async function loadProfiles(){if(!isAdmin())return;const {data,error}=await db.from('perfis').select('id,email,nome,perfil,setor_id,setores(nome)').order('nome');if(error){console.error(error);return}perfis=data||[]}
 async function loadAtas(){
- const q='id,treinamento_id,unidade_id,setor_id,nome_arquivo,caminho_arquivo,tipo_arquivo,tamanho_arquivo,data_ata,inserido_por,created_at,mes_referencia,unidades(nome),setores(nome),treinamentos(nome,tipo)';
- let res=await db.from('atas').select(q).order('data_ata',{ascending:false});
- if(res.error){
-   console.error('Falha na consulta completa de atas:',res.error);
-   const fallback=await db.from('atas').select('id,treinamento_id,unidade_id,setor_id,nome_arquivo,caminho_arquivo,tipo_arquivo,tamanho_arquivo,data_ata,inserido_por,created_at,mes_referencia').order('data_ata',{ascending:false});
-   if(fallback.error){console.error(fallback.error);toast('Não foi possível carregar o histórico de atas: '+fallback.error.message);return}
-   atas=fallback.data||[];
- }else atas=res.data||[];
+ const base='id,treinamento_id,unidade_id,setor_id,nome_arquivo,caminho_arquivo,tipo_arquivo,tamanho_arquivo,data_ata,inserido_por,created_at,mes_referencia';
+ const res=await db.from('atas').select(base).order('data_ata',{ascending:false}).order('created_at',{ascending:false});
+ if(res.error){console.error('Falha ao carregar atas:',res.error);atas=[];toast('Não foi possível carregar o histórico de atas: '+res.error.message);return}
+ atas=res.data||[];
  const ids=[...new Set(atas.map(a=>a.inserido_por).filter(Boolean))];
- if(ids.length){const {data:ps}=await db.from('perfis').select('id,nome,email').in('id',ids);const map=new Map((ps||[]).map(p=>[p.id,p]));atas=atas.map(a=>({...a,criador:map.get(a.inserido_por)}))}
+ const uids=[...new Set(atas.map(a=>a.unidade_id).filter(Boolean))];
+ const sids=[...new Set(atas.map(a=>a.setor_id).filter(Boolean))];
+ const tids=[...new Set(atas.map(a=>a.treinamento_id).filter(Boolean))];
+ const [ps,us,ss,ts]=await Promise.all([
+   ids.length?db.from('perfis').select('id,nome,email').in('id',ids):Promise.resolve({data:[]}),
+   uids.length?db.from('unidades').select('id,nome').in('id',uids):Promise.resolve({data:[]}),
+   sids.length?db.from('setores').select('id,nome').in('id',sids):Promise.resolve({data:[]}),
+   tids.length?db.from('treinamentos').select('id,nome,tipo').in('id',tids):Promise.resolve({data:[]})
+ ]);
+ const pm=new Map((ps.data||[]).map(x=>[String(x.id),x]));
+ const um=new Map((us.data||[]).map(x=>[String(x.id),x]));
+ const sm=new Map((ss.data||[]).map(x=>[String(x.id),x]));
+ const tm=new Map((ts.data||[]).map(x=>[String(x.id),x]));
+ atas=atas.map(a=>({...a,criador:pm.get(String(a.inserido_por)),unidades:um.get(String(a.unidade_id)),setores:sm.get(String(a.setor_id)),treinamentos:tm.get(String(a.treinamento_id))}));
 }
-async function loadEmentas(){const {data,error}=await db.from('ementas').select('id,created_at,tipo,titulo,objetivo,conteudo_programatico,publico_alvo,carga_horaria,instrutor,unidade_id,setor_id,treinamento_id,data_ementa,nome_arquivo,caminho_arquivo,tipo_arquivo,tamanho_arquivo,mes_referencia,criado_por,unidades(nome),setores(nome),treinamentos(nome,tipo)').order('created_at',{ascending:false});if(error){console.error(error);toast('Não foi possível carregar as ementas: '+error.message);return}ementas=data||[];const ids=[...new Set(ementas.map(a=>a.criado_por).filter(Boolean))];if(ids.length){const {data:ps}=await db.from('perfis').select('id,nome,email').in('id',ids);const map=new Map((ps||[]).map(p=>[p.id,p]));ementas=ementas.map(a=>({...a,criador:map.get(a.criado_por)}))}}
+async function loadEmentas(){
+ const base='id,created_at,tipo,titulo,objetivo,conteudo_programatico,publico_alvo,carga_horaria,instrutor,unidade_id,setor_id,treinamento_id,data_ementa,nome_arquivo,caminho_arquivo,tipo_arquivo,tamanho_arquivo,mes_referencia,criado_por';
+ const res=await db.from('ementas').select(base).order('data_ementa',{ascending:false}).order('created_at',{ascending:false});
+ if(res.error){console.error('Falha ao carregar ementas:',res.error);ementas=[];toast('Não foi possível carregar as ementas: '+res.error.message);return}
+ ementas=res.data||[];
+ const ids=[...new Set(ementas.map(a=>a.criado_por).filter(Boolean))];
+ const uids=[...new Set(ementas.map(a=>a.unidade_id).filter(Boolean))];
+ const sids=[...new Set(ementas.map(a=>a.setor_id).filter(Boolean))];
+ const [ps,us,ss]=await Promise.all([
+   ids.length?db.from('perfis').select('id,nome,email').in('id',ids):Promise.resolve({data:[]}),
+   uids.length?db.from('unidades').select('id,nome').in('id',uids):Promise.resolve({data:[]}),
+   sids.length?db.from('setores').select('id,nome').in('id',sids):Promise.resolve({data:[]})
+ ]);
+ const pm=new Map((ps.data||[]).map(x=>[String(x.id),x]));
+ const um=new Map((us.data||[]).map(x=>[String(x.id),x]));
+ const sm=new Map((ss.data||[]).map(x=>[String(x.id),x]));
+ ementas=ementas.map(a=>({...a,criador:pm.get(String(a.criado_por)),unidades:um.get(String(a.unidade_id)),setores:sm.get(String(a.setor_id))}));
+}
 async function loadTreinamentos(){let q=db.from('treinamentos').select('id,nome,objetivo,conteudo_programatico,publico_alvo,tipo,formato,carga_horaria,instrutor,consultoria,data_treinamento,status,unidade_id,setor_id,unidades(nome),setores(nome)').order('nome');if(!isAdmin()&&currentProfile?.setor_id)q=q.eq('setor_id',currentProfile.setor_id);const {data,error}=await q;if(error){console.error(error);return}treinamentos=data||[];const options='<option value="">Selecione</option>'+treinamentos.map(t=>`<option value="${t.id}">${esc(t.nome)} — ${esc(t.tipo||'')}</option>`).join('');const el=document.getElementById('ata-treinamento');if(el){el.innerHTML=options;atualizarTipoAta()}const ee=document.getElementById('ementa-treinamento');if(ee){ee.innerHTML=options;atualizarDadosEmenta()}}
 function atualizarTipoAta(){const t=treinamentos.find(x=>String(x.id)===String(v('ata-treinamento')));const el=document.getElementById('ata-tipo');if(el)el.value=t?.tipo||''}function atualizarDadosEmenta(){const t=treinamentos.find(x=>String(x.id)===String(v('ementa-treinamento')));const tipo=document.getElementById('ementa-tipo');const titulo=document.getElementById('ementa-titulo');if(tipo)tipo.value=t?.tipo||'';if(titulo)titulo.value=t?.nome||''}
 function populateFilters(){
