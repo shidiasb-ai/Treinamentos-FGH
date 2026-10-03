@@ -121,8 +121,30 @@ function fillMonthSelect(id){const el=document.getElementById(id);if(!el)return;
 function fillMonthOnly(id){const el=document.getElementById(id);if(!el)return;el.innerHTML='<option value="todos">Todos</option>'+meses.map((m,i)=>`<option value="${String(i+1).padStart(2,'0')}">${m}</option>`).join('');el.value='todos'}
 function fillYearOnly(id){const el=document.getElementById(id);if(!el)return;const y=new Date().getFullYear();el.innerHTML='<option value="todos">Todos</option>'+Array.from({length:5},(_,i)=>`<option value="${y-2+i}">${y-2+i}</option>`).join('');el.value='todos'}
 function fillYearMonth(id){fillMonthSelect(id)}
-async function boot(){db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});const {data:{session}}=await db.auth.getSession();if(session)await onSignedIn(session);db.auth.onAuthStateChange(async(e,s)=>{if(e==='SIGNED_IN'&&s)await onSignedIn(s);if(e==='SIGNED_OUT'){currentUser=null;currentProfile=null;initializedUserId=null;document.querySelector('.container').style.display='none';document.getElementById('login').style.display='flex'}})}
-async function login(e){e.preventDefault();if(!db)return;const email=document.getElementById('login-email').value.trim(),password=document.getElementById('login-password').value;const {error}=await db.auth.signInWithPassword({email,password});if(error)toast('Não foi possível entrar. Verifique o e-mail e a senha.')}
+async function boot(){
+  try{
+    db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+    db.auth.onAuthStateChange((e,s)=>{
+      if(e==='SIGNED_IN'&&s){setTimeout(()=>onSignedIn(s),0)}
+      if(e==='SIGNED_OUT'){
+        currentUser=null;currentProfile=null;initializedUserId=null;
+        document.querySelector('.container').style.display='none';
+        document.getElementById('login').style.display='flex';
+      }
+    });
+    const {data:{session},error}=await db.auth.getSession();
+    if(error){console.error(error);return}
+    if(session) await onSignedIn(session);
+    else {document.querySelector('.container').style.display='none';document.getElementById('login').style.display='flex'}
+  }catch(err){console.error(err);document.querySelector('.container').style.display='none';document.getElementById('login').style.display='flex';}
+}
+async function login(e){
+  e.preventDefault();
+  if(!db){toast('Sistema de autenticação ainda não carregado. Atualize a página e tente novamente.');return}
+  const email=document.getElementById('login-email').value.trim(),password=document.getElementById('login-password').value;
+  const {error}=await db.auth.signInWithPassword({email,password});
+  if(error){console.error(error);toast('Não foi possível entrar. Verifique o e-mail e a senha.')}
+}
 async function logout(){if(db)await db.auth.signOut()}
 async function onSignedIn(session){
   currentUser=session.user;
