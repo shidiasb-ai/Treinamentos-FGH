@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="app-version" content="2026-10-03-dashboard-v6">
+<meta name="app-version" content="2026-10-03-v8-historico-permanente-navegacao">
 <title>Sistema de Gestão de Treinamentos FGH — Versão Consolidada</title>
 <style>
 :root{--bg:#0f172a;--card:#1e293b;--border:#334155;--primary:#0284c7;--primary2:#0369a1;--accent:#38bdf8;--text:#f8fafc;--muted:#94a3b8;--ok:#10b981;--warn:#f59e0b;--danger:#ef4444}
@@ -21,11 +21,11 @@
 <div class="container">
 <header class="top"><div class="brand"><h1>Sistema de Gestão de Treinamentos FGH</h1><p>Educação Permanente</p></div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span id="user-display" class="user-tag"></span><button type="button" class="btn btn-secondary" onclick="logout()">Sair</button></div></header>
 <nav class="tabs">
- <button type="button" class="tab active" id="tab-dashboard" onclick="switchTab('dashboard')">Dashboard & Indicadores</button>
- <button type="button" class="tab" id="tab-atas" onclick="switchTab('atas')">Atas e Ementas</button>
- <button type="button" class="tab" id="tab-colab" onclick="switchTab('colaboradores')">Colaboradores & Checklist</button>
- <button type="button" class="tab" id="tab-unidades" onclick="switchTab('unidades')">Unidades & Setores</button>
- <button type="button" class="tab" id="tab-usuarios" onclick="switchTab('usuarios')">Cadastro de Usuários</button>
+ <button type="button" class="tab active" id="tab-dashboard" onclick="event.preventDefault();switchTab('dashboard')">Dashboard & Indicadores</button>
+ <button type="button" class="tab" id="tab-atas" onclick="event.preventDefault();switchTab('atas')">Atas e Ementas</button>
+ <button type="button" class="tab" id="tab-colab" onclick="event.preventDefault();switchTab('colaboradores')">Colaboradores & Checklist</button>
+ <button type="button" class="tab" id="tab-unidades" onclick="event.preventDefault();switchTab('unidades')">Unidades & Setores</button>
+ <button type="button" class="tab" id="tab-usuarios" onclick="event.preventDefault();switchTab('usuarios')">Cadastro de Usuários</button>
 </nav>
 
 <section id="view-dashboard" class="view active">
@@ -118,14 +118,35 @@ function toast(msg){alert(msg)}
 function ymDate(ym){return ym+'-01'}
 function currentYM(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`}
 function fillMonthSelect(id){const el=document.getElementById(id);if(!el)return;const now=new Date();let out='';for(let y=now.getFullYear()-1;y<=now.getFullYear()+1;y++)for(let m=1;m<=12;m++){const v=`${y}-${String(m).padStart(2,'0')}`;out+=`<option value="${v}">${meses[m-1]} / ${y}</option>`}el.innerHTML=out;el.value=currentYM()}
-function fillMonthOnly(id){const el=document.getElementById(id);if(!el)return;el.innerHTML='<option value="todos">Todos</option>'+meses.map((m,i)=>`<option value="${String(i+1).padStart(2,'0')}">${m}</option>`).join('');el.value=String(new Date().getMonth()+1).padStart(2,'0')}
-function fillYearOnly(id){const el=document.getElementById(id);if(!el)return;const y=new Date().getFullYear();el.innerHTML='<option value="todos">Todos</option>'+Array.from({length:5},(_,i)=>`<option value="${y-2+i}">${y-2+i}</option>`).join('');el.value=String(y)}
+function fillMonthOnly(id){const el=document.getElementById(id);if(!el)return;el.innerHTML='<option value="todos">Todos</option>'+meses.map((m,i)=>`<option value="${String(i+1).padStart(2,'0')}">${m}</option>`).join('');el.value='todos'}
+function fillYearOnly(id){const el=document.getElementById(id);if(!el)return;const y=new Date().getFullYear();el.innerHTML='<option value="todos">Todos</option>'+Array.from({length:5},(_,i)=>`<option value="${y-2+i}">${y-2+i}</option>`).join('');el.value='todos'}
 function fillYearMonth(id){fillMonthSelect(id)}
-async function boot(){db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});const {data:{session}}=await db.auth.getSession();if(session)await onSignedIn(session);db.auth.onAuthStateChange(async(e,s)=>{if(e==='SIGNED_IN'&&s)await onSignedIn(s);if(e==='SIGNED_OUT'){currentUser=null;currentProfile=null;document.querySelector('.container').style.display='none';document.getElementById('login').style.display='flex'}})}
+async function boot(){db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});const {data:{session}}=await db.auth.getSession();if(session)await onSignedIn(session);db.auth.onAuthStateChange(async(e,s)=>{if(e==='SIGNED_IN'&&s)await onSignedIn(s);if(e==='SIGNED_OUT'){currentUser=null;currentProfile=null;initializedUserId=null;document.querySelector('.container').style.display='none';document.getElementById('login').style.display='flex'}})}
 async function login(e){e.preventDefault();if(!db)return;const email=document.getElementById('login-email').value.trim(),password=document.getElementById('login-password').value;const {error}=await db.auth.signInWithPassword({email,password});if(error)toast('Não foi possível entrar. Verifique o e-mail e a senha.')}
 async function logout(){if(db)await db.auth.signOut()}
-async function onSignedIn(session){currentUser=session.user;const {data:profile,error}=await db.from('perfis').select('id,nome,perfil,email,setor_id').eq('id',currentUser.id).maybeSingle();if(error||!profile){await db.auth.signOut();return toast('Sua conta foi autenticada, mas não possui perfil cadastrado. Solicite ao administrador.')}currentProfile=profile;document.querySelector('.container').style.display='block';document.getElementById('login').style.display='none';document.getElementById('user-display').textContent=`${profile.nome||currentUser.email} — ${roleLabel(profile.perfil)}`;aplicarPermissoes();await initData()}
-function aplicarPermissoes(){document.getElementById('tab-unidades').style.display=isAdmin()?'block':'none';document.getElementById('tab-usuarios').style.display=isAdmin()?'block':'none';document.getElementById('tab-atas').style.display='block';document.getElementById('tab-colab').style.display='block';switchTab('dashboard')}
+async function onSignedIn(session){
+  currentUser=session.user;
+  if(initializedUserId===currentUser.id && currentProfile) return;
+  const {data:profile,error}=await db.from('perfis').select('id,nome,perfil,email,setor_id').eq('id',currentUser.id).maybeSingle();
+  if(error||!profile){await db.auth.signOut();return toast('Sua conta foi autenticada, mas não possui perfil cadastrado. Solicite ao administrador.')}
+  currentProfile=profile;
+  initializedUserId=currentUser.id;
+  document.querySelector('.container').style.display='block';
+  document.getElementById('login').style.display='none';
+  document.getElementById('user-display').textContent=`${profile.nome||currentUser.email} — ${roleLabel(profile.perfil)}`;
+  aplicarPermissoes();
+  await initData()
+}
+function aplicarPermissoes(){
+  document.getElementById('tab-unidades').style.display=isAdmin()?'block':'none';
+  document.getElementById('tab-usuarios').style.display=isAdmin()?'block':'none';
+  document.getElementById('tab-atas').style.display='block';
+  document.getElementById('tab-colab').style.display='block';
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.getElementById('tab-dashboard')?.classList.add('active');
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  document.getElementById('view-dashboard')?.classList.add('active');
+}
 async function initData(){fillMonthSelect('dash-mes');fillMonthSelect('imp-mes');fillMonthSelect('check-mes');fillMonthOnly('hist-ata-mes');fillYearOnly('hist-ata-ano');fillMonthOnly('hist-ementa-mes');fillYearOnly('hist-ementa-ano');await Promise.all([loadUnits(),loadProfiles(),loadAtas(),loadEmentas(),loadTreinamentos()]);populateFilters();await loadDashboard();await loadMesChecklist();renderUsuarios();renderUnidades();renderTreinamentos();renderHistoricoAtas();renderHistoricoEmentas()}
 async function loadUnits(){
   const status=document.getElementById('unidades-status');
