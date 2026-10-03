@@ -274,11 +274,19 @@ async function switchTab(view){if(!document.getElementById('view-'+view))return;
 function switchSub(group,name,btn){const target=document.getElementById('sub-'+group+'-'+name);if(!target)return;document.querySelectorAll('#view-'+group+' .subtab').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');document.querySelectorAll('#view-'+group+' .subview').forEach(x=>x.classList.remove('active'));target.classList.add('active')}
 async function loadDashboard(){
  const comp=ymDate(document.getElementById('dash-mes')?.value||currentYM());
- let q=db.from('colaboradores_mensal').select('id,matricula,nome,cargo,descricao_secao,unidade_id,setor_id,situacao,ferias,ferias_marcada,checklist_mensal(tipo,realizado),setores(nome),unidades(nome)').eq('competencia',comp).order('nome');
- if(!isAdmin()&&currentProfile?.setor_id)q=q.eq('setor_id',currentProfile.setor_id);
- const {data,error}=await q;
- if(error){console.error('Erro ao carregar Dashboard:',error);dashboardRows=[];renderDashboard();toast('Não foi possível atualizar o Dashboard: '+error.message);return}
- dashboardRows=(data||[]).map(r=>{
+ let base=db.from('colaboradores_mensal').select('id,matricula,nome,cargo,descricao_secao,unidade_id,setor_id,situacao,ferias,ferias_marcada,checklist_mensal(tipo,realizado),setores(nome),unidades(nome)').eq('competencia',comp).order('nome');
+ if(!isAdmin()&&currentProfile?.setor_id)base=base.eq('setor_id',currentProfile.setor_id);
+ // O Supabase pode limitar uma consulta a 1.000 registros.
+ // O Dashboard pagina a consulta para carregar todos os colaboradores do mês.
+ const data=[];
+ const pageSize=1000;
+ for(let from=0;;from+=pageSize){
+   const {data:page,error}=await base.range(from,from+pageSize-1);
+   if(error){console.error('Erro ao carregar Dashboard:',error);dashboardRows=[];renderDashboard();toast('Não foi possível atualizar o Dashboard: '+error.message);return}
+   if(page?.length)data.push(...page);
+   if(!page || page.length<pageSize)break;
+ }
+ dashboardRows=data.map(r=>{
    const done=new Set((r.checklist_mensal||[]).filter(c=>c.realizado).map(c=>norm(c.tipo)));
    const has=(tipo)=>done.has(norm(tipo));
    return {
