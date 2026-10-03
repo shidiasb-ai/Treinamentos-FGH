@@ -245,22 +245,36 @@ async function renderHistoricoAtas(){
 async function excluirAta(id){if(!confirm('Excluir esta ata?'))return;const a=atas.find(x=>x.id===id);const {error}=await db.from('atas').delete().eq('id',id);if(error)return toast(error.message);if(a?.caminho_arquivo)await db.storage.from('atas-treinamentos').remove([a.caminho_arquivo]);await loadAtas();renderHistoricoAtas()}
 async function renderHistoricoEmentas(){const rows=ementas.filter(e=>mesAnoFiltro(e.mes_referencia||e.data_ementa||e.created_at,'hist-ementa-mes','hist-ementa-ano')).filter(e=>isAdmin()||e.criado_por===currentUser.id);const out=[];for(const e of rows){let link='—';if(e.caminho_arquivo){const {data}=await db.storage.from('atas-treinamentos').createSignedUrl(e.caminho_arquivo,3600);if(data?.signedUrl)link=`<a class="btn btn-secondary" target="_blank" href="${esc(data.signedUrl)}">Abrir arquivo</a>`}out.push(`<tr><td>${e.data_ementa?new Date(e.data_ementa+'T12:00:00').toLocaleDateString('pt-BR'):new Date(e.created_at).toLocaleDateString('pt-BR')}</td><td>${esc(e.unidades?.nome)}</td><td>${esc(e.setores?.nome)}</td><td><span class="badge info">${esc(e.tipo)}</span></td><td>${esc(e.titulo)}</td><td>${esc(e.criador?.nome||e.criador?.email||'')}</td><td>${esc(e.nome_arquivo||'')}</td><td>${link}</td><td>${isAdmin()||e.criado_por===currentUser.id?`<button type="button" class="btn btn-danger" onclick="excluirEmenta('${e.id}')">Excluir</button>`:''}</td></tr>`)}document.getElementById('historico-ementas-tbody').innerHTML=out.join('')||'<tr><td colspan="9">Nenhuma EMENTA no período.</td></tr>'}
 async function excluirEmenta(id){if(!confirm('Excluir esta EMENTA?'))return;const e=ementas.find(x=>String(x.id)===String(id));const {error}=await db.from('ementas').delete().eq('id',id);if(error)return toast(error.message);if(e?.caminho_arquivo)await db.storage.from('atas-treinamentos').remove([e.caminho_arquivo]);await loadEmentas();renderHistoricoEmentas()}
-function renderTreinamentos(){document.getElementById('treinamentos-tbody').innerHTML=treinamentos.map(t=>`<tr><td>${esc(t.nome)}</td><td>${esc(t.tipo)}</td><td>${esc(t.unidades?.nome)}</td><td>${esc(t.setores?.nome||'Todos')}</td><td>${esc(t.carga_horaria||'')}</td><td>${isAdmin()||String(t.setor_id)===String(currentProfile?.setor_id)?`<button type="button" class="btn btn-danger" onclick="excluirTreinamento('${t.id}')">Excluir</button>`:''}</td></tr>`).join('')||'<tr><td colspan="6">Nenhum treinamento cadastrado.</td></tr>'}
-async function salvarTreinamento(e){e.preventDefault();
-  if(!currentUser)return toast('Sua sessão não está ativa. Faça login novamente.');
-  const unidade_id=v('tr-unidade'), setor_id=v('tr-setor'), tipo=v('tr-tipo'), nome=v('tr-titulo').trim();
-  if(!unidade_id)return toast('Selecione a unidade.');
-  if(!nome)return toast('Informe o nome do treinamento.');
-  const carga=v('tr-carga');
-  const payload={unidade_id:Number(unidade_id),setor_id:setor_id?Number(setor_id):null,nome,
-    objetivo:v('tr-objetivo').trim()||null,conteudo_programatico:v('tr-conteudo').trim()||null,
-    publico_alvo:v('tr-publico').trim()||null,tipo,formato:v('tr-formato').trim()||null,
-    carga_horaria:carga!==''?Number(carga):null,instrutor:v('tr-instrutor').trim()||null,
-    consultoria:v('tr-consultoria').trim()||null,data_treinamento:v('tr-data')||null,status:'ativo'};
-  const {error}=await db.from('treinamentos').insert(payload).select('id').single();
-  if(error){console.error('Erro ao cadastrar treinamento:',error);return toast('Não foi possível cadastrar o treinamento. Erro do banco: '+error.message)}
-  await loadTreinamentos();renderTreinamentos();document.querySelector('#sub-atas-cadastro-treinamentos form')?.reset();populateFilters();toast('Treinamento cadastrado com sucesso.');
+async function salvarTreinamento(e){
+  e.preventDefault();
+  if(!currentUser||!currentProfile)return toast('Sua sessão não está pronta. Faça login novamente.');
+  if(!isAdmin() && !currentProfile?.setor_id)return toast('Seu usuário precisa ter um setor responsável cadastrado.');
+  const unidade_id=document.getElementById('tr-unidade')?.value;
+  const setor_id=document.getElementById('tr-setor')?.value||null;
+  const tipo=document.getElementById('tr-tipo')?.value;
+  const nome=document.getElementById('tr-titulo')?.value.trim();
+  const data_treinamento=document.getElementById('tr-data')?.value||null;
+  const cargaRaw=document.getElementById('tr-carga')?.value;
+  const carga_horaria=cargaRaw===''||cargaRaw==null?null:Number(cargaRaw);
+  const formato=document.getElementById('tr-formato')?.value.trim()||null;
+  const instrutor=document.getElementById('tr-instrutor')?.value.trim()||null;
+  const consultoria=document.getElementById('tr-consultoria')?.value.trim()||null;
+  const objetivo=document.getElementById('tr-objetivo')?.value.trim()||null;
+  const conteudo_programatico=document.getElementById('tr-conteudo')?.value.trim()||null;
+  const publico_alvo=document.getElementById('tr-publico')?.value.trim()||null;
+  if(!unidade_id||!tipo||!nome)return toast('Preencha Unidade, Tipo e Nome do treinamento.');
+  if(!isAdmin() && String(setor_id)!==String(currentProfile.setor_id))return toast('O setor informado não corresponde ao setor responsável pelo seu usuário.');
+  const payload={nome,objetivo,conteudo_programatico,publico_alvo,tipo,formato,carga_horaria,instrutor,consultoria,data_treinamento,status:'ativo',unidade_id:Number(unidade_id),setor_id:setor_id?Number(setor_id):null};
+  const {error}=await db.from('treinamentos').insert(payload);
+  if(error){console.error(error);return toast('Não foi possível cadastrar o treinamento: '+error.message);}
+  e.target.reset();
+  document.getElementById('tr-unidade').value='';
+  document.getElementById('tr-setor').innerHTML='<option value="">Selecione</option>';
+  await loadTreinamentos();
+  renderTreinamentos();
+  toast('Treinamento cadastrado com sucesso.');
 }
+function renderTreinamentos(){document.getElementById('treinamentos-tbody').innerHTML=treinamentos.map(t=>`<tr><td>${esc(t.nome)}</td><td>${esc(t.tipo)}</td><td>${esc(t.unidades?.nome)}</td><td>${esc(t.setores?.nome||'Todos')}</td><td>${esc(t.carga_horaria||'')}</td><td>${isAdmin()||String(t.setor_id)===String(currentProfile?.setor_id)?`<button type="button" class="btn btn-danger" onclick="excluirTreinamento('${t.id}')">Excluir</button>`:''}</td></tr>`).join('')||'<tr><td colspan="6">Nenhum treinamento cadastrado.</td></tr>'}
 async function excluirTreinamento(id){if(!confirm('Excluir este treinamento?'))return;const {error}=await db.from('treinamentos').delete().eq('id',id);if(error)return toast(error.message);await loadTreinamentos();renderTreinamentos()}
 function encontrar(headers,arr){const hs=headers.map(norm);for(const a of arr){const i=hs.indexOf(norm(a));if(i>=0)return i}return -1}
 async function lerArquivo(file){const ext=file.name.split('.').pop().toLowerCase();if(ext==='xlsx'||ext==='xls'){const wb=XLSX.read(await file.arrayBuffer(),{type:'array',cellDates:false});const nomeAba=wb.SheetNames.find(n=>norm(n)==='base geral')||wb.SheetNames[0];return XLSX.utils.sheet_to_json(wb.Sheets[nomeAba],{defval:'',raw:false})}const txt=await file.text();const lines=txt.replace(/^\uFEFF/,'').split(/\r?\n/).filter(x=>x.trim());if(!lines.length)return[];const sep=lines[0].includes(';')?';':lines[0].includes('\t')?'\t':',';const parseLine=line=>{let arr=[],cur='',q=false;for(let i=0;i<line.length;i++){const c=line[i];if(c==='"'){if(q&&line[i+1]==='"'){cur+='"';i++}else q=!q}else if(c===sep&&!q){arr.push(cur);cur=''}else cur+=c}arr.push(cur);return arr};const h=parseLine(lines[0]);return lines.slice(1).map(l=>{const a=parseLine(l),o={};h.forEach((x,i)=>o[x]=a[i]??'');return o})}
