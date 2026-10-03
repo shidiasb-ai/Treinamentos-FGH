@@ -21,10 +21,10 @@
 <header class="top"><div class="brand"><h1>Sistema de Gestão de Treinamentos FGH</h1><p>Educação Permanente</p></div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span id="user-display" class="user-tag"></span><button type="button" class="btn btn-secondary" onclick="logout()">Sair</button></div></header>
 <nav class="tabs">
  <button type="button" class="tab active" id="tab-dashboard" onclick="switchTab('dashboard')">Dashboard & Indicadores</button>
- <button type="button" class="tab" id="tab-atas" onclick="switchTab('atas')">Atas e Ementas</button>
- <button type="button" class="tab" id="tab-colab" onclick="switchTab('colaboradores')">Colaboradores & Checklist</button>
- <button type="button" class="tab" id="tab-unidades" onclick="switchTab('unidades')">Unidades & Setores</button>
- <button type="button" class="tab" id="tab-usuarios" onclick="switchTab('usuarios')">Cadastro de Usuários</button>
+ <button class="tab" id="tab-atas" onclick="switchTab('atas')">Atas e Ementas</button>
+ <button class="tab" id="tab-colab" onclick="switchTab('colaboradores')">Colaboradores & Checklist</button>
+ <button class="tab" id="tab-unidades" onclick="switchTab('unidades')">Unidades & Setores</button>
+ <button class="tab" id="tab-usuarios" onclick="switchTab('usuarios')">Cadastro de Usuários</button>
 </nav>
 
 <section id="view-dashboard" class="view active">
@@ -41,10 +41,10 @@
 </section>
 
 <section id="view-atas" class="view">
- <div class="subtabs"><button type="button" class="subtab active" onclick="switchSub('atas','registrar-ata',this)">Registrar Nova Ata de Treinamento</button><button type="button" class="subtab" onclick="switchSub('atas','registrar-ementa',this)">Registrar Nova EMENTA de Treinamento</button><button type="button" class="subtab" onclick="switchSub('atas','cadastro-treinamentos',this)">Cadastro de Treinamentos</button><button type="button" class="subtab" onclick="switchSub('atas','historico-atas',this)">Histórico de Atas</button><button type="button" class="subtab" onclick="switchSub('atas','historico-ementas',this)">Histórico de Ementas</button></div>
+ <div class="subtabs"><button type="button" class="subtab active" onclick="switchSub('atas','registrar-ata',this)">Registrar Nova Ata de Treinamento</button><button class="subtab" onclick="switchSub('atas','registrar-ementa',this)">Registrar Nova EMENTA de Treinamento</button><button class="subtab" onclick="switchSub('atas','cadastro-treinamentos',this)">Cadastro de Treinamentos</button><button class="subtab" onclick="switchSub('atas','historico-atas',this)">Histórico de Atas</button><button class="subtab" onclick="switchSub('atas','historico-ementas',this)">Histórico de Ementas</button></div>
  <div id="sub-atas-registrar-ata" class="subview active"><div class="card"><div class="title">Registrar Nova Ata de Treinamento</div><form onsubmit="salvarAta(event)"><div class="grid"><div class="field"><label>Unidade</label><select id="ata-unidade" required onchange="carregarSetores('ata-unidade','ata-setor')"></select></div><div class="field"><label>Setor</label><select id="ata-setor" required></select></div><div class="field"><label>Treinamento cadastrado</label><select id="ata-treinamento" required></select></div><div class="field"><label>Tipo de Treinamento</label><input id="ata-tipo" readonly></div><div class="field"><label>Data do treinamento</label><input id="ata-data" type="date" required></div><div class="field"><label>Arquivo da Ata</label><input id="ata-arquivo" type="file" accept=".pdf,image/*"></div></div><button class="btn btn-primary" type="submit">Registrar Ata</button></form></div></div>
  <div id="sub-atas-registrar-ementa" class="subview"><div class="card"><div class="title">Registrar Nova EMENTA de Treinamento</div><p class="hint">Nesta tela, a EMENTA será inserida como arquivo. Aceita documento digital ou arquivo escaneado, como PDF, Word, Excel e imagens.</p><form onsubmit="salvarEmenta(event)"><div class="grid"><div class="field"><label>Unidade</label><select id="ementa-unidade" required onchange="carregarSetores('ementa-unidade','ementa-setor')"></select></div><div class="field"><label>Setor</label><select id="ementa-setor" required></select></div><div class="field"><label>Treinamento cadastrado</label><select id="ementa-treinamento" required onchange="atualizarDadosEmenta()"></select></div><div class="field"><label>Tipo de Treinamento</label><input id="ementa-tipo" readonly></div><div class="field"><label>Tema / Título</label><input id="ementa-titulo" readonly></div><div class="field"><label>Data da ementa</label><input id="ementa-data" type="date" required></div><div class="field"><label>Arquivo da EMENTA</label><input id="ementa-arquivo" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.odt,.ods,.rtf,image/*" required></div></div><button class="btn btn-primary" type="submit">Registrar EMENTA</button></form></div></div>
- <div id="sub-atas-cadastro-treinamentos" class="subview"><div class="card"><div class="title">Cadastro de Treinamentos</div><form id="form-treinamento" onsubmit="salvarTreinamento(event); return false;"><div class="grid"><div class="field"><label>Unidade</label><select id="tr-unidade" required onchange="carregarSetores('tr-unidade','tr-setor')"></select></div><div class="field"><label>Setor</label><select id="tr-setor"></select></div><div class="field"><label>Tipo</label><select id="tr-tipo" required><option>Transversal NEP</option><option>Institucional</option><option>Intrasetorial LNT</option><option>Intrasetorial Adicional</option></select></div><div class="field"><label>Nome do treinamento</label><input id="tr-titulo" required></div><div class="field"><label>Data</label><input id="tr-data" type="date"></div><div class="field"><label>Carga horária</label><input id="tr-carga" type="number" step="0.5"></div><div class="field"><label>Formato</label><input id="tr-formato" placeholder="Presencial, vídeo, online..."></div><div class="field"><label>Instrutor</label><input id="tr-instrutor"></div><div class="field"><label>Consultoria</label><input id="tr-consultoria"></div></div><div class="grid"><div class="field"><label>Objetivo</label><textarea id="tr-objetivo"></textarea></div><div class="field"><label>Conteúdo programático</label><textarea id="tr-conteudo"></textarea></div><div class="field"><label>Público-alvo</label><textarea id="tr-publico"></textarea></div></div><button class="btn btn-primary" type="button" onclick="salvarTreinamento()">Cadastrar Treinamento</button><div id="tr-status" style="margin-top:10px;font-size:13px"></div></form></div><div class="card"><div class="title">Treinamentos cadastrados</div><div class="table-wrap"><table><thead><tr><th>Título</th><th>Tipo</th><th>Unidade</th><th>Setor</th><th>Carga</th><th>Ação</th></tr></thead><tbody id="treinamentos-tbody"></tbody></table></div></div></div>
+ <div id="sub-atas-cadastro-treinamentos" class="subview"><div class="card"><div class="title">Cadastro de Treinamentos</div><form onsubmit="salvarTreinamento(event)"><div class="grid"><div class="field"><label>Unidade</label><select id="tr-unidade" required onchange="carregarSetores('tr-unidade','tr-setor')"></select></div><div class="field"><label>Setor</label><select id="tr-setor"></select></div><div class="field"><label>Tipo</label><select id="tr-tipo" required><option>Transversal NEP</option><option>Institucional</option><option>Intrasetorial LNT</option><option>Intrasetorial Adicional</option></select></div><div class="field"><label>Nome do treinamento</label><input id="tr-titulo" required></div><div class="field"><label>Data</label><input id="tr-data" type="date"></div><div class="field"><label>Carga horária</label><input id="tr-carga" type="number" step="0.5"></div><div class="field"><label>Formato</label><input id="tr-formato" placeholder="Presencial, vídeo, online..."></div><div class="field"><label>Instrutor</label><input id="tr-instrutor"></div><div class="field"><label>Consultoria</label><input id="tr-consultoria"></div></div><div class="grid"><div class="field"><label>Objetivo</label><textarea id="tr-objetivo"></textarea></div><div class="field"><label>Conteúdo programático</label><textarea id="tr-conteudo"></textarea></div><div class="field"><label>Público-alvo</label><textarea id="tr-publico"></textarea></div></div><button class="btn btn-primary" type="submit">Cadastrar Treinamento</button></form></div><div class="card"><div class="title">Treinamentos cadastrados</div><div class="table-wrap"><table><thead><tr><th>Título</th><th>Tipo</th><th>Unidade</th><th>Setor</th><th>Carga</th><th>Ação</th></tr></thead><tbody id="treinamentos-tbody"></tbody></table></div></div></div>
  <div id="sub-atas-historico-atas" class="subview"><div class="card"><div class="title">Histórico de Atas Registradas</div><div class="grid"><div class="field"><label>Mês</label><select id="hist-ata-mes" onchange="renderHistoricoAtas()"></select></div><div class="field"><label>Ano</label><select id="hist-ata-ano" onchange="renderHistoricoAtas()"></select></div></div><div class="table-wrap"><table><thead><tr><th>Data</th><th>Unidade</th><th>Setor</th><th>Tipo</th><th>Tema</th><th>Usuário que inseriu</th><th>Arquivo</th><th>Ação</th></tr></thead><tbody id="historico-atas-tbody"></tbody></table></div></div></div>
  <div id="sub-atas-historico-ementas" class="subview"><div class="card"><div class="title">Histórico de Ementas Registradas</div><div class="grid"><div class="field"><label>Mês</label><select id="hist-ementa-mes" onchange="renderHistoricoEmentas()"></select></div><div class="field"><label>Ano</label><select id="hist-ementa-ano" onchange="renderHistoricoEmentas()"></select></div></div><div class="table-wrap"><table><thead><tr><th>Data</th><th>Unidade</th><th>Setor</th><th>Tipo</th><th>Tema</th><th>Usuário que inseriu</th><th>Arquivo</th><th>Visualizar</th><th>Ação</th></tr></thead><tbody id="historico-ementas-tbody"></tbody></table></div></div></div>
 </section>
@@ -93,6 +93,7 @@ const TIPOS=['Transversal NEP','Institucional','Intrasetorial LNT','Intrasetoria
 const meses=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
 function norm(v){return String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase();}
+function v(id){const el=document.getElementById(id);return el?el.value:'';}
 function isAdmin(){return currentProfile?.perfil==='administrador'}
 function canUseSector(){return !!currentProfile}
 function roleLabel(r){return ({administrador:'Administrador',gestor:'Gestor',equipe:'Equipe'}[r]||r||'')}
@@ -103,7 +104,7 @@ function fillMonthSelect(id){const el=document.getElementById(id);if(!el)return;
 function fillMonthOnly(id){const el=document.getElementById(id);if(!el)return;el.innerHTML='<option value="todos">Todos</option>'+meses.map((m,i)=>`<option value="${String(i+1).padStart(2,'0')}">${m}</option>`).join('');el.value=String(new Date().getMonth()+1).padStart(2,'0')}
 function fillYearOnly(id){const el=document.getElementById(id);if(!el)return;const y=new Date().getFullYear();el.innerHTML='<option value="todos">Todos</option>'+Array.from({length:5},(_,i)=>`<option value="${y-2+i}">${y-2+i}</option>`).join('');el.value=String(y)}
 function fillYearMonth(id){fillMonthSelect(id)}
-async function boot(){db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});const {data:{session}}=await db.auth.getSession();if(session)await onSignedIn(session);db.auth.onAuthStateChange(async(e,s)=>{if(e==='SIGNED_IN'&&s)await onSignedIn(s);if(e==='SIGNED_OUT'){currentUser=null;currentProfile=null;document.querySelector('.container').style.display='none';document.getElementById('login').style.display='flex'}})}
+async function boot(){if(SUPABASE_PUBLISHABLE_KEY.includes('sb_publishable_mqpR1gLc9NuWfBVhTK9SiA_FzI-KJUM')){alert('Antes de publicar, mantenha no arquivo a chave Publishable do seu projeto Supabase.');return}db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});const {data:{session}}=await db.auth.getSession();if(session)await onSignedIn(session);db.auth.onAuthStateChange(async(e,s)=>{if(e==='SIGNED_IN'&&s)await onSignedIn(s);if(e==='SIGNED_OUT'){currentUser=null;currentProfile=null;document.querySelector('.container').style.display='none';document.getElementById('login').style.display='flex'}})}
 async function login(e){e.preventDefault();if(!db)return;const email=document.getElementById('login-email').value.trim(),password=document.getElementById('login-password').value;const {error}=await db.auth.signInWithPassword({email,password});if(error)toast('Não foi possível entrar. Verifique o e-mail e a senha.')}
 async function logout(){if(db)await db.auth.signOut()}
 async function onSignedIn(session){currentUser=session.user;const {data:profile,error}=await db.from('perfis').select('id,nome,perfil,email,setor_id').eq('id',currentUser.id).maybeSingle();if(error||!profile){await db.auth.signOut();return toast('Sua conta foi autenticada, mas não possui perfil cadastrado. Solicite ao administrador.')}currentProfile=profile;document.querySelector('.container').style.display='block';document.getElementById('login').style.display='none';document.getElementById('user-display').textContent=`${profile.nome||currentUser.email} — ${roleLabel(profile.perfil)}`;aplicarPermissoes();await initData()}
@@ -171,41 +172,18 @@ async function loadTreinamentos(){let q=db.from('treinamentos').select('id,nome,
 function atualizarTipoAta(){const t=treinamentos.find(x=>String(x.id)===String(v('ata-treinamento')));const el=document.getElementById('ata-tipo');if(el)el.value=t?.tipo||''}function atualizarDadosEmenta(){const t=treinamentos.find(x=>String(x.id)===String(v('ementa-treinamento')));const tipo=document.getElementById('ementa-tipo');const titulo=document.getElementById('ementa-titulo');if(tipo)tipo.value=t?.tipo||'';if(titulo)titulo.value=t?.nome||''}
 function populateFilters(){
   const all='<option value="todos">Todas as Unidades</option>';
-  const dash=document.getElementById('dash-unidade');
-  if(dash) dash.innerHTML=all+unidades.map(u=>`<option value="${u.id}">${esc(u.nome)}</option>`).join('');
+  const dash=document.getElementById('dash-unidade');if(dash)dash.innerHTML=all+unidades.map(u=>`<option value="${u.id}">${esc(u.nome)}</option>`).join('');
   updateDashSectors();
-
-  const unitOptions='<option value="">Selecione a unidade</option>'+unidades.map(u=>`<option value="${u.id}">${esc(u.nome)}</option>`).join('');
-  ['ata-unidade','ementa-unidade','tr-unidade'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(!el)return;
-    const old=el.value;
-    el.innerHTML=unitOptions;
-    if(old && unidades.some(u=>String(u.id)===String(old))) el.value=old;
-    else if(unidades.length===1) el.value=String(unidades[0].id);
-    carregarSetores(id,id.replace('-unidade','-setor'));
-  });
-
+  ['ata-unidade','ementa-unidade','tr-unidade'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<option value="">Selecione</option>'+unidades.map(u=>`<option value="${u.id}">${esc(u.nome)}</option>`).join('');});
+  ['ata-unidade','ementa-unidade','tr-unidade'].forEach((id)=>{const el=document.getElementById(id);if(el?.value)carregarSetores(id,id.replace('-unidade','-setor'));});
   const sectors=unidades.flatMap(u=>u.setores.map(s=>({...s,unidade_id:u.id,unidade_nome:u.nome})));
-  const cs=document.getElementById('check-setor');
-  if(cs)cs.innerHTML='<option value="todos">Todos os Setores</option>'+sectors.map(s=>`<option value="${s.id}">${esc(s.nome)}</option>`).join('');
-  const us=document.getElementById('u-setor');
-  if(us)us.innerHTML='<option value="">Sem setor (somente administrador)</option>'+sectors.map(s=>`<option value="${s.id}">${esc(s.nome)} — ${esc(s.unidade_nome)}</option>`).join('');
+  const cs=document.getElementById('check-setor');if(cs)cs.innerHTML='<option value="todos">Todos os Setores</option>'+sectors.map(s=>`<option value="${s.id}">${esc(s.nome)}</option>`).join('');
+  const us=document.getElementById('u-setor');if(us)us.innerHTML='<option value="">Sem setor (somente administrador)</option>'+sectors.map(s=>`<option value="${s.id}">${esc(s.nome)} — ${esc(s.unidade_nome)}</option>`).join('');
   preencherUnidadeSetorAdmin();
 }
 function updateDashSectors(){const u=document.getElementById('dash-unidade')?.value||'todos';let ss=unidades.flatMap(x=>x.setores.map(s=>({...s,unidade_id:x.id}))).filter(s=>u==='todos'||String(s.unidade_id)===String(u));document.getElementById('dash-setor').innerHTML='<option value="todos">Todos os Setores</option>'+ss.map(s=>`<option value="${s.id}">${esc(s.nome)}</option>`).join('')}
 function carregarSetores(unitId,sectorId){const u=document.getElementById(unitId)?.value;const ss=unidades.find(x=>String(x.id)===String(u))?.setores||[];const el=document.getElementById(sectorId);if(el)el.innerHTML='<option value="">Selecione</option>'+ss.map(s=>`<option value="${s.id}">${esc(s.nome)}</option>`).join('')}
-function switchTab(view){
-  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-  document.getElementById('tab-'+view)?.classList.add('active');
-  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
-  document.getElementById('view-'+view)?.classList.add('active');
-  if(view==='dashboard')loadDashboard();
-  if(view==='colaboradores')loadMesChecklist();
-  if(view==='atas'){populateFilters();renderHistoricoAtas();renderHistoricoEmentas();renderTreinamentos()}
-  if(view==='unidades'){populateFilters();renderUnidades()}
-  if(view==='usuarios')renderUsuarios();
-}
+function switchTab(view){document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.getElementById('tab-'+view)?.classList.add('active');document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+view)?.classList.add('active');if(view==='dashboard')loadDashboard();if(view==='colaboradores')loadMesChecklist();if(view==='atas'){renderHistoricoAtas();renderHistoricoEmentas();renderTreinamentos()}if(view==='usuarios')renderUsuarios()}
 function switchSub(group,name,btn){document.querySelectorAll('#view-'+group+' .subtab').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');document.querySelectorAll('#view-'+group+' .subview').forEach(x=>x.classList.remove('active'));document.getElementById('sub-'+group+'-'+name)?.classList.add('active')}
 async function loadDashboard(){const comp=ymDate(document.getElementById('dash-mes')?.value||currentYM());const {data,error}=await db.rpc('dashboard_mensal',{p_competencia:comp});if(error){console.error(error);dashboardRows=[];toast('Execute a migração SQL enviada junto com o sistema para ativar o Dashboard mensal.');return}dashboardRows=data||[];renderDashboard()}
 function filteredDash(){const u=document.getElementById('dash-unidade')?.value||'todos',s=document.getElementById('dash-setor')?.value||'todos';return dashboardRows.filter(r=>(u==='todos'||String(r.unidade_id)===String(u))&&(s==='todos'||String(r.setor_id)===String(s)))}
@@ -268,41 +246,6 @@ async function renderHistoricoAtas(){
 async function excluirAta(id){if(!confirm('Excluir esta ata?'))return;const a=atas.find(x=>x.id===id);const {error}=await db.from('atas').delete().eq('id',id);if(error)return toast(error.message);if(a?.caminho_arquivo)await db.storage.from('atas-treinamentos').remove([a.caminho_arquivo]);await loadAtas();renderHistoricoAtas()}
 async function renderHistoricoEmentas(){const rows=ementas.filter(e=>mesAnoFiltro(e.mes_referencia||e.data_ementa||e.created_at,'hist-ementa-mes','hist-ementa-ano')).filter(e=>isAdmin()||e.criado_por===currentUser.id);const out=[];for(const e of rows){let link='—';if(e.caminho_arquivo){const {data}=await db.storage.from('atas-treinamentos').createSignedUrl(e.caminho_arquivo,3600);if(data?.signedUrl)link=`<a class="btn btn-secondary" target="_blank" href="${esc(data.signedUrl)}">Abrir arquivo</a>`}out.push(`<tr><td>${e.data_ementa?new Date(e.data_ementa+'T12:00:00').toLocaleDateString('pt-BR'):new Date(e.created_at).toLocaleDateString('pt-BR')}</td><td>${esc(e.unidades?.nome)}</td><td>${esc(e.setores?.nome)}</td><td><span class="badge info">${esc(e.tipo)}</span></td><td>${esc(e.titulo)}</td><td>${esc(e.criador?.nome||e.criador?.email||'')}</td><td>${esc(e.nome_arquivo||'')}</td><td>${link}</td><td>${isAdmin()||e.criado_por===currentUser.id?`<button type="button" class="btn btn-danger" onclick="excluirEmenta('${e.id}')">Excluir</button>`:''}</td></tr>`)}document.getElementById('historico-ementas-tbody').innerHTML=out.join('')||'<tr><td colspan="9">Nenhuma EMENTA no período.</td></tr>'}
 async function excluirEmenta(id){if(!confirm('Excluir esta EMENTA?'))return;const e=ementas.find(x=>String(x.id)===String(id));const {error}=await db.from('ementas').delete().eq('id',id);if(error)return toast(error.message);if(e?.caminho_arquivo)await db.storage.from('atas-treinamentos').remove([e.caminho_arquivo]);await loadEmentas();renderHistoricoEmentas()}
-async function salvarTreinamento(e){
-  if(e&&e.preventDefault)e.preventDefault();
-  const status=document.getElementById('tr-status');
-  const msg=(texto,erro=false)=>{if(status){status.textContent=texto;status.style.color=erro?'#f87171':'#34d399';}console.log(texto)};
-  try{
-    if(!db||!currentUser||!currentProfile){msg('Sessão não está pronta. Faça login novamente.',true);return;}
-    const unidade_id=document.getElementById('tr-unidade')?.value||'';
-    const setor_id=document.getElementById('tr-setor')?.value||null;
-    const tipo=document.getElementById('tr-tipo')?.value||'';
-    const nome=(document.getElementById('tr-titulo')?.value||'').trim();
-    if(!unidade_id||!tipo||!nome){msg('Preencha Unidade, Tipo e Nome do treinamento.',true);return;}
-    if(!isAdmin()&&!currentProfile?.setor_id){msg('Seu usuário precisa ter um setor responsável cadastrado.',true);return;}
-    if(!isAdmin()&&String(setor_id)!==String(currentProfile.setor_id)){msg('O setor informado não corresponde ao setor responsável pelo seu usuário.',true);return;}
-    const cargaRaw=document.getElementById('tr-carga')?.value;
-    const carga_horaria=cargaRaw===''||cargaRaw==null?null:Number(cargaRaw);
-    const payload={
-      nome, objetivo:(document.getElementById('tr-objetivo')?.value||'').trim()||null,
-      conteudo_programatico:(document.getElementById('tr-conteudo')?.value||'').trim()||null,
-      publico_alvo:(document.getElementById('tr-publico')?.value||'').trim()||null,
-      tipo, formato:(document.getElementById('tr-formato')?.value||'').trim()||null,
-      carga_horaria, instrutor:(document.getElementById('tr-instrutor')?.value||'').trim()||null,
-      consultoria:(document.getElementById('tr-consultoria')?.value||'').trim()||null,
-      data_treinamento:document.getElementById('tr-data')?.value||null,
-      status:'ativo', unidade_id:Number(unidade_id), setor_id:setor_id?Number(setor_id):null
-    };
-    msg('Cadastrando treinamento...');
-    const {data,error}=await db.from('treinamentos').insert(payload).select('id').single();
-    if(error){console.error('ERRO CADASTRO TREINAMENTO',error);msg('Erro ao cadastrar: '+error.message,true);return;}
-    msg('Treinamento cadastrado com sucesso.');
-    document.getElementById('form-treinamento')?.reset();
-    document.getElementById('tr-setor').innerHTML='<option value="">Selecione</option>';
-    await loadTreinamentos();
-    renderTreinamentos();
-  }catch(err){console.error(err);msg('Erro inesperado: '+(err?.message||err),true)}
-}
 function renderTreinamentos(){document.getElementById('treinamentos-tbody').innerHTML=treinamentos.map(t=>`<tr><td>${esc(t.nome)}</td><td>${esc(t.tipo)}</td><td>${esc(t.unidades?.nome)}</td><td>${esc(t.setores?.nome||'Todos')}</td><td>${esc(t.carga_horaria||'')}</td><td>${isAdmin()||String(t.setor_id)===String(currentProfile?.setor_id)?`<button type="button" class="btn btn-danger" onclick="excluirTreinamento('${t.id}')">Excluir</button>`:''}</td></tr>`).join('')||'<tr><td colspan="6">Nenhum treinamento cadastrado.</td></tr>'}
 async function excluirTreinamento(id){if(!confirm('Excluir este treinamento?'))return;const {error}=await db.from('treinamentos').delete().eq('id',id);if(error)return toast(error.message);await loadTreinamentos();renderTreinamentos()}
 function encontrar(headers,arr){const hs=headers.map(norm);for(const a of arr){const i=hs.indexOf(norm(a));if(i>=0)return i}return -1}
