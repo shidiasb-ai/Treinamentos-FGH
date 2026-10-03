@@ -139,7 +139,7 @@ function canUseSector(){return !!currentProfile}
 function setorPermitido(id){return hasFullDataAccess()||!!currentProfile?.setor_ids?.length?.some(x=>String(x)===String(id))}
 function roleLabel(r){return ({administrador:'Administrador',administrador_nep:'Administrador NEP',gestor:'Gestor',equipe:'Acesso comum'}[r]||r||'')}
 function toast(msg){alert(msg)}
-function ymDate(ym){return ym+'-01'}
+function ymDate(ym){const s=String(ym||'').trim();return /^\d{4}-\d{2}$/.test(s)?s+'-01':s}
 function currentYM(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`}
 function fillMonthSelect(id){const el=document.getElementById(id);if(!el)return;const now=new Date();let out='';for(let y=now.getFullYear()-1;y<=now.getFullYear()+1;y++)for(let m=1;m<=12;m++){const v=`${y}-${String(m).padStart(2,'0')}`;out+=`<option value="${v}">${meses[m-1]} / ${y}</option>`}el.innerHTML=out;el.value=currentYM()}
 function fillMonthOnly(id){const el=document.getElementById(id);if(!el)return;el.innerHTML='<option value="todos">Todos</option>'+meses.map((m,i)=>`<option value="${String(i+1).padStart(2,'0')}">${m}</option>`).join('');el.value='todos'}
