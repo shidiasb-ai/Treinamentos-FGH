@@ -3,12 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="app-version" content="2026-10-03-v25-perfis-exclusao">
-<title>Sistema de Gestão de Treinamentos FGH — Versão Consolidada V25</title>
+<meta name="app-version" content="2026-10-15-v31-filtro-intervalo">
+<title>Sistema de Gestão de Treinamentos FGH — V31 Filtro por Intervalo</title>
 <style>
 :root{--bg:#0f172a;--card:#1e293b;--border:#334155;--primary:#0284c7;--primary2:#0369a1;--accent:#38bdf8;--text:#f8fafc;--muted:#94a3b8;--ok:#10b981;--warn:#f59e0b;--danger:#ef4444}
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}body{background:var(--bg);color:var(--text);padding:16px;min-height:100vh}.container{max-width:1400px;margin:auto;display:none}.login{position:fixed;inset:0;background:#0f172a;display:flex;align-items:center;justify-content:center;z-index:99}.login-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:32px;width:min(400px,92vw);box-shadow:0 10px 30px #0008}.login-card h2{color:var(--accent);margin-bottom:6px}.login-card p{color:var(--muted);font-size:13px;margin-bottom:22px}.field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}.field label{font-size:12px;color:var(--muted)}input,select,textarea{width:100%;padding:9px 10px;border:1px solid var(--border);border-radius:6px;background:#0b1120;color:var(--text);font-size:13px}textarea{min-height:90px;resize:vertical}.btn{padding:8px 13px;border:0;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer}.btn-primary{background:var(--primary);color:white}.btn-primary:hover{background:var(--primary2)}.btn-secondary{background:var(--border);color:white}.btn-danger{background:var(--danger);color:white}.btn-warning{background:var(--warn);color:#111}.btn-success{background:var(--ok);color:white}.btn-full{width:100%;padding:12px}.top{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}.brand h1{font-size:18px;color:var(--accent)}.brand p{font-size:12px;color:var(--muted)}.user-tag{font-size:12px;background:#0b1120;border:1px solid var(--border);padding:6px 10px;border-radius:20px}.tabs{display:flex;gap:7px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:14px}.tab{background:transparent;color:var(--muted);border:0;padding:8px 12px;border-radius:6px;cursor:pointer;font-weight:600;font-size:13px}.tab.active{background:var(--primary);color:#fff}.view{display:none}.view.active{display:block}.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:17px;margin-bottom:15px}.title{font-size:15px;font-weight:700;color:var(--accent);margin-bottom:13px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px;margin-bottom:13px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:12px;min-width:900px}th{background:#0b1120;color:var(--muted);text-align:left;padding:9px;border-bottom:1px solid var(--border);position:sticky;top:0}td{padding:9px;border-bottom:1px solid var(--border);vertical-align:middle}.badge{display:inline-block;padding:3px 7px;border-radius:4px;font-size:10px;font-weight:700}.ok{background:#10b98122;color:var(--ok)}.warn{background:#f59e0b22;color:var(--warn)}.danger{background:#ef444422;color:var(--danger)}.info{background:#38bdf822;color:var(--accent)}.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:11px;margin-bottom:15px}.metric{background:#0b1120;border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center}.metric .n{font-size:24px;font-weight:800;margin:4px 0}.metric .l{font-size:11px;color:var(--muted)}.subtabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}.subtab{border:1px solid var(--border);background:#0b1120;color:var(--muted);padding:7px 10px;border-radius:6px;cursor:pointer}.subtab.active{background:var(--primary);color:#fff}.subview{display:none}.subview.active{display:block}.hint{font-size:12px;color:var(--muted);line-height:1.5}.checkbox{width:18px;height:18px;accent-color:var(--primary);cursor:pointer}.searchbar{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;margin-bottom:12px}.scroll-list{max-height:600px;overflow:auto}.danger-text{color:var(--danger)}.success-text{color:var(--ok)}.admin-status{margin-top:10px;padding:10px;border:1px solid var(--border);border-radius:7px;background:#0b1120;font-size:12px}.unit-item{padding:12px;border:1px solid var(--border);border-radius:8px;margin-bottom:10px;background:#0b1120}.unit-head{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}.chart-box{background:#0b1120;border:1px solid var(--border);border-radius:8px;padding:14px}.bar-row{display:grid;grid-template-columns:150px 1fr 50px;gap:8px;align-items:center;margin:8px 0;font-size:11px}.bar-track{height:12px;background:#1e293b;border-radius:20px;overflow:hidden}.bar-fill{height:100%;background:var(--primary);border-radius:20px}.donut{width:150px;height:150px;border-radius:50%;margin:8px auto;display:flex;align-items:center;justify-content:center}.donut-inner{width:105px;height:105px;border-radius:50%;background:#0b1120;display:flex;flex-direction:column;align-items:center;justify-content:center}.donut-inner strong{font-size:25px}.small-note{font-size:11px;color:var(--muted);margin-top:6px}.sector-row{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}.line-chart{width:100%;min-height:280px;overflow:auto}.line-chart svg{width:100%;min-width:760px;height:300px}.line-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:8px}.legend-item{display:flex;align-items:center;gap:5px}.legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block}.multi-years{display:flex;gap:8px;flex-wrap:wrap}.year-chip{display:flex;align-items:center;gap:5px;padding:5px 8px;border:1px solid var(--border);border-radius:6px;background:#0b1120;font-size:11px}.indicator-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}.indicator-item{background:#0b1120;border:1px solid var(--border);border-radius:7px;padding:10px}.indicator-head{display:flex;justify-content:space-between;gap:8px;font-size:12px}.indicator-bar{height:10px;background:#1e293b;border-radius:20px;overflow:hidden;margin-top:7px}.indicator-bar>div{height:100%;background:var(--primary);border-radius:20px}
 @media(max-width:700px){.searchbar{grid-template-columns:1fr}.tabs{overflow:auto}.card{padding:12px}}
+/* Tema claro: alteração exclusivamente visual; mantém intactas as regras de acesso e os dados. */
+:root[data-theme="light"]{--bg:#f1f5f9;--card:#ffffff;--border:#cbd5e1;--primary:#0284c7;--primary2:#0369a1;--accent:#0369a1;--text:#0f172a;--muted:#475569;--ok:#059669;--warn:#b45309;--danger:#dc2626}
+:root[data-theme="light"] body{background:var(--bg);color:var(--text)}
+:root[data-theme="light"] .login{background:var(--bg)}
+:root[data-theme="light"] input,:root[data-theme="light"] select,:root[data-theme="light"] textarea{background:#fff;color:var(--text);border-color:var(--border)}
+:root[data-theme="light"] .user-tag,:root[data-theme="light"] th,:root[data-theme="light"] .metric,:root[data-theme="light"] .subtab,:root[data-theme="light"] .admin-status,:root[data-theme="light"] .unit-item,:root[data-theme="light"] .chart-box,:root[data-theme="light"] .year-chip,:root[data-theme="light"] .indicator-item{background:#f8fafc;color:var(--text);border-color:var(--border)}
+:root[data-theme="light"] .bar-track,:root[data-theme="light"] .indicator-bar{background:#e2e8f0}
+:root[data-theme="light"] .bar-track{border-color:#e2e8f0}
+:root[data-theme="light"] .donut-inner{background:#fff;color:var(--text)}
+:root[data-theme="light"] .btn-secondary{background:#e2e8f0;color:#0f172a}
+:root[data-theme="light"] .tab{color:var(--muted)}
+:root[data-theme="light"] .tab.active,:root[data-theme="light"] .subtab.active{background:var(--primary);color:#fff}
+:root[data-theme="light"] .brand h1,:root[data-theme="light"] .title,:root[data-theme="light"] .login-card h2{color:var(--accent)}
+:root[data-theme="light"] .bar-fill,:root[data-theme="light"] .indicator-bar>div{background:var(--primary)}
 </style>
 </head>
 <body>
@@ -19,7 +33,7 @@
  </div>
 </div>
 <div class="container">
-<header class="top"><div class="brand"><h1>Sistema de Gestão de Treinamentos FGH</h1><p>Educação Permanente</p></div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span id="user-display" class="user-tag"></span><button type="button" class="btn btn-secondary" onclick="logout()">Sair</button></div></header>
+<header class="top"><div class="brand"><h1>Sistema de Gestão de Treinamentos FGH</h1><p>Educação Permanente</p></div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span id="user-display" class="user-tag"></span><button type="button" class="btn btn-secondary" id="theme-toggle" onclick="toggleTheme()" aria-label="Alternar tema claro e escuro">☀️ Modo claro</button><button type="button" class="btn btn-secondary" onclick="logout()">Sair</button></div></header>
 <nav class="tabs">
  <button type="button" class="tab active" id="tab-dashboard" onclick="event.preventDefault();switchTab('dashboard')">Dashboard & Indicadores</button><button type="button" class="tab" id="tab-gestao" onclick="event.preventDefault();switchTab('gestao')">Gestão à Vista</button>
  <button type="button" class="tab" id="tab-atas" onclick="event.preventDefault();switchTab('atas')">Atas e Ementas</button>
@@ -29,19 +43,19 @@
 </nav>
 
 <section id="view-dashboard" class="view active">
- <div class="card"><div class="title">Filtros do Dashboard</div><div class="grid"><div class="field"><label>Unidade</label><select id="dash-unidade" onchange="loadDashboard()"></select></div><div class="field"><label>Setor</label><select id="dash-setor" onchange="loadDashboard()"></select></div><div class="field"><label>Mês</label><select id="dash-mes" onchange="loadDashboard()"></select></div></div><div class="hint">O Dashboard é liberado para todos os usuários. As demais telas respeitam o setor responsável cadastrado no perfil. <strong>Colaboradores em férias não entram no cálculo dos indicadores de treinados do mês vigente; férias são acompanhadas exclusivamente no indicador separado de Gestão de Faltosos.</strong></div></div>
+ <div class="card"><div class="title">Filtros do Dashboard</div><div class="grid"><div class="field"><label>Unidade</label><select id="dash-unidade" onchange="loadDashboard()"></select></div><div class="field"><label>Setor</label><select id="dash-setor" onchange="loadDashboard()"></select></div><div class="field"><label>Competência inicial</label><div class="grid" style="grid-template-columns:1fr 1fr;margin:0;gap:6px"><select id="dash-inicio-mes" aria-label="Competência inicial: mês" onchange="alterarPeriodo('dash')"></select><select id="dash-inicio-ano" aria-label="Competência inicial: ano" onchange="alterarPeriodo('dash')"></select></div><select id="dash-inicio" style="display:none" aria-hidden="true" tabindex="-1"></select></div><div class="field"><label>Competência final</label><div class="grid" style="grid-template-columns:1fr 1fr;margin:0;gap:6px"><select id="dash-fim-mes" aria-label="Competência final: mês" onchange="alterarPeriodo('dash')"></select><select id="dash-fim-ano" aria-label="Competência final: ano" onchange="alterarPeriodo('dash')"></select></div><select id="dash-fim" style="display:none" aria-hidden="true" tabindex="-1"></select></div></div><div class="hint">Os percentuais do período são calculados sobre os registros colaborador-mês de cada competência (média ponderada pelo quantitativo mensal), evitando tratar o histórico como uma única lista de pessoas. Colaboradores em férias ficam fora dos percentuais de treinados e são acompanhados no indicador separado de Gestão de Faltosos.</div></div>
  <div class="metrics">
-  <div class="metric"><div class="l">Colaboradores no mês</div><div class="n" id="m-total">0</div></div>
+  <div class="metric"><div class="l">Registros colaborador-mês no período</div><div class="n" id="m-total">0</div></div>
   <div class="metric"><div class="l">Transversal NEP</div><div class="n" id="m-trans">0%</div><div class="l">Meta: 90%</div></div>
   <div class="metric"><div class="l">Institucional</div><div class="n" id="m-inst">0%</div><div class="l">Meta: 90%</div></div>
   <div class="metric"><div class="l">Intrasetorial LNT</div><div class="n" id="m-lnt">0%</div><div class="l">Meta: 90%</div></div>
   <div class="metric"><div class="l">Intrasetorial Adicional</div><div class="n" id="m-add">0%</div><div class="l">Meta: 90%</div></div>
   <div class="metric"><div class="l">Gestão de faltosos — férias</div><div class="n" id="m-faltosos">100%</div><div class="l" id="m-faltosos-detalhe">0 pendentes de 0</div></div>
  </div>
- <div class="card"><div class="title">Colaboradores — realizados e pendentes</div><div class="searchbar"><input id="dash-busca" placeholder="Buscar por nome ou matrícula/chapa" oninput="renderDashboardTable()"><select id="dash-tipo" onchange="renderDashboardTable()"><option value="todos">Todos os treinamentos</option><option value="Transversal NEP">Transversal NEP</option><option value="Institucional">Institucional</option><option value="Intrasetorial LNT">Intrasetorial LNT</option><option value="Intrasetorial Adicional">Intrasetorial Adicional</option><option value="ferias">Férias</option></select><select id="dash-status" onchange="renderDashboardTable()"><option value="todos">Todos</option><option value="realizado">Realizado</option><option value="pendente">Pendente</option><option value="ferias">Férias</option></select></div><div class="table-wrap"><table><thead><tr><th>Matrícula/Chapa</th><th>Nome</th><th>Função</th><th>Descrição de Seção</th><th>Situação</th><th>Férias</th><th>Transversal NEP</th><th>Institucional</th><th>Intrasetorial LNT</th><th>Intrasetorial Adicional</th></tr></thead><tbody id="dash-tbody"></tbody></table></div></div>
+ <div class="card"><div class="title">Colaboradores — realizados e pendentes</div><div class="searchbar"><input id="dash-busca" placeholder="Buscar por nome ou matrícula/chapa" oninput="renderDashboardTable()"><select id="dash-tipo" onchange="renderDashboardTable()"><option value="todos">Todos os treinamentos</option><option value="Transversal NEP">Transversal NEP</option><option value="Institucional">Institucional</option><option value="Intrasetorial LNT">Intrasetorial LNT</option><option value="Intrasetorial Adicional">Intrasetorial Adicional</option><option value="ferias">Férias</option></select><select id="dash-status" onchange="renderDashboardTable()"><option value="todos">Todos</option><option value="realizado">Realizado</option><option value="pendente">Pendente</option><option value="ferias">Férias</option></select></div><div class="table-wrap"><table><thead><tr><th>Competência</th><th>Matrícula/Chapa</th><th>Nome</th><th>Função</th><th>Descrição de Seção</th><th>Situação</th><th>Férias</th><th>Transversal NEP</th><th>Institucional</th><th>Intrasetorial LNT</th><th>Intrasetorial Adicional</th></tr></thead><tbody id="dash-tbody"></tbody></table></div></div>
 </section>
 
-<section id="view-gestao" class="view"><div class="card"><div class="title">Gestão à Vista <span class="badge info">Visualização gerencial</span></div><div class="grid"><div class="field"><label>Unidade</label><select id="gv-unidade" onchange="loadGestaoVista()"><option value="">Todas as unidades</option></select></div><div class="field"><label>Mês de referência</label><select id="gv-mes" onchange="loadGestaoVista()"></select></div></div><div class="hint">Visão consolidada para acompanhamento dos treinamentos, dos perfis, formatos, tipos de instrutor e da gestão de faltosos. Férias permanecem fora dos indicadores de treinamentos.</div></div><div class="metrics"><div class="metric"><div class="l">Colaboradores no mês</div><div class="n" id="gv-total">0</div></div><div class="metric"><div class="l">Transversal NEP</div><div class="n" id="gv-trans">0%</div></div><div class="metric"><div class="l">Institucional</div><div class="n" id="gv-inst">0%</div></div><div class="metric"><div class="l">% do setor contemplado com a LNT</div><div class="n" id="gv-lnt">0%</div></div><div class="metric"><div class="l">Intra setorial LNT previsto</div><div class="n" id="gv-lnt-previsto">0%</div><div class="l" id="gv-lnt-previsto-detalhe">0 treinados de 0 previstos</div></div><div class="metric"><div class="l">Intrasetorial Adicional</div><div class="n" id="gv-add">0%</div></div><div class="metric"><div class="l">Gestão de faltosos — férias</div><div class="n" id="gv-faltosos">100%</div><div class="l" id="gv-faltosos-detalhe">0 realizados de 0</div></div></div><div class="chart-grid"><div class="chart-box"><div class="title">Perfil dos treinamentos</div><div id="gv-perfil-chart" class="indicator-list"></div></div><div class="chart-box"><div class="title">Formato dos treinamentos</div><div id="gv-formato-chart" class="indicator-list"></div></div><div class="chart-box"><div class="title">Tipo de instrutor</div><div id="gv-instrutor-chart" class="indicator-list"></div></div><div class="chart-box"><div class="title">Gestão de faltosos</div><div id="gv-faltosos-chart"></div><div class="small-note">Percentual de férias com gestão realizada.</div></div></div><div class="card"><div class="title">Acompanhamento anual — % de treinamento Transversal NEP</div><div class="grid"><div class="field"><label>Anos para comparar</label><div id="gv-anos-trans" class="multi-years"></div></div></div><div id="gv-trans-anual" class="line-chart"></div></div><div class="card"><div class="title">Acompanhamento anual — % do setor contemplado com a LNT</div><div class="grid"><div class="field"><label>Anos para comparar</label><div id="gv-anos-lnt" class="multi-years"></div></div></div><div id="gv-lnt-anual" class="line-chart"></div></div><div class="card"><div class="title">Gestão de Faltosos por setor</div><div class="table-wrap"><table><thead><tr><th>Setor</th><th>Férias</th><th>Realizados</th><th>Não realizados</th><th>% realizados</th><th>% não realizados</th></tr></thead><tbody id="gv-faltosos-tbody"></tbody></table></div></div><div class="card"><div class="title">Classificação dos treinamentos por setor</div><div class="hint" style="margin-bottom:10px">Acompanhamento dos treinamentos cadastrados por setor, conforme a classificação registrada no cadastro.</div><div class="table-wrap"><table><thead><tr><th>Setor</th><th>Concluído</th><th>Em andamento</th><th>Programado</th><th>Atrasado</th><th>Reprogramado</th><th>Não executado</th><th>Sem status</th><th>Total</th></tr></thead><tbody id="gv-classificacao-tbody"></tbody></table></div></div><div class="chart-box" style="margin:16px 0"><div class="title">Classificação consolidada dos treinamentos</div><div id="gv-classificacao-chart" class="indicator-list"></div></div><div class="card"><div class="title">Execução por Área</div><div class="hint" style="margin-bottom:10px">Treinamentos cadastrados por setor e situação de execução. “A executar” considera programados, em andamento, reprogramados e sem status.</div><div class="table-wrap"><table><thead><tr><th>Área</th><th>Total cadastrados</th><th>Concluídos</th><th>A executar</th><th>Atrasados</th><th>Não executados</th><th>% execução</th></tr></thead><tbody id="gv-execucao-tbody"></tbody></table></div></div><div class="card"><div class="title">Execução dos treinamentos por setor</div><div id="gv-setores-chart"></div></div></section>
+<section id="view-gestao" class="view"><div class="card"><div class="title">Gestão à Vista <span class="badge info">Visualização gerencial</span></div><div class="grid"><div class="field"><label>Unidade</label><select id="gv-unidade" onchange="loadGestaoVista()"><option value="">Todas as unidades</option></select></div><div class="field"><label>Competência inicial</label><div class="grid" style="grid-template-columns:1fr 1fr;margin:0;gap:6px"><select id="gv-inicio-mes" aria-label="Competência inicial: mês" onchange="alterarPeriodo('gv')"></select><select id="gv-inicio-ano" aria-label="Competência inicial: ano" onchange="alterarPeriodo('gv')"></select></div><select id="gv-inicio" style="display:none" aria-hidden="true" tabindex="-1"></select></div><div class="field"><label>Competência final</label><div class="grid" style="grid-template-columns:1fr 1fr;margin:0;gap:6px"><select id="gv-fim-mes" aria-label="Competência final: mês" onchange="alterarPeriodo('gv')"></select><select id="gv-fim-ano" aria-label="Competência final: ano" onchange="alterarPeriodo('gv')"></select></div><select id="gv-fim" style="display:none" aria-hidden="true" tabindex="-1"></select></div></div><div class="hint">O intervalo pode atravessar anos. Indicadores de pessoas usam registros colaborador-mês, com percentuais ponderados pelo quantitativo de cada competência; distribuição de treinamentos e atas considera os meses selecionados. Férias permanecem fora dos indicadores de treinamentos.</div></div><div class="metrics"><div class="metric"><div class="l">Registros colaborador-mês no período</div><div class="n" id="gv-total">0</div></div><div class="metric"><div class="l">Transversal NEP</div><div class="n" id="gv-trans">0%</div></div><div class="metric"><div class="l">Institucional</div><div class="n" id="gv-inst">0%</div></div><div class="metric"><div class="l">% do setor contemplado com a LNT</div><div class="n" id="gv-lnt">0%</div></div><div class="metric"><div class="l">Intra setorial LNT previsto</div><div class="n" id="gv-lnt-previsto">0%</div><div class="l" id="gv-lnt-previsto-detalhe">0 treinados de 0 previstos</div></div><div class="metric"><div class="l">Intrasetorial Adicional</div><div class="n" id="gv-add">0%</div></div><div class="metric"><div class="l">Gestão de faltosos — férias</div><div class="n" id="gv-faltosos">100%</div><div class="l" id="gv-faltosos-detalhe">0 realizados de 0</div></div></div><div class="chart-grid"><div class="chart-box"><div class="title">Perfil dos treinamentos</div><div id="gv-perfil-chart" class="indicator-list"></div></div><div class="chart-box"><div class="title">Formato dos treinamentos</div><div id="gv-formato-chart" class="indicator-list"></div></div><div class="chart-box"><div class="title">Tipo de instrutor</div><div id="gv-instrutor-chart" class="indicator-list"></div></div><div class="chart-box"><div class="title">Gestão de faltosos</div><div id="gv-faltosos-chart"></div><div class="small-note">Percentual de férias com gestão realizada.</div></div></div><div class="card"><div class="title">Acompanhamento anual — % de treinamento Transversal NEP</div><div class="grid"><div class="field"><label>Anos para comparar</label><div id="gv-anos-trans" class="multi-years"></div></div></div><div id="gv-trans-anual" class="line-chart"></div></div><div class="card"><div class="title">Acompanhamento anual — % do setor contemplado com a LNT</div><div class="grid"><div class="field"><label>Anos para comparar</label><div id="gv-anos-lnt" class="multi-years"></div></div></div><div id="gv-lnt-anual" class="line-chart"></div></div><div class="card"><div class="title">Gestão de Faltosos por setor</div><div class="table-wrap"><table><thead><tr><th>Setor</th><th>Férias</th><th>Realizados</th><th>Não realizados</th><th>% realizados</th><th>% não realizados</th></tr></thead><tbody id="gv-faltosos-tbody"></tbody></table></div></div><div class="card"><div class="title">Classificação dos treinamentos por setor</div><div class="hint" style="margin-bottom:10px">Acompanhamento dos treinamentos cadastrados por setor, conforme a classificação registrada no cadastro.</div><div class="table-wrap"><table><thead><tr><th>Setor</th><th>Concluído</th><th>Em andamento</th><th>Programado</th><th>Atrasado</th><th>Reprogramado</th><th>Não executado</th><th>Sem status</th><th>Total</th></tr></thead><tbody id="gv-classificacao-tbody"></tbody></table></div></div><div class="chart-box" style="margin:16px 0"><div class="title">Classificação consolidada dos treinamentos</div><div id="gv-classificacao-chart" class="indicator-list"></div></div><div class="card"><div class="title">Execução por Área</div><div class="hint" style="margin-bottom:10px">Treinamentos cadastrados por setor e situação de execução. “A executar” considera programados, em andamento, reprogramados e sem status.</div><div class="table-wrap"><table><thead><tr><th>Área</th><th>Total cadastrados</th><th>Concluídos</th><th>A executar</th><th>Atrasados</th><th>Não executados</th><th>% execução</th></tr></thead><tbody id="gv-execucao-tbody"></tbody></table></div></div><div class="card"><div class="title">Execução dos treinamentos por setor</div><div id="gv-setores-chart"></div></div></section>
 
 <section id="view-atas" class="view">
  <div class="subtabs"><button type="button" class="subtab active" onclick="switchSub('atas','registrar-ata',this)">Registrar Nova Ata de Treinamento</button><button type="button" class="subtab" onclick="switchSub('atas','registrar-ementa',this)">Registrar Nova EMENTA de Treinamento</button><button type="button" class="subtab" onclick="switchSub('atas','cadastro-treinamentos',this)">Cadastro de Treinamentos</button><button type="button" class="subtab" onclick="switchSub('atas','historico-atas',this)">Histórico de Atas</button><button type="button" class="subtab" onclick="switchSub('atas','historico-ementas',this)">Histórico de Ementas</button></div>
@@ -68,7 +82,7 @@
   <button type="button" class="btn btn-primary" onclick="salvarColaboradorIndividual()">Inserir colaborador</button>
   <div id="cad-colab-status" class="admin-status" style="display:none"></div>
  </div>
- <div class="card"><div class="title">Importar lista mensal de colaboradores</div><div class="grid"><div class="field"><label>Mês da lista</label><input id="imp-mes" type="month" required></div><div class="field"><label>Arquivo original</label><input id="file-colab" type="file" accept=".csv,.xlsx,.xls"></div></div><p class="hint">O sistema mantém todos os colaboradores no histórico. Situação A = ativo e V = aviso prévio: ambos são considerados nos indicadores de treinamento. F = férias: entra apenas na Gestão de Faltosos e não entra no indicador de treinamento. E = licença, D = demissão, U = outros e P = previdência social: ficam fora dos indicadores e não são tratados como faltosos de treinamento.</p><div id="imp-colab-status" class="hint" style="display:none;margin-top:10px;font-weight:700"></div><div style="margin-top:10px"><button id="btn-importar-colab" type="button" class="btn btn-primary">Importar / Atualizar mês</button></div></div>
+ <div class="card"><div class="title">Importar lista mensal de colaboradores</div><div class="grid"><div class="field"><label>Mês da lista</label><input id="imp-mes" type="month" required></div><div class="field"><label>Listagem Ativos EP (todos os funcionários)</label><input id="file-colab" type="file" accept=".csv,.xlsx,.xls"></div><div class="field"><label>Alocações — Profissionais (médicos)</label><input id="file-alocacoes" type="file" accept=".csv,.xlsx,.xls"></div></div><p class="hint">As duas fontes são consolidadas no mesmo indicador mensal. Os médicos PJ usam CRM como identificador (CRM-...) e recebem setores próprios com prefixo MÉDICO —, criados durante a importação quando necessário. Situação A = ativo e V = aviso prévio: ambos são considerados nos indicadores de treinamento. F = férias: entra apenas na Gestão de Faltosos e não entra no indicador de treinamento. E = licença, D = demissão, U = outros e P = previdência social: ficam fora dos indicadores e não são tratados como faltosos de treinamento.</p><div id="imp-colab-status" class="hint" style="display:none;margin-top:10px;font-weight:700"></div><div style="margin-top:10px"><button id="btn-importar-colab" type="button" class="btn btn-primary">Importar / Atualizar mês</button></div></div>
  <div class="card"><div class="title">Checklist Mensal da Equipe <div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn btn-secondary" onclick="baixarChecklistExcel()">Baixar Excel</button></div></div><div class="grid"><div class="field"><label>Mês/ano</label><select id="check-mes" onchange="loadMesChecklist()"></select></div><div class="field"><label>Setor</label><select id="check-setor" onchange="renderChecklist()"></select></div></div><div class="searchbar"><input id="check-busca" placeholder="Buscar por nome ou matrícula/chapa" oninput="renderChecklist()"><select id="check-tipo-filtro" onchange="renderChecklist()"><option value="todos">Todos</option><option value="Transversal NEP">Transversal NEP</option><option value="Institucional">Institucional</option><option value="Intrasetorial LNT">Intrasetorial LNT</option><option value="Intrasetorial Adicional">Intrasetorial Adicional</option></select><select id="check-ferias" onchange="renderChecklist()"><option value="todos">Todos</option><option value="ferias">Férias</option><option value="naoferias">Não férias</option></select></div><div class="table-wrap"><table><thead><tr><th>Matrícula/Chapa</th><th>Nome</th><th>Função</th><th>Descrição de Seção</th><th>Situação</th><th>Férias</th><th>Transversal NEP</th><th>Institucional</th><th>Intrasetorial LNT</th><th>Intrasetorial Adicional</th><th>Ação</th></tr></thead><tbody id="check-tbody"></tbody></table></div></div>
 </section>
 
@@ -103,14 +117,14 @@
  <form onsubmit="criarUsuario(event)"><div class="grid">
   <div class="field"><label>Nome</label><input id="u-nome" required></div>
   <div class="field"><label>E-mail</label><input id="u-email" type="email" required></div>
-  <div class="field"><label>Perfil / acesso</label><select id="u-perfil"><option value="gestor">Gestor</option><option value="equipe">Acesso comum</option><option value="administrador_nep">Administrador NEP</option><option value="administrador">Administrador</option></select></div>
+  <div class="field"><label>Perfil / acesso</label><select id="u-perfil" onchange="preencherSetoresUsuario('u-unidade','u-setores')"><option value="gestor">Gestor</option><option value="gestor_medico">Gestor Médico</option><option value="equipe">Acesso comum</option><option value="administrador_nep">Administrador NEP</option><option value="administrador">Administrador</option></select></div>
   <div class="field"><label>Unidade</label><select id="u-unidade" required onchange="preencherSetoresUsuario('u-unidade','u-setores')"></select></div>
   <div class="field"><label>Setores responsáveis</label><select id="u-setores" multiple size="6" required></select><div class="small-note">Segure Ctrl para selecionar mais de um setor.</div></div>
   <div class="field"><label>Senha inicial</label><input id="u-senha" type="password" minlength="8" required></div>
  </div><button class="btn btn-primary" type="submit">Cadastrar Usuário</button></form></div>
  <div class="card" id="editar-usuario-card" style="display:none"><div class="title">Alterar acesso do usuário</div><div class="grid">
   <div class="field"><label>Usuário</label><input id="ed-nome" readonly></div>
-  <div class="field"><label>Perfil / acesso</label><select id="ed-perfil"><option value="gestor">Gestor</option><option value="equipe">Acesso comum</option><option value="administrador_nep">Administrador NEP</option><option value="administrador">Administrador</option></select></div>
+  <div class="field"><label>Perfil / acesso</label><select id="ed-perfil" onchange="preencherSetoresUsuario('ed-unidade','ed-setores')"><option value="gestor">Gestor</option><option value="gestor_medico">Gestor Médico</option><option value="equipe">Acesso comum</option><option value="administrador_nep">Administrador NEP</option><option value="administrador">Administrador</option></select></div>
   <div class="field"><label>Unidade</label><select id="ed-unidade" onchange="preencherSetoresUsuario('ed-unidade','ed-setores')"></select></div>
   <div class="field"><label>Setores responsáveis</label><select id="ed-setores" multiple size="6"></select></div>
  </div><input type="hidden" id="ed-id"><button type="button" class="btn btn-primary" onclick="salvarEdicaoUsuario()">Salvar alterações</button> <button type="button" class="btn btn-secondary" onclick="cancelarEdicaoUsuario()">Cancelar</button><div id="ed-status" class="small-note"></div></div>
@@ -134,13 +148,22 @@ function isAdminNEP(){return currentProfile?.perfil==='administrador_nep'}
 function hasFullDataAccess(){return isAdmin()||isAdminNEP()}
 function canManageUsers(){return isAdmin()||isAdminNEP()}
 function isGestor(){return currentProfile?.perfil==='gestor'}
+function isGestorMedico(){return currentProfile?.perfil==='gestor_medico'}
+function isMedicoPJ(r){return norm(r?.cargo)==='medico'||norm(r?.cargo)==='medico pj'||String(r?.matricula||'').startsWith('CRM-')}
+function isSetorMedico(s){return norm(s?.nome).startsWith('medico —')||norm(s?.nome).startsWith('medico -')}
+function roleSetorFilter(ss,perfil){return perfil==='gestor_medico'?ss.filter(isSetorMedico):ss}
 function isComum(){return currentProfile?.perfil==='equipe'}
 function canUseSector(){return !!currentProfile}
 function setorPermitido(id){return hasFullDataAccess()||!!currentProfile?.setor_ids?.length?.some(x=>String(x)===String(id))}
-function roleLabel(r){return ({administrador:'Administrador',administrador_nep:'Administrador NEP',gestor:'Gestor',equipe:'Acesso comum'}[r]||r||'')}
+function roleLabel(r){return ({administrador:'Administrador',administrador_nep:'Administrador NEP',gestor:'Gestor',gestor_medico:'Gestor Médico',equipe:'Acesso comum'}[r]||r||'')}
 function toast(msg){alert(msg)}
 function ymDate(ym){const s=String(ym||'').trim();return /^\d{4}-\d{2}$/.test(s)?s+'-01':s}
 function currentYM(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`}
+function fillRangeSelects(startId,endId){const now=new Date(),start=document.getElementById(startId),end=document.getElementById(endId);if(!start||!end)return;const opts=[];for(let y=2020;y<=now.getFullYear()+1;y++)for(let m=1;m<=12;m++){const ym=`${y}-${String(m).padStart(2,'0')}`;opts.push(`<option value="${ym}">${meses[m-1]} / ${y}</option>`)}start.innerHTML=opts.join('');end.innerHTML=opts.join('');start.value=currentYM();end.value=currentYM();const prefix=startId.startsWith('dash-')?'dash':'gv';for(const side of ['inicio','fim']){const month=document.getElementById(`${prefix}-${side}-mes`),year=document.getElementById(`${prefix}-${side}-ano`),canonical=document.getElementById(`${prefix}-${side}`);if(month)month.innerHTML=meses.map((m,i)=>`<option value="${String(i+1).padStart(2,'0')}">${m}</option>`).join('');if(year)year.innerHTML=Array.from({length:now.getFullYear()+2-2020},(_,i)=>2020+i).map(y=>`<option value="${y}">${y}</option>`).join('');if(canonical){const [yy,mm]=canonical.value.split('-');if(month)month.value=mm;if(year)year.value=yy;}}}
+function syncRangeControls(prefix,side){const canonical=document.getElementById(`${prefix}-${side}`),month=document.getElementById(`${prefix}-${side}-mes`),year=document.getElementById(`${prefix}-${side}-ano`);if(canonical&&month&&year)canonical.value=`${year.value}-${month.value}`;}
+function setRangeControls(prefix,side,ym){const [yy,mm]=ym.split('-');const canonical=document.getElementById(`${prefix}-${side}`),month=document.getElementById(`${prefix}-${side}-mes`),year=document.getElementById(`${prefix}-${side}-ano`);if(canonical)canonical.value=ym;if(month)month.value=mm;if(year)year.value=yy;}
+function alterarPeriodo(prefix){syncRangeControls(prefix,'inicio');syncRangeControls(prefix,'fim');validarIntervalo(prefix);if(prefix==='dash')loadDashboard();else loadGestaoVista();}
+function intervaloMeses(prefix){const a=document.getElementById(prefix+'-inicio'),b=document.getElementById(prefix+'-fim');let ini=a?.value||currentYM(),fim=b?.value||currentYM();if(ini>fim){const t=ini;ini=fim;fim=t;setRangeControls(prefix,'inicio',ini);setRangeControls(prefix,'fim',fim);}const out=[];let d=new Date(Number(ini.slice(0,4)),Number(ini.slice(5,7))-1,1),last=new Date(Number(fim.slice(0,4)),Number(fim.slice(5,7))-1,1);while(d<=last){out.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);d.setMonth(d.getMonth()+1);}return out;}function validarIntervalo(prefix){intervaloMeses(prefix)}
 function fillMonthSelect(id){const el=document.getElementById(id);if(!el)return;const now=new Date();let out='';for(let y=now.getFullYear()-1;y<=now.getFullYear()+1;y++)for(let m=1;m<=12;m++){const v=`${y}-${String(m).padStart(2,'0')}`;out+=`<option value="${v}">${meses[m-1]} / ${y}</option>`}el.innerHTML=out;el.value=currentYM()}
 function fillMonthOnly(id){const el=document.getElementById(id);if(!el)return;el.innerHTML='<option value="todos">Todos</option>'+meses.map((m,i)=>`<option value="${String(i+1).padStart(2,'0')}">${m}</option>`).join('');el.value='todos'}
 function fillYearOnly(id){const el=document.getElementById(id);if(!el)return;const y=new Date().getFullYear();el.innerHTML='<option value="todos">Todos</option>'+Array.from({length:5},(_,i)=>`<option value="${y-2+i}">${y-2+i}</option>`).join('');el.value='todos'}
@@ -184,7 +207,7 @@ async function onSignedIn(session){
   await initData()
 }
 function aplicarPermissoes(){
-  const full=hasFullDataAccess(), gestor=isGestor(), comum=isComum();
+  const full=hasFullDataAccess(), gestor=isGestor()||isGestorMedico(), comum=isComum();
   document.getElementById('tab-dashboard').style.display=(full||gestor)?'block':'none';
   document.getElementById('tab-gestao').style.display='block';
   document.getElementById('tab-atas').style.display=(full||gestor)?'block':'none';
@@ -206,7 +229,7 @@ function aplicarPermissoes(){
   }
 }
 
-async function initData(){fillMonthSelect('dash-mes');fillMonthSelect('imp-mes');fillMonthSelect('check-mes');fillMonthOnly('hist-ata-mes');fillYearOnly('hist-ata-ano');fillMonthOnly('hist-ementa-mes');fillYearOnly('hist-ementa-ano');await Promise.all([loadUnits(),loadProfiles(),loadAtas(),loadEmentas(),loadTreinamentos()]);preencherFormularioUsuario('u-unidade','u-setores');preencherFormularioUsuario('ed-unidade','ed-setores');populateFilters();await loadDashboard();await loadMesChecklist();renderUsuarios();renderUnidades();renderTreinamentos();renderHistoricoAtas();renderHistoricoEmentas()}
+async function initData(){fillRangeSelects('dash-inicio','dash-fim');fillRangeSelects('gv-inicio','gv-fim');fillMonthSelect('imp-mes');fillMonthSelect('check-mes');fillMonthOnly('hist-ata-mes');fillYearOnly('hist-ata-ano');fillMonthOnly('hist-ementa-mes');fillYearOnly('hist-ementa-ano');await Promise.all([loadUnits(),loadProfiles(),loadAtas(),loadEmentas(),loadTreinamentos()]);preencherFormularioUsuario('u-unidade','u-setores');preencherFormularioUsuario('ed-unidade','ed-setores');populateFilters();await loadDashboard();await loadMesChecklist();renderUsuarios();renderUnidades();renderTreinamentos();renderHistoricoAtas();renderHistoricoEmentas()}
 async function loadUnits(){
   const status=document.getElementById('unidades-status');
   if(status) status.textContent='Carregando unidades e setores...';
@@ -254,8 +277,9 @@ function preencherUnidadeSetorAdmin(){
 async function loadProfiles(){if(!canManageUsers())return;const {data,error}=await db.from('perfis').select('id,email,nome,perfil,setor_id,unidade_id,unidades(nome),perfil_setores(setor_id,setores(nome))').order('nome');if(error){console.error(error);return}perfis=(data||[]).map(p=>({...p,setor_ids:[...(p.perfil_setores||[]).map(x=>x.setor_id),...(p.setor_id?[p.setor_id]:[])].filter((x,i,a)=>x!=null&&a.findIndex(y=>String(y)===String(x))===i)}))} 
 
 async function loadAtas(){
+ if(isGestorMedico()&&!currentProfile?.setor_ids?.length){atas=[];return}
  const base='id,treinamento_id,unidade_id,setor_id,nome_arquivo,caminho_arquivo,tipo_arquivo,tamanho_arquivo,quantidade_treinados_assinatura,data_ata,inserido_por,created_at,mes_referencia';
- const res=await db.from('atas').select(base).order('data_ata',{ascending:false}).order('created_at',{ascending:false});
+ let aq=db.from('atas').select(base);if(!hasFullDataAccess()&&currentProfile?.setor_ids?.length)aq=aq.in('setor_id',currentProfile.setor_ids);const res=await aq.order('data_ata',{ascending:false}).order('created_at',{ascending:false});
  if(res.error){console.error('Falha ao carregar atas:',res.error);atas=[];toast('Não foi possível carregar o histórico de atas: '+res.error.message);return}
  atas=res.data||[];
  const ids=[...new Set(atas.map(a=>a.inserido_por).filter(Boolean))];
@@ -275,8 +299,9 @@ async function loadAtas(){
  atas=atas.map(a=>({...a,criador:pm.get(String(a.inserido_por)),unidades:um.get(String(a.unidade_id)),setores:sm.get(String(a.setor_id)),treinamentos:tm.get(String(a.treinamento_id))}));
 }
 async function loadEmentas(){
+ if(isGestorMedico()&&!currentProfile?.setor_ids?.length){ementas=[];return}
  const base='id,created_at,tipo,titulo,objetivo,conteudo_programatico,publico_alvo,carga_horaria,instrutor,unidade_id,setor_id,treinamento_id,data_ementa,nome_arquivo,caminho_arquivo,tipo_arquivo,tamanho_arquivo,mes_referencia,criado_por';
- const res=await db.from('ementas').select(base).order('data_ementa',{ascending:false}).order('created_at',{ascending:false});
+ let eq=db.from('ementas').select(base);if(!hasFullDataAccess()&&currentProfile?.setor_ids?.length)eq=eq.in('setor_id',currentProfile.setor_ids);const res=await eq.order('data_ementa',{ascending:false}).order('created_at',{ascending:false});
  if(res.error){console.error('Falha ao carregar ementas:',res.error);ementas=[];toast('Não foi possível carregar as ementas: '+res.error.message);return}
  ementas=res.data||[];
  const ids=[...new Set(ementas.map(a=>a.criado_por).filter(Boolean))];
@@ -292,7 +317,7 @@ async function loadEmentas(){
  const sm=new Map((ss.data||[]).map(x=>[String(x.id),x]));
  ementas=ementas.map(a=>({...a,criador:pm.get(String(a.criado_por)),unidades:um.get(String(a.unidade_id)),setores:sm.get(String(a.setor_id))}));
 }
-async function loadTreinamentos(){let q=db.from('treinamentos').select('id,nome,objetivo,conteudo_programatico,publico_alvo,publico_alvo_quantidade,tipo,perfil_treinamento,formato,carga_horaria,instrutor,tipo_instrutor,data_treinamento,status,confirmacao,classificacao,unidade_id,setor_id,unidades(nome),setores(nome)').order('nome');if(!hasFullDataAccess()&&currentProfile?.setor_ids?.length)q=q.in('setor_id',currentProfile.setor_ids);const {data,error}=await q;if(error){console.error(error);return}treinamentos=data||[];const options='<option value="">Selecione</option>'+treinamentos.map(t=>`<option value="${t.id}">${esc(t.nome)} — ${esc(t.tipo||'')}</option>`).join('');const el=document.getElementById('ata-treinamento');if(el){el.innerHTML=options;atualizarTipoAta()}const ee=document.getElementById('ementa-treinamento');if(ee){ee.innerHTML=options;atualizarDadosEmenta()}}
+async function loadTreinamentos(){if(isGestorMedico()&&!currentProfile?.setor_ids?.length){treinamentos=[];return}let q=db.from('treinamentos').select('id,nome,objetivo,conteudo_programatico,publico_alvo,publico_alvo_quantidade,tipo,perfil_treinamento,formato,carga_horaria,instrutor,tipo_instrutor,data_treinamento,status,confirmacao,classificacao,unidade_id,setor_id,unidades(nome),setores(nome)').order('nome');if(!hasFullDataAccess()&&currentProfile?.setor_ids?.length)q=q.in('setor_id',currentProfile.setor_ids);const {data,error}=await q;if(error){console.error(error);return}treinamentos=data||[];const options='<option value="">Selecione</option>'+treinamentos.map(t=>`<option value="${t.id}">${esc(t.nome)} — ${esc(t.tipo||'')}</option>`).join('');const el=document.getElementById('ata-treinamento');if(el){el.innerHTML=options;atualizarTipoAta()}const ee=document.getElementById('ementa-treinamento');if(ee){ee.innerHTML=options;atualizarDadosEmenta()}}
 function atualizarTipoAta(){const t=treinamentos.find(x=>String(x.id)===String(v('ata-treinamento')));const el=document.getElementById('ata-tipo');if(el)el.value=t?.tipo||''}function atualizarDadosEmenta(){const t=treinamentos.find(x=>String(x.id)===String(v('ementa-treinamento')));const tipo=document.getElementById('ementa-tipo');const titulo=document.getElementById('ementa-titulo');if(tipo)tipo.value=t?.tipo||'';if(titulo)titulo.value=t?.nome||''}
 function populateFilters(){
   const all='<option value="todos">Todas as Unidades</option>';
@@ -306,36 +331,16 @@ function populateFilters(){
   const us=document.getElementById('u-setor');if(us)us.innerHTML='<option value="">Sem setor (somente administrador)</option>'+sectors.map(s=>`<option value="${s.id}">${esc(s.nome)} — ${esc(s.unidade_nome)}</option>`).join('');
   preencherUnidadeSetorAdmin();
 }
-function updateDashSectors(){const u=document.getElementById('dash-unidade')?.value||'todos';let ss=unidades.flatMap(x=>x.setores.map(s=>({...s,unidade_id:x.id}))).filter(s=>u==='todos'||String(s.unidade_id)===String(u));document.getElementById('dash-setor').innerHTML='<option value="todos">Todos os Setores</option>'+ss.map(s=>`<option value="${s.id}">${esc(s.nome)}</option>`).join('')}
+function updateDashSectors(){const u=document.getElementById('dash-unidade')?.value||'todos';let ss=unidades.flatMap(x=>x.setores.map(s=>({...s,unidade_id:x.id}))).filter(s=>u==='todos'||String(s.unidade_id)===String(u));if(isGestorMedico())ss=ss.filter(s=>isSetorMedico(s)&&currentProfile?.setor_ids?.some(id=>String(id)===String(s.id)));document.getElementById('dash-setor').innerHTML='<option value="todos">Todos os Setores</option>'+ss.map(s=>`<option value="${s.id}">${esc(s.nome)}</option>`).join('')}
 function carregarSetores(unitId,sectorId){const u=document.getElementById(unitId)?.value;const ss=unidades.find(x=>String(x.id)===String(u))?.setores||[];const el=document.getElementById(sectorId);if(el)el.innerHTML='<option value="">Selecione</option>'+ss.map(s=>`<option value="${s.id}">${esc(s.nome)}</option>`).join('')}
-async function switchTab(view){const permitido=(view==='gestao')||(view==='dashboard'&&(hasFullDataAccess()||isGestor()))||(view==='atas'&&(hasFullDataAccess()||isGestor()))||(view==='colaboradores'&&hasFullDataAccess())||(view==='unidades'&&isAdmin())||(view==='usuarios'&&canManageUsers());if(!permitido){toast('Seu perfil não possui acesso a esta área.');return}if(!document.getElementById('view-'+view))return;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.getElementById('tab-'+view)?.classList.add('active');document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+view)?.classList.add('active');if(view==='dashboard')await loadDashboard();if(view==='gestao')await loadGestaoVista();if(view==='colaboradores')await loadMesChecklist();if(view==='atas'){await loadTreinamentos();await renderHistoricoAtas();await renderHistoricoEmentas()}if(view==='usuarios')renderUsuarios()}
+async function switchTab(view){const permitido=(view==='gestao')||(view==='dashboard'&&(hasFullDataAccess()||isGestor()||isGestorMedico()))||(view==='atas'&&(hasFullDataAccess()||isGestor()||isGestorMedico()))||(view==='colaboradores'&&hasFullDataAccess())||(view==='unidades'&&isAdmin())||(view==='usuarios'&&canManageUsers());if(!permitido){toast('Seu perfil não possui acesso a esta área.');return}if(!document.getElementById('view-'+view))return;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.getElementById('tab-'+view)?.classList.add('active');document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+view)?.classList.add('active');if(view==='dashboard')await loadDashboard();if(view==='gestao')await loadGestaoVista();if(view==='colaboradores')await loadMesChecklist();if(view==='atas'){await loadTreinamentos();await renderHistoricoAtas();await renderHistoricoEmentas()}if(view==='usuarios')renderUsuarios()}
 function switchSub(group,name,btn){if(group==='atas'&&name==='cadastro-treinamentos'&&!hasFullDataAccess()){toast('Seu perfil não possui acesso ao cadastro de treinamentos.');return;}const target=document.getElementById('sub-'+group+'-'+name);if(!target)return;document.querySelectorAll('#view-'+group+' .subtab').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');document.querySelectorAll('#view-'+group+' .subview').forEach(x=>x.classList.remove('active'));target.classList.add('active')}
 async function loadDashboard(){
- const comp=ymDate(document.getElementById('dash-mes')?.value||currentYM());
- let base=db.from('colaboradores_mensal').select('id,matricula,nome,cargo,descricao_secao,unidade_id,setor_id,situacao,ferias,ferias_marcada,checklist_mensal(tipo,realizado),setores(nome),unidades(nome)').eq('competencia',comp).order('nome');
+ if(isGestorMedico()&&!currentProfile?.setor_ids?.length){dashboardRows=[];renderDashboard();return}
+ const months=intervaloMeses('dash');let base=db.from('colaboradores_mensal').select('id,competencia,matricula,nome,cargo,descricao_secao,unidade_id,setor_id,situacao,ferias,ferias_marcada,checklist_mensal(tipo,realizado),setores(nome),unidades(nome)').gte('competencia',ymDate(months[0])).lte('competencia',ymDate(months[months.length-1])).order('competencia').order('nome').order('id');
  if(!hasFullDataAccess()&&currentProfile?.setor_ids?.length)base=base.in('setor_id',currentProfile.setor_ids);
- // O Supabase pode limitar uma consulta a 1.000 registros.
- // O Dashboard pagina a consulta para carregar todos os colaboradores do mês.
- const data=[];
- const pageSize=1000;
- for(let from=0;;from+=pageSize){
-   const {data:page,error}=await base.range(from,from+pageSize-1);
-   if(error){console.error('Erro ao carregar Dashboard:',error);dashboardRows=[];renderDashboard();toast('Não foi possível atualizar o Dashboard: '+error.message);return}
-   if(page?.length)data.push(...page);
-   if(!page || page.length<pageSize)break;
- }
- dashboardRows=data.map(r=>{
-   const done=new Set((r.checklist_mensal||[]).filter(c=>c.realizado).map(c=>norm(c.tipo)));
-   const has=(tipo)=>done.has(norm(tipo));
-   return {
-     colaborador_id:r.id,matricula:r.matricula,nome:r.nome,cargo:r.cargo,descricao_secao:r.descricao_secao,
-     unidade_id:r.unidade_id,unidade_nome:r.unidades?.nome||'',setor_id:r.setor_id,setor_nome:r.setores?.nome||'',
-     situacao:r.situacao||'',status_codigo:codigoSituacao(r.situacao),ferias:!!r.ferias,ferias_marcada:!!r.ferias_marcada,
-     transversal_nep:has('Transversal NEP'),institucional:has('Institucional'),
-     intrasetorial_lnt:has('Intrasetorial LNT'),intrasetorial_adicional:has('Intrasetorial Adicional')
-   };
- });
- renderDashboard()
+ const data=[],pageSize=1000;for(let from=0;;from+=pageSize){const {data:page,error}=await base.range(from,from+pageSize-1);if(error){console.error('Erro ao carregar Dashboard:',error);dashboardRows=[];renderDashboard();toast('Não foi possível atualizar o Dashboard: '+error.message);return}if(page?.length)data.push(...page);if(!page||page.length<pageSize)break;}
+ dashboardRows=data.filter(r=>!isGestorMedico()||isMedicoPJ(r)).map(r=>{const done=new Set((r.checklist_mensal||[]).filter(c=>c.realizado).map(c=>norm(c.tipo))),has=(tipo)=>done.has(norm(tipo));return {colaborador_id:r.id,competencia:String(r.competencia||'').slice(0,7),competencia_label:meses[Number(String(r.competencia||'').slice(5,7))-1]+' / '+String(r.competencia||'').slice(0,4),matricula:r.matricula,nome:r.nome,cargo:r.cargo,descricao_secao:r.descricao_secao,unidade_id:r.unidade_id,unidade_nome:r.unidades?.nome||'',setor_id:r.setor_id,setor_nome:r.setores?.nome||'',situacao:r.situacao||'',status_codigo:codigoSituacao(r.situacao),ferias:!!r.ferias,ferias_marcada:!!r.ferias_marcada,transversal_nep:has('Transversal NEP'),institucional:has('Institucional'),intrasetorial_lnt:has('Intrasetorial LNT'),intrasetorial_adicional:has('Intrasetorial Adicional')}});renderDashboard()
 }
 function filteredDash(){const u=document.getElementById('dash-unidade')?.value||'todos',s=document.getElementById('dash-setor')?.value||'todos';return dashboardRows.filter(r=>(u==='todos'||String(r.unidade_id)===String(u))&&(s==='todos'||String(r.setor_id)===String(s)))}
 function pct(rows,key){const n=rows.length;if(!n)return 0;return Math.round(rows.filter(r=>r[key]).length/n*100)}
@@ -381,7 +386,7 @@ function renderDashboardTable(){
      return status==='realizado'?keys.every(k=>r[k]):keys.some(k=>!r[k]);
    });
  }
- document.getElementById('dash-tbody').innerHTML=rows.map(r=>`<tr><td>${esc(r.matricula)}</td><td><strong>${esc(r.nome)}</strong></td><td>${esc(r.cargo)}</td><td>${esc(r.descricao_secao)}</td><td>${esc(r.situacao||'')}</td><td>${r.ferias?(r.ferias_marcada?'<span class="badge ok">MARCADA</span>':'<span class="badge danger">PENDENTE</span>'):'—'}</td>${['transversal_nep','institucional','intrasetorial_lnt','intrasetorial_adicional'].map(k=>`<td>${(r.status_codigo==='A'||r.status_codigo==='V')&&r[k]?'<span class="badge ok">REALIZADO</span>':(r.status_codigo==='A'||r.status_codigo==='V')?'<span class="badge danger">PENDENTE</span>':'<span class="badge info">DESCONSIDERADO</span>'}</td>`).join('')}</tr>`).join('')||'<tr><td colspan="10">Nenhum colaborador encontrado.</td></tr>'
+ document.getElementById('dash-tbody').innerHTML=rows.map(r=>`<tr><td>${esc(r.competencia_label||'')}</td><td>${esc(r.matricula)}</td><td><strong>${esc(r.nome)}</strong></td><td>${esc(r.cargo)}</td><td>${esc(r.descricao_secao)}</td><td>${esc(r.situacao||'')}</td><td>${r.ferias?(r.ferias_marcada?'<span class="badge ok">MARCADA</span>':'<span class="badge danger">PENDENTE</span>'):'—'}</td>${['transversal_nep','institucional','intrasetorial_lnt','intrasetorial_adicional'].map(k=>`<td>${(r.status_codigo==='A'||r.status_codigo==='V')&&r[k]?'<span class="badge ok">REALIZADO</span>':(r.status_codigo==='A'||r.status_codigo==='V')?'<span class="badge danger">PENDENTE</span>':'<span class="badge info">DESCONSIDERADO</span>'}</td>`).join('')}</tr>`).join('')||'<tr><td colspan="11">Nenhum colaborador encontrado.</td></tr>'
 }
 
 function tipoKey(t){return ({'Transversal NEP':'transversal_nep','Institucional':'institucional','Intrasetorial LNT':'intrasetorial_lnt','Intrasetorial Adicional':'intrasetorial_adicional'}[t])}
@@ -428,15 +433,11 @@ async function prepararFiltrosGestao(){
     unidade.innerHTML='<option value="">Todas as unidades</option>'+(data||[]).map(u=>`<option value="${esc(u.id)}">${esc(u.nome)}</option>`).join('');
     unidade.value=(data||[]).some(u=>String(u.id)===String(atual))?atual:'';
   }
-  const el=document.getElementById('gv-mes');
-  if(!el)return;
-  const atual=el.value||currentYM();el.innerHTML='';const d=new Date();
-  for(let i=11;i>=0;i--){const x=new Date(d.getFullYear(),d.getMonth()-i,1);const ym=x.toISOString().slice(0,7);el.innerHTML+=`<option value="${ym}">${x.toLocaleDateString('pt-BR',{month:'long',year:'numeric'})}</option>`}
-  el.value=atual;
+  if(!document.getElementById('gv-inicio')||!document.getElementById('gv-fim'))return;
 }
 let gvSnapshot=null;
 async function carregarDadosGestaoVista(){
-  const comp=ymDate(document.getElementById('gv-mes')?.value||currentYM());
+  const comp=ymDate(intervaloMeses('gv').slice(-1)[0]||currentYM());
   const unidade=document.getElementById('gv-unidade')?.value||null;
   const {data,error}=await db.rpc('gestao_vista_dados',{p_unidade_id:unidade?Number(unidade):null,p_competencia:comp});
   if(error)throw error;
@@ -446,15 +447,34 @@ async function carregarDadosGestaoVista(){
 async function buscarColaboradoresGestao(comp){return (gvSnapshot?.colaboradores||[])}
 function percentualLista(rows,key){return rows.length?Math.round(rows.filter(x=>x[key]).length/rows.length*100):100}
 function renderDistribuicao(id,rows,campo,opcoes){const total=rows.length;const box=document.getElementById(id);if(!box)return;box.innerHTML=opcoes.map(n=>{const q=rows.filter(x=>String(x[campo]||'')===n).length,p=total?Math.round(q/total*100):0;return `<div class="indicator-item"><div class="indicator-head"><span>${esc(n)}</span><strong>${p}% (${q})</strong></div><div class="indicator-bar"><div style="width:${p}%"></div></div></div>`}).join('')||'<div class="hint">Nenhum treinamento no período.</div>'}
-function renderLinhaAnual(containerId,series,anos){const box=document.getElementById(containerId);if(!box)return;if(!anos.length){box.innerHTML='<div class="hint">Selecione pelo menos um ano.</div>';return}const w=900,h=300,pad={l:55,r:25,t:25,b:45},cw=w-pad.l-pad.r,ch=h-pad.t-pad.b;const colors=['#38bdf8','#10b981','#f59e0b','#ef4444','#a78bfa','#f472b6','#22d3ee'];let svg=`<svg viewBox="0 0 ${w} ${h}" role="img"><rect x="0" y="0" width="${w}" height="${h}" fill="#0b1120" rx="8"/>`;for(let y=0;y<=100;y+=20){const yy=pad.t+ch-(y/100)*ch;svg+=`<line x1="${pad.l}" y1="${yy}" x2="${w-pad.r}" y2="${yy}" stroke="#334155"/><text x="${pad.l-8}" y="${yy+4}" text-anchor="end" fill="#94a3b8" font-size="10">${y}%</text>`}for(let m=0;m<12;m++){const x=pad.l+(m/11)*cw;svg+=`<text x="${x}" y="${h-15}" text-anchor="middle" fill="#94a3b8" font-size="9">${['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'][m]}</text>`}anos.forEach((ano,ai)=>{const vals=series[ano]||Array(12).fill(null);let d='';vals.forEach((v,i)=>{if(v==null)return;const x=pad.l+(i/11)*cw,y=pad.t+ch-(v/100)*ch;d+=(d?' L':'M')+` ${x} ${y}`});if(d){svg+=`<path d="${d}" fill="none" stroke="${colors[ai%colors.length]}" stroke-width="3"/>`;vals.forEach((v,i)=>{if(v==null)return;const x=pad.l+(i/11)*cw,y=pad.t+ch-(v/100)*ch;svg+=`<circle cx="${x}" cy="${y}" r="4" fill="${colors[ai%colors.length]}"/><title>${ano} — ${['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'][i]}: ${v}%</title>`})}});svg+='</svg>';const legend=anos.map((a,i)=>`<span class="legend-item"><span class="legend-dot" style="background:${colors[i%colors.length]}"></span>${a}</span>`).join('');box.innerHTML=svg+`<div class="line-legend">${legend}</div>`}
+function renderLinhaAnual(containerId,series,anos){const box=document.getElementById(containerId);if(!box)return;if(!anos.length){box.innerHTML='<div class="hint">Selecione pelo menos um ano.</div>';return}const w=900,h=300,pad={l:55,r:25,t:25,b:45},cw=w-pad.l-pad.r,ch=h-pad.t-pad.b;const colors=['#0284c7','#059669','#b45309','#dc2626','#7c3aed','#db2777','#0891b2'];const light=document.documentElement.getAttribute('data-theme')==='light',bg=light?'#ffffff':'#0b1120',grid=light?'#cbd5e1':'#334155',label=light?'#475569':'#94a3b8';let svg=`<svg viewBox="0 0 ${w} ${h}" role="img"><rect x="0" y="0" width="${w}" height="${h}" fill="${bg}" rx="8"/>`;for(let y=0;y<=100;y+=20){const yy=pad.t+ch-(y/100)*ch;svg+=`<line x1="${pad.l}" y1="${yy}" x2="${w-pad.r}" y2="${yy}" stroke="${grid}"/><text x="${pad.l-8}" y="${yy+4}" text-anchor="end" fill="${label}" font-size="10">${y}%</text>`}for(let m=0;m<12;m++){const x=pad.l+(m/11)*cw;svg+=`<text x="${x}" y="${h-15}" text-anchor="middle" fill="${label}" font-size="9">${['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'][m]}</text>`}anos.forEach((ano,ai)=>{const vals=series[ano]||Array(12).fill(null);let d='';vals.forEach((v,i)=>{if(v==null)return;const x=pad.l+(i/11)*cw,y=pad.t+ch-(v/100)*ch;d+=(d?' L':'M')+` ${x} ${y}`});if(d){svg+=`<path d="${d}" fill="none" stroke="${colors[ai%colors.length]}" stroke-width="3"/>`;vals.forEach((v,i)=>{if(v==null)return;const x=pad.l+(i/11)*cw,y=pad.t+ch-(v/100)*ch;svg+=`<circle cx="${x}" cy="${y}" r="4" fill="${colors[ai%colors.length]}"/><title>${ano} — ${['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'][i]}: ${v}%</title>`})}});svg+='</svg>';const legend=anos.map((a,i)=>`<span class="legend-item"><span class="legend-dot" style="background:${colors[i%colors.length]}"></span>${a}</span>`).join('');box.innerHTML=svg+`<div class="line-legend">${legend}</div>`}
 function renderYearChecks(id,years,selected,callback){const box=document.getElementById(id);if(!box)return;box.innerHTML=years.map(y=>`<label class="year-chip"><input type="checkbox" value="${y}" ${selected.includes(y)?'checked':''} onchange="${callback}()"> ${y}</label>`).join('')||'<span class="hint">Ainda não há histórico suficiente.</span>'}
 async function buscarHistoricoAnual(){return gvSnapshot?.historico||[]}
 let gvHistoricoAnual=new Map();
 function atualizarGraficosAnuais(){const anos=[...gvHistoricoAnual.keys()].sort();const transSel=[...document.querySelectorAll('#gv-anos-trans input:checked')].map(x=>x.value);const lntSel=[...document.querySelectorAll('#gv-anos-lnt input:checked')].map(x=>x.value);const mk=(campo)=>Object.fromEntries([...gvHistoricoAnual.entries()].map(([ano,meses])=>[ano,meses.map(x=>x.tot?Math.round(x[campo]/x.tot*100):null)]));renderLinhaAnual('gv-trans-anual',mk('trans'),transSel);renderLinhaAnual('gv-lnt-anual',mk('lnt'),lntSel)}
-async function loadGestaoVista(){await prepararFiltrosGestao();const comp=ymDate(document.getElementById('gv-mes')?.value||currentYM());try{await carregarDadosGestaoVista();const colabs=await buscarColaboradoresGestao(comp);const rows=colabs.map(r=>{const done=new Set((r.checklist_mensal||[]).filter(c=>c.realizado).map(c=>norm(c.tipo)));return {...r,status_codigo:codigoSituacao(r.situacao),transversal_nep:done.has('transversal nep'),institucional:done.has('institucional'),intrasetorial_lnt:done.has('intrasetorial lnt'),intrasetorial_adicional:done.has('intrasetorial adicional')}});const eligible=rows.filter(r=>r.status_codigo==='A'||r.status_codigo==='V'),vac=rows.filter(r=>r.status_codigo==='F');document.getElementById('gv-total').textContent=rows.length;document.getElementById('gv-trans').textContent=percentualLista(eligible,'transversal_nep')+'%';document.getElementById('gv-inst').textContent=percentualLista(eligible,'institucional')+'%';document.getElementById('gv-lnt').textContent=percentualLista(eligible,'intrasetorial_lnt')+'%';document.getElementById('gv-add').textContent=percentualLista(eligible,'intrasetorial_adicional')+'%';const vd=vac.filter(r=>r.ferias_marcada).length,vp=vac.length?Math.round(vd/vac.length*100):100;document.getElementById('gv-faltosos').textContent=vp+'%';document.getElementById('gv-faltosos-detalhe').textContent=`${vd} realizados de ${vac.length}`;renderGestaoFaltosos(vac);await renderGestaoExecucao();await renderGestaoTreinamentos(comp);const hist=await buscarHistoricoAnual();gvHistoricoAnual=Array.isArray(hist)?buildHistoricoMap(hist):hist;const anos=[...gvHistoricoAnual.keys()].sort();const prevTrans=[...document.querySelectorAll('#gv-anos-trans input:checked')].map(x=>x.value);const prevLnt=[...document.querySelectorAll('#gv-anos-lnt input:checked')].map(x=>x.value);const defaultSel=anos.length?[anos[anos.length-1]]:[];renderYearChecks('gv-anos-trans',anos,prevTrans.length?prevTrans:defaultSel,'atualizarGraficosAnuais');renderYearChecks('gv-anos-lnt',anos,prevLnt.length?prevLnt:defaultSel,'atualizarGraficosAnuais');atualizarGraficosAnuais()}catch(e){console.error(e);toast('Não foi possível carregar a Gestão à Vista: '+e.message)}}
+
+async function loadGestaoVistaMedico(){
+ const assigned=(currentProfile?.setor_ids||[]).map(Number).filter(Boolean);
+ const months=intervaloMeses('gv');
+ // Não chama a RPC consolidada geral: consulta somente setores atribuídos ao Gestor Médico.
+ const hide=document.querySelectorAll('#view-gestao > .chart-grid, #view-gestao > .card');
+ hide.forEach((el,i)=>{if(el.id==='')el.style.display=(el.querySelector('#gv-inicio')||el.querySelector('#gv-total'))?'':'none'});
+ const gvUnit=document.getElementById('gv-unidade');if(gvUnit){gvUnit.disabled=true;gvUnit.innerHTML='<option value="">Setores médicos atribuídos</option>'}
+ if(!assigned.length){['gv-total','gv-trans','gv-inst','gv-lnt','gv-add','gv-faltosos'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=id==='gv-total'?'0':'0%'});return}
+ const rowsBrutas=[];const pageSize=1000;
+ for(const ym of months){for(let from=0;;from+=pageSize){const {data:page,error}=await db.from('colaboradores_mensal').select('id,competencia,matricula,nome,cargo,descricao_secao,setor_id,situacao,ferias,ferias_marcada,checklist_mensal(tipo,realizado)').eq('competencia',ymDate(ym)).in('setor_id',assigned).order('nome').order('id').range(from,from+pageSize-1);if(error){console.error(error);toast('Não foi possível carregar os indicadores médicos: '+error.message);return}if(page?.length)rowsBrutas.push(...page);if(!page||page.length<pageSize)break;}}
+ const rows=rowsBrutas.filter(isMedicoPJ).map(r=>{const done=new Set((r.checklist_mensal||[]).filter(c=>c.realizado).map(c=>norm(c.tipo)));return {...r,status_codigo:codigoSituacao(r.situacao),transversal_nep:done.has('transversal nep'),institucional:done.has('institucional'),intrasetorial_lnt:done.has('intrasetorial lnt'),intrasetorial_adicional:done.has('intrasetorial adicional')}});
+ const eligible=rows.filter(r=>r.status_codigo==='A'||r.status_codigo==='V'),vac=rows.filter(r=>r.status_codigo==='F');
+ document.getElementById('gv-total').textContent=rows.length;document.getElementById('gv-trans').textContent=percentualLista(eligible,'transversal_nep')+'%';document.getElementById('gv-inst').textContent=percentualLista(eligible,'institucional')+'%';document.getElementById('gv-lnt').textContent=percentualLista(eligible,'intrasetorial_lnt')+'%';document.getElementById('gv-add').textContent=percentualLista(eligible,'intrasetorial_adicional')+'%';const done=vac.filter(r=>r.ferias_marcada).length;document.getElementById('gv-faltosos').textContent=(vac.length?Math.round(done/vac.length*100):100)+'%';document.getElementById('gv-faltosos-detalhe').textContent=`${done} realizados de ${vac.length}`;
+ const detail=document.getElementById('gv-faltosos-detalhe');if(detail)detail.textContent=`${done} realizados de ${vac.length}`;
+}
+
+async function loadGestaoVista(){
+ if(isGestorMedico()){await loadGestaoVistaMedico();return;}
+ await prepararFiltrosGestao();const months=intervaloMeses('gv');try{const snaps=[];for(const ym of months){const unidade=document.getElementById('gv-unidade')?.value||null;const {data,error}=await db.rpc('gestao_vista_dados',{p_unidade_id:unidade?Number(unidade):null,p_competencia:ymDate(ym)});if(error)throw error;snaps.push(data||{colaboradores:[],treinamentos_mes:[],treinamentos_todos:[],atas_mes:[],historico:[]});}const last=snaps[snaps.length-1]||{};gvSnapshot={colaboradores:snaps.flatMap(x=>x.colaboradores||[]),treinamentos_mes:snaps.flatMap(x=>x.treinamentos_mes||[]),atas_mes:snaps.flatMap(x=>x.atas_mes||[]),treinamentos_todos:last.treinamentos_todos||[],historico:last.historico||[]};const rows=(gvSnapshot.colaboradores||[]).map(r=>{const done=new Set((r.checklist_mensal||[]).filter(c=>c.realizado).map(c=>norm(c.tipo)));return {...r,status_codigo:codigoSituacao(r.situacao),transversal_nep:done.has('transversal nep'),institucional:done.has('institucional'),intrasetorial_lnt:done.has('intrasetorial lnt'),intrasetorial_adicional:done.has('intrasetorial adicional')}});const eligible=rows.filter(r=>r.status_codigo==='A'||r.status_codigo==='V'),vac=rows.filter(r=>r.status_codigo==='F');document.getElementById('gv-total').textContent=rows.length;document.getElementById('gv-trans').textContent=percentualLista(eligible,'transversal_nep')+'%';document.getElementById('gv-inst').textContent=percentualLista(eligible,'institucional')+'%';document.getElementById('gv-lnt').textContent=percentualLista(eligible,'intrasetorial_lnt')+'%';document.getElementById('gv-add').textContent=percentualLista(eligible,'intrasetorial_adicional')+'%';const vd=vac.filter(r=>r.ferias_marcada).length,vp=vac.length?Math.round(vd/vac.length*100):100;document.getElementById('gv-faltosos').textContent=vp+'%';document.getElementById('gv-faltosos-detalhe').textContent=`${vd} realizados de ${vac.length}`;renderGestaoFaltosos(vac);await renderGestaoExecucao();await renderGestaoTreinamentos(months.join(','));const hist=await buscarHistoricoAnual();gvHistoricoAnual=Array.isArray(hist)?buildHistoricoMap(hist):hist;const anos=[...gvHistoricoAnual.keys()].sort();const prevTrans=[...document.querySelectorAll('#gv-anos-trans input:checked')].map(x=>x.value);const prevLnt=[...document.querySelectorAll('#gv-anos-lnt input:checked')].map(x=>x.value);const defaultSel=anos.length?[anos[anos.length-1]]:[];renderYearChecks('gv-anos-trans',anos,prevTrans.length?prevTrans:defaultSel,'atualizarGraficosAnuais');renderYearChecks('gv-anos-lnt',anos,prevLnt.length?prevLnt:defaultSel,'atualizarGraficosAnuais');atualizarGraficosAnuais()}catch(e){console.error(e);toast('Não foi possível carregar a Gestão à Vista: '+e.message)}}
 function buildHistoricoMap(out){const mapa=new Map();(out||[]).forEach(r=>{const ym=String(r.competencia||'').slice(0,7);if(!ym)return;const ano=ym.slice(0,4),mes=Number(ym.slice(5,7))-1;if(!mapa.has(ano))mapa.set(ano,Array.from({length:12},()=>({tot:0,trans:0,lnt:0})));const x=mapa.get(ano)[mes],st=codigoSituacao(r.situacao);if(st!=='A'&&st!=='V')return;x.tot++;const done=new Set((r.checklist_mensal||[]).filter(c=>c.realizado).map(c=>norm(c.tipo)));if(done.has('transversal nep'))x.trans++;if(done.has('intrasetorial lnt'))x.lnt});return mapa}
 async function renderGestaoTreinamentos(comp){const trs=gvSnapshot?.treinamentos_mes||[];const atasMes=gvSnapshot?.atas_mes||[];renderDistribuicao('gv-perfil-chart',trs,'perfil_treinamento',['Transversal FGH','Comportamental','Assistencial (Intra)','Segurança do Paciente – Gerência de Risco','Institucional NEP','Tecnologia/Sistemas','Integração/Onboarding','SESMT','Na Trilha','RH']);renderDistribuicao('gv-formato-chart',trs,'formato',['Presencial','Híbrido','Online EAD']);renderDistribuicao('gv-instrutor-chart',trs,'tipo_instrutor',['Instrutor interno','Instrutor externo','Consultoria externa']);const lnts=trs.filter(t=>t.tipo==='Intrasetorial LNT');let treinados=0,previstos=0;for(const t of lnts){const qtd=atasMes.filter(a=>String(a.treinamento_id)===String(t.id)).reduce((n,a)=>n+Number(a.quantidade_treinados_assinatura||0),0);treinados+=qtd;previstos+=Number(t.publico_alvo_quantidade||0)}const pct=previstos?Math.min(100,Math.round(treinados/previstos*100)):0;document.getElementById('gv-lnt-previsto').textContent=pct+'%';document.getElementById('gv-lnt-previsto-detalhe').textContent=`${treinados} treinados de ${previstos} previstos`}
-function renderGestaoFaltosos(vac){const done=vac.filter(r=>r.ferias_marcada).length,pct=vac.length?Math.round(done/vac.length*100):100;document.getElementById('gv-faltosos-chart').innerHTML=`<div class="donut" style="background:conic-gradient(var(--ok) 0 ${pct*3.6}deg,#334155 ${pct*3.6}deg 360deg)"><div class="donut-inner"><strong>${pct}%</strong><span class="small-note">realizados</span></div></div>`;const map=new Map();vac.forEach(r=>{const k=r.setores?.nome||'Sem setor';if(!map.has(k))map.set(k,{total:0,done:0});const x=map.get(k);x.total++;if(r.ferias_marcada)x.done++});const out=[...map.entries()].sort((a,b)=>a[0].localeCompare(b[0],'pt-BR')).map(([k,x])=>{const p=x.total?Math.round(x.done/x.total*100):100;return `<tr><td>${esc(k)}</td><td>${x.total}</td><td>${x.done}</td><td>${x.total-x.done}</td><td>${p}%</td><td>${100-p}%</td></tr>`}).join('');document.getElementById('gv-faltosos-tbody').innerHTML=out||'<tr><td colspan="6">Nenhum colaborador em férias no mês.</td></tr>'}
+function renderGestaoFaltosos(vac){const done=vac.filter(r=>r.ferias_marcada).length,pct=vac.length?Math.round(done/vac.length*100):100;document.getElementById('gv-faltosos-chart').innerHTML=`<div class="donut" style="background:conic-gradient(var(--ok) 0 ${pct*3.6}deg,#334155 ${pct*3.6}deg 360deg)"><div class="donut-inner"><strong>${pct}%</strong><span class="small-note">realizados</span></div></div>`;const map=new Map();vac.forEach(r=>{const k=r.setores?.nome||'Sem setor';if(!map.has(k))map.set(k,{total:0,done:0});const x=map.get(k);x.total++;if(r.ferias_marcada)x.done++});const out=[...map.entries()].sort((a,b)=>a[0].localeCompare(b[0],'pt-BR')).map(([k,x])=>{const p=x.total?Math.round(x.done/x.total*100):100;return `<tr><td>${esc(k)}</td><td>${x.total}</td><td>${x.done}</td><td>${x.total-x.done}</td><td>${p}%</td><td>${100-p}%</td></tr>`}).join('');document.getElementById('gv-faltosos-tbody').innerHTML=out||'<tr><td colspan="6">Nenhum colaborador em férias no período selecionado.</td></tr>'}
 async function renderGestaoExecucao(){const data=gvSnapshot?.treinamentos_todos||[];const map=new Map();(data||[]).forEach(t=>{const k=t.setores?.nome||'Sem setor';if(!map.has(k))map.set(k,{total:0,concluidos:0,aExecutar:0,atrasados:0,naoExecutados:0});const x=map.get(k);x.total++;const c=t.classificacao||'Sem status';if(c==='Concluído')x.concluidos++;else if(c==='Atrasado')x.atrasados++;else if(c==='Não executado')x.naoExecutados++;else if(['Programado','Em andamento','Reprogramado','Sem status'].includes(c))x.aExecutar++});const rows=[...map.entries()].sort((a,b)=>a[0].localeCompare(b[0],'pt-BR'));document.getElementById('gv-execucao-tbody').innerHTML=rows.map(([k,x])=>`<tr><td>${esc(k)}</td><td>${x.total}</td><td>${x.concluidos}</td><td>${x.aExecutar}</td><td>${x.atrasados}</td><td>${x.naoExecutados}</td><td>${x.total?Math.round(x.concluidos/x.total*100):0}%</td></tr>`).join('')||'<tr><td colspan="7">Nenhum treinamento cadastrado.</td></tr>';document.getElementById('gv-setores-chart').innerHTML=rows.map(([k,x])=>{const p=x.total?Math.round(x.concluidos/x.total*100):0;return `<div class="bar-row"><span>${esc(k)}</span><div class="bar-track"><div class="bar-fill" style="width:${p}%"></div></div><strong>${p}%</strong></div>`}).join('')||'<div class="hint">Nenhum dado para representar.</div>';const statusList=['Concluído','Em andamento','Programado','Atrasado','Reprogramado','Não executado','Sem status'];const consolidado=Object.fromEntries(statusList.map(c=>[c,0]));(data||[]).forEach(t=>{const c=statusList.includes(t.classificacao)?t.classificacao:'Sem status';consolidado[c]++});const totalClass=data?.length||0;document.getElementById('gv-classificacao-chart').innerHTML=statusList.map(c=>{const n=consolidado[c]||0;const p=totalClass?Math.round(n/totalClass*100):0;return `<div class="indicator-item"><div class="indicator-head"><span>${esc(c)}</span><strong>${p}% (${n})</strong></div><div class="indicator-track"><div class="indicator-fill" style="width:${p}%"></div></div></div>`}).join('')||'<div class="hint">Nenhum dado para representar.</div>';const tbody=document.getElementById('gv-classificacao-tbody');tbody.innerHTML=rows.map(([k])=>{const subset=(data||[]).filter(t=>(t.setores?.nome||'Sem setor')===k);const counts=Object.fromEntries(statusList.map(c=>[c,0]));subset.forEach(t=>{const c=statusList.includes(t.classificacao)?t.classificacao:'Sem status';counts[c]++});return `<tr><td>${esc(k)}</td>${statusList.map(c=>`<td>${counts[c]}</td>`).join('')}<td>${subset.length}</td></tr>`}).join('')||'<tr><td colspan="9">Nenhum treinamento cadastrado.</td></tr>'}
 
 async function salvarTreinamento(e){
@@ -510,84 +530,141 @@ async function importarArquivoColab(){
   const status=document.getElementById('imp-colab-status');
   const btn=document.getElementById('btn-importar-colab');
   const mostrar=(msg,erro=false)=>{if(status){status.style.display='block';status.style.color=erro?'var(--danger)':'var(--ok)';status.textContent=msg;}if(erro)toast(msg);};
+  const limpar=(v)=>String(v??'').trim();
+  const soDigitos=(v)=>String(v??'').replace(/\D/g,'');
+  const chaveNome=(v)=>norm(String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,''));
   try{
     if(!hasFullDataAccess()&&!currentProfile?.setor_ids?.length)return mostrar('Seu usuário precisa ter um setor responsável cadastrado.',true);
     const file=document.getElementById('file-colab')?.files?.[0];
+    const fileAloc=document.getElementById('file-alocacoes')?.files?.[0];
     const competencia=document.getElementById('imp-mes')?.value;
-    if(!file||!competencia)return mostrar('Informe o mês e selecione o arquivo.',true);
-    if(btn){btn.disabled=true;btn.textContent='Lendo arquivo...';}
-    mostrar('Lendo o arquivo e preparando os colaboradores...');
+    if(!file||!fileAloc||!competencia)return mostrar('Informe o mês e selecione os dois arquivos: Listagem Ativos EP e Alocações — Profissionais.',true);
+    if(btn){btn.disabled=true;btn.textContent='Lendo arquivos...';}
+    mostrar('Lendo as duas fontes e preparando os colaboradores...');
     const rows=await lerArquivo(file);
-    if(!rows.length)return mostrar('Nenhum registro encontrado no arquivo.',true);
+    const alocRows=await lerArquivo(fileAloc);
+    if(!rows.length)return mostrar('Nenhum registro encontrado na Listagem Ativos EP.',true);
+    if(!alocRows.length)return mostrar('Nenhum registro encontrado no arquivo de Alocações.',true);
     const headers=Object.keys(rows[0]);
     const iNome=encontrar(headers,['Nome']);
     const iMat=encontrar(headers,['Chapa','Matrícula','Matricula']);
     const iCargo=encontrar(headers,['Nome Funcão','Nome Função','Cargo','NOME FUNÇÃO']);
     const iSec=encontrar(headers,['Descrição Seção','Descrição da Seção','DESCRIÇAO DA SEÇÃO','DESCRIÇÃO DA SEÇÃO','DESCRIÇÃO SEÇÃO']);
-    let iSit=encontrar(headers,['Situação','SITUAÇÃO','SITUACAO','SITUAÇÃO SETEMBRO/ 26','SITUAÇÃO SETEMBRO/26','SITUAÇÃO DO PROFISSIONAL','SITUAÇÃO DO PROFISSIONAL...']);
-    if(iSit<0){
-      const candidatos=headers.map((h,i)=>({h,i,n:norm(h)})).filter(x=>x.n.includes('situacao'));
-      const preferido=candidatos.find(x=>x.n.includes('setembro'))||candidatos[0];
-      if(preferido)iSit=preferido.i;
-    }
-    if(iNome<0||iMat<0)return mostrar('O arquivo precisa conter as colunas Nome e Chapa/Matrícula.',true);
+    const iSit=encontrar(headers,['Situação','SITUAÇÃO','SITUACAO']);
+    if(iNome<0||iMat<0)return mostrar('A Listagem Ativos EP precisa conter as colunas Nome e Chapa.',true);
+    const ah=Object.keys(alocRows[0]);
+    const aNome=encontrar(ah,['Profissional Fixo','Profissional','Nome']);
+    const aCRM=encontrar(ah,['CRM Prof. Fixo','CRM','CRM Profissional']);
+    const aEscala=encontrar(ah,['Escala','Alocação','Alocacao']);
+    if(aNome<0||aCRM<0)return mostrar('O arquivo de Alocações precisa conter as colunas Profissional e CRM.',true);
     const setores=unidades.flatMap(u=>(u.setores||[]).map(s=>({...s,unidade_id:u.id,unidade_nome:u.nome})));
-    const porMatricula=new Map();let duplicados=0;let semSetor=0;
+    const porMatricula=new Map(), nomesPrincipais=new Map();let duplicados=0,semSetor=0,medicosAdicionados=0,medicosJaListados=0,semCRM=0;
+    const prepararSetor=(sec)=>{
+      let setor=setores.find(x=>norm(x.nome)===norm(sec));
+      if(!setor&&sec){const kw=norm(sec);setor=setores.find(x=>kw.includes(norm(x.nome))||norm(x.nome).includes(kw));}
+      if(!setor&&sec){const tokens=norm(sec).split(/\s+/).filter(x=>x.length>=3);let melhor=null,scoreMax=0;for(const cand of setores){const ct=norm(cand.nome).split(/\s+/).filter(x=>x.length>=3);const score=ct.reduce((n,t)=>n+(tokens.includes(t)?1:0),0);if(score>scoreMax){scoreMax=score;melhor=cand;}}if(scoreMax>0)setor=melhor;}
+      if(!setor&&currentProfile?.setor_ids?.length)setor=setores.find(x=>currentProfile.setor_ids.some(id=>String(id)===String(x.id)));
+      return setor;
+    };
+    const unidadeMedica=unidades.find(u=>norm(u.nome).includes('dom helder'))||unidades[0];
+    const limparEscalaMedica=(escala)=>String(escala||'').replace(/\s*-\s*Coord\.:.*$/i,'').trim();
+    const obterSetorMedico=async(escala)=>{
+      const nome='MÉDICO — '+limparEscalaMedica(escala);
+      if(!unidadeMedica?.id)throw new Error('Cadastre a unidade Hospital Dom Helder Câmara antes de importar as alocações médicas.');
+      let setor=setores.find(x=>String(x.unidade_id)===String(unidadeMedica.id)&&norm(x.nome)===norm(nome));
+      if(setor)return setor;
+      const {data,error}=await db.from('setores').insert({unidade_id:unidadeMedica.id,nome}).select('id,nome,unidade_id').single();
+      if(error){
+        // Se outro processo já criou o setor, busca novamente; não faz equivalência aproximada.
+        const q=await db.from('setores').select('id,nome,unidade_id').eq('unidade_id',unidadeMedica.id).eq('nome',nome).maybeSingle();
+        if(q.error||!q.data)throw new Error('Não foi possível criar o setor médico "'+nome+'": '+error.message);
+        setor={...q.data,unidade_nome:unidadeMedica.nome};
+      }else setor={...data,unidade_nome:unidadeMedica.nome};
+      setores.push(setor);
+      const u=unidades.find(x=>String(x.id)===String(unidadeMedica.id));if(u&&!u.setores.some(x=>String(x.id)===String(setor.id)))u.setores.push(setor);
+      return setor;
+    };
     for(const row of rows){
       const vals=headers.map(h=>row[h]??'');
-      const nome=String(vals[iNome]||'').trim();
-      const matricula=String(vals[iMat]||'').trim();
+      const nome=limpar(vals[iNome]),matricula=limpar(vals[iMat]);
       if(!nome||!matricula)continue;
-      if(porMatricula.has(matricula))duplicados++;
-      const cargo=iCargo>=0?String(vals[iCargo]||'').trim():'';
-      const sec=iSec>=0?String(vals[iSec]||'').trim():'';
-      const situ=iSit>=0?String(vals[iSit]??'').trim().toUpperCase():'';
-      const situacaoCodigo=codigoSituacao(situ);
-      const emFerias=situacaoCodigo==='F';
-      let setor=setores.find(s=>norm(s.nome)===norm(sec));
-      if(!setor&&sec){
-        const kw=norm(sec);
-        setor=setores.find(s=>kw.includes(norm(s.nome))||norm(s.nome).includes(kw));
-      }
-      if(!setor&&sec){
-        const tokens=norm(sec).split(/\s+/).filter(x=>x.length>=3);
-        let melhor=null,melhorScore=0;
-        for(const cand of setores){
-          const ct=norm(cand.nome).split(/\s+/).filter(x=>x.length>=3);
-          const score=ct.reduce((n,t)=>n+(tokens.includes(t)?1:0),0);
-          if(score>melhorScore){melhorScore=score;melhor=cand;}
-        }
-        if(melhorScore>0)setor=melhor;
-      }
-      if(!setor&&currentProfile?.setor_ids?.length)setor=setores.find(s=>currentProfile.setor_ids.some(id=>String(id)===String(s.id)));
+      const cargo=iCargo>=0?limpar(vals[iCargo]):'';
+      const sec=iSec>=0?limpar(vals[iSec]):'';
+      const situ=iSit>=0?limpar(vals[iSit]).toUpperCase():'';
+      const setor=prepararSetor(sec);
       if(!setor)semSetor++;
-      porMatricula.set(matricula,{competencia:competencia+'-01',matricula,nome,cargo,descricao_secao:sec,unidade_id:setor?.unidade_id?Number(setor.unidade_id):(unidades[0]?.id?Number(unidades[0].id):null),setor_id:setor?.id?Number(setor.id):null,situacao:situ,ferias:emFerias,origem_arquivo:file.name,criado_por:currentUser.id});
+      const payload={competencia:competencia+'-01',matricula,nome,cargo,descricao_secao:sec,unidade_id:setor?.unidade_id?Number(setor.unidade_id):(unidades[0]?.id?Number(unidades[0].id):null),setor_id:setor?.id?Number(setor.id):null,situacao:situ,ferias:codigoSituacao(situ)==='F',origem_arquivo:file.name+' + '+fileAloc.name,criado_por:currentUser.id};
+      if(porMatricula.has(matricula))duplicados++;
+      porMatricula.set(matricula,payload);
+      const kn=chaveNome(nome);if(!nomesPrincipais.has(kn))nomesPrincipais.set(kn,payload);
+    }
+    for(const row of alocRows){
+      const nome=limpar(row[ah[aNome]]);
+      const crm=soDigitos(row[ah[aCRM]]);
+      if(!nome)continue;
+      const kn=chaveNome(nome);
+      if(nomesPrincipais.has(kn)){medicosJaListados++;continue;}
+      if(!crm){semCRM++;continue;}
+      // CRM é usado como identificador alternativo para médicos sem matrícula.
+      const matricula='CRM-'+crm;
+      const sec=limpar(aEscala>=0?row[ah[aEscala]]:'');
+      let setor;try{setor=await obterSetorMedico(sec)}catch(err){return mostrar(err.message,true)}
+      // Prefixo CRM evita colisão acidental com chapas numéricas da lista EP.
+      const chaveCRM='CRM-'+crm;
+      const payload={competencia:competencia+'-01',matricula:chaveCRM,nome,cargo:'MÉDICO PJ',descricao_secao:sec,unidade_id:Number(setor.unidade_id),setor_id:Number(setor.id),situacao:'A',ferias:false,origem_arquivo:file.name+' + '+fileAloc.name,criado_por:currentUser.id};
+      if(porMatricula.has(matricula)){
+        // Se já existe essa chave, não sobrescreve o funcionário da lista principal.
+        medicosJaListados++;continue;
+      }
+      porMatricula.set(matricula,payload);nomesPrincipais.set(kn,payload);medicosAdicionados++;
     }
     const payload=[...porMatricula.values()];
-    if(!payload.length)return mostrar('Nenhum registro pôde ser preparado. Verifique se o arquivo possui Nome e Chapa/Matrícula.',true);
+    if(!payload.length)return mostrar('Nenhum registro pôde ser preparado. Verifique as colunas dos dois arquivos.',true);
+    const resumo='Competência: '+competencia+'\nFuncionários da Listagem Ativos EP: '+rows.length+'\nMédicos novos por CRM: '+medicosAdicionados+'\nMédicos já encontrados na lista principal: '+medicosJaListados+'\nRegistros preparados para importar: '+payload.length+'\nLinhas repetidas consolidadas: '+duplicados+'\nRegistros sem CRM ignorados: '+semCRM+'\nRegistros sem setor vinculado: '+semSetor+'\n\nDeseja continuar e gravar esses dados no mês selecionado?';
+    if(!confirm(resumo))return mostrar('Importação cancelada. Nenhum dado foi gravado.');
     if(btn)btn.textContent='Gravando no mês...';
     mostrar('Gravando '+payload.length+' colaboradores em '+competencia+'...');
     const {error}=await db.from('colaboradores_mensal').upsert(payload,{onConflict:'competencia,matricula'});
     if(error)return mostrar('Erro ao importar o mês: '+error.message,true);
     if(btn)btn.textContent='Criando checklist...';
-    const {data:mesRows,error:loadErr}=await db.from('colaboradores_mensal').select('id').eq('competencia',competencia+'-01');
-    if(loadErr)return mostrar('Importação concluída, mas não foi possível preparar o checklist: '+loadErr.message,true);
-    for(const r of mesRows||[]){
+    const mesRows=[];const pageSizeIds=1000;
+    for(let from=0;;from+=pageSizeIds){
+      const {data:page,error:loadErr}=await db.from('colaboradores_mensal').select('id').eq('competencia',competencia+'-01').order('id').range(from,from+pageSizeIds-1);
+      if(loadErr)return mostrar('Importação concluída, mas não foi possível preparar o checklist: '+loadErr.message,true);
+      if(page?.length)mesRows.push(...page);
+      if(!page||page.length<pageSizeIds)break;
+    }
+    for(const r of mesRows){
       const q=await db.from('checklist_mensal').select('tipo').eq('colaborador_mensal_id',r.id);
       if(q.error)continue;
       const existentes=new Set((q.data||[]).map(x=>x.tipo));
       const faltantes=TIPOS.filter(tipo=>!existentes.has(tipo)).map(tipo=>({colaborador_mensal_id:r.id,tipo,realizado:false}));
       if(faltantes.length)await db.from('checklist_mensal').insert(faltantes);
     }
-    document.getElementById('file-colab').value='';
+    document.getElementById('file-colab').value='';document.getElementById('file-alocacoes').value='';
     const dashMes=document.getElementById('dash-mes');if(dashMes)dashMes.value=competencia;const checkMes=document.getElementById('check-mes');if(checkMes)checkMes.value=competencia;
     await loadMesChecklist();await loadDashboard();
-    mostrar(payload.length+' colaboradores importados para '+competencia+'. '+(duplicados?duplicados+' linhas repetidas por matrícula foram consolidadas. ':'')+(semSetor?semSetor+' registros foram mantidos sem setor vinculado porque a descrição da seção não correspondeu aos setores cadastrados. ':'')+'Todos os colaboradores importados permanecem no histórico; férias ficam fora do indicador de treinados.');
+    mostrar(payload.length+' registros importados para '+competencia+'. '+medicosAdicionados+' médicos PJ complementados pelo CRM e vinculados a setores médicos próprios. '+medicosJaListados+' médicos já constavam na lista principal e não foram duplicados. '+(semSetor?semSetor+' registros sem setor vinculado. ':'')+'O histórico dos outros meses foi preservado.');
   }catch(err){console.error('ERRO IMPORTAÇÃO COLABORADORES',err);mostrar('Erro inesperado na importação: '+(err?.message||err),true);}
   finally{if(btn){btn.disabled=false;btn.textContent='Importar / Atualizar mês';}}
 }
 
-async function loadMesChecklist(){const competencia=(document.getElementById('check-mes')?.value||currentYM())+'-01';let q=db.from('colaboradores_mensal').select('id,competencia,matricula,nome,cargo,descricao_secao,unidade_id,setor_id,ferias,ferias_marcada,situacao,checklist_mensal(id,tipo,realizado),setores(nome),unidades(nome)').eq('competencia',competencia).order('nome');if(!hasFullDataAccess()&&currentProfile?.setor_ids?.length)q=q.in('setor_id',currentProfile.setor_ids);const {data,error}=await q;if(error){console.error(error);checkRows=[];renderChecklist();return}checkRows=(data||[]).map(r=>({...r,status_codigo:codigoSituacao(r.situacao)}));renderChecklist()}
+async function loadMesChecklist(){
+ const competencia=(document.getElementById('check-mes')?.value||currentYM())+'-01';
+ const pageSize=1000;let from=0;const allRows=[];
+ // O Supabase limita cada resposta; buscar em páginas evita cortar a lista por volta da letra M.
+ while(true){
+  let q=db.from('colaboradores_mensal').select('id,competencia,matricula,nome,cargo,descricao_secao,unidade_id,setor_id,ferias,ferias_marcada,situacao,checklist_mensal(id,tipo,realizado),setores(nome),unidades(nome)').eq('competencia',competencia).order('nome').order('id').range(from,from+pageSize-1);
+  if(!hasFullDataAccess()&&currentProfile?.setor_ids?.length)q=q.in('setor_id',currentProfile.setor_ids);
+  const {data,error}=await q;
+  if(error){console.error('Erro ao carregar checklist:',error);checkRows=[];renderChecklist();toast('Não foi possível carregar o Checklist: '+error.message);return}
+  const page=data||[];allRows.push(...page);
+  if(page.length<pageSize)break;
+  from+=pageSize;
+ }
+ checkRows=allRows.map(r=>({...r,status_codigo:codigoSituacao(r.situacao)}));
+ renderChecklist();
+}
 function renderChecklist(){
  const b=norm(document.getElementById('check-busca')?.value),s=document.getElementById('check-setor')?.value||'todos',t=document.getElementById('check-tipo-filtro')?.value||'todos',f=document.getElementById('check-ferias')?.value||'todos';
  let rows=checkRows.filter(r=>(s==='todos'||String(r.setor_id)===String(s))&&(!b||norm(r.nome).includes(b)||norm(r.matricula).includes(b))&&(f==='todos'||(f==='ferias'?r.ferias:!r.ferias)));
@@ -707,7 +784,7 @@ async function excluirSetor(id){
   if(error)return toast('Não foi possível excluir o setor.\n\n'+error.message);
   await loadUnits();populateFilters();renderUnidades();toast('Setor excluído.');
 }
-function preencherSetoresUsuario(unitId,sectorId){const u=document.getElementById(unitId)?.value;const el=document.getElementById(sectorId);if(!el)return;const ss=unidades.find(x=>String(x.id)===String(u))?.setores||[];el.innerHTML=ss.map(s=>`<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('')}
+function preencherSetoresUsuario(unitId,sectorId){const u=document.getElementById(unitId)?.value;const el=document.getElementById(sectorId);if(!el)return;const perfilId=unitId==='u-unidade'?'u-perfil':unitId==='ed-unidade'?'ed-perfil':null;const perfil=perfilId?document.getElementById(perfilId)?.value:'';let ss=unidades.find(x=>String(x.id)===String(u))?.setores||[];ss=roleSetorFilter(ss,perfil);el.innerHTML=ss.map(s=>`<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');const hint=el.parentElement?.querySelector('.small-note');if(hint&&perfil==='gestor_medico')hint.textContent='Selecione um ou mais setores médicos. O Gestor Médico verá apenas médicos PJ desses setores.'}
 function preencherFormularioUsuario(unitId,sectorId){const u=document.getElementById(unitId);if(!u)return;u.innerHTML='<option value="">Selecione a unidade</option>'+unidades.map(x=>`<option value="${esc(x.id)}">${esc(x.nome)}</option>`).join('');preencherSetoresUsuario(unitId,sectorId)}
 function idsSelecionados(id){return [...(document.getElementById(id)?.selectedOptions||[])].map(o=>Number(o.value)).filter(Boolean)}
 async function salvarVinculosUsuario(id,unidade_id,setor_ids){
@@ -724,6 +801,20 @@ async function salvarEdicaoUsuario(){if(!canManageUsers())return;const id=v('ed-
 async function excluirUsuario(id){if(!canManageUsers()||id===currentUser.id)return;if(!confirm('Excluir este usuário?'))return;const {data,error}=await db.functions.invoke(EDGE_FUNCTION_ADMIN_USERS,{body:{action:'delete',id}});if(error||data?.error)return toast(data?.error||error?.message||'Não foi possível excluir.');await loadProfiles();renderUsuarios()}
 async function resetSenha(email){if(!confirm('Enviar e-mail de redefinição de senha para '+email+'?'))return;const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});if(error)return toast(error.message);toast('Solicitação de redefinição enviada para o e-mail informado.')}
 document.getElementById('btn-importar-colab')?.addEventListener('click',importarArquivoColab);
+// Preferência visual local; não altera autenticação, permissões, consultas ou dados.
+function applyTheme(theme){
+ const selected=theme==='light'?'light':'dark';
+ document.documentElement.setAttribute('data-theme',selected);
+ const btn=document.getElementById('theme-toggle');
+ if(btn){btn.textContent=selected==='dark'?'☀️ Modo claro':'🌙 Modo escuro';btn.setAttribute('aria-label',selected==='dark'?'Ativar modo claro':'Ativar modo escuro');}
+ if(typeof atualizarGraficosAnuais==='function')atualizarGraficosAnuais();
+}
+function toggleTheme(){
+ const next=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
+ applyTheme(next);
+ try{localStorage.setItem('treinamentos-fgh-theme',next);}catch(e){}
+}
+(function initTheme(){let saved='dark';try{saved=localStorage.getItem('treinamentos-fgh-theme')||'dark';}catch(e){}applyTheme(saved);})();
 boot();
 </script>
 </body>
