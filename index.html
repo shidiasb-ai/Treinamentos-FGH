@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="app-version" content="2026-10-15-v31-filtro-intervalo">
-<title>Sistema de Gestão de Treinamentos FGH — V31 Filtro por Intervalo</title>
+<meta name="app-version" content="2026-10-16-v32-importacao-multifonte-6000">
+<title>Sistema de Gestão de Treinamentos FGH — V32 Importação Multifonte</title>
 <style>
 :root{--bg:#0f172a;--card:#1e293b;--border:#334155;--primary:#0284c7;--primary2:#0369a1;--accent:#38bdf8;--text:#f8fafc;--muted:#94a3b8;--ok:#10b981;--warn:#f59e0b;--danger:#ef4444}
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}body{background:var(--bg);color:var(--text);padding:16px;min-height:100vh}.container{max-width:1400px;margin:auto;display:none}.login{position:fixed;inset:0;background:#0f172a;display:flex;align-items:center;justify-content:center;z-index:99}.login-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:32px;width:min(400px,92vw);box-shadow:0 10px 30px #0008}.login-card h2{color:var(--accent);margin-bottom:6px}.login-card p{color:var(--muted);font-size:13px;margin-bottom:22px}.field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}.field label{font-size:12px;color:var(--muted)}input,select,textarea{width:100%;padding:9px 10px;border:1px solid var(--border);border-radius:6px;background:#0b1120;color:var(--text);font-size:13px}textarea{min-height:90px;resize:vertical}.btn{padding:8px 13px;border:0;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer}.btn-primary{background:var(--primary);color:white}.btn-primary:hover{background:var(--primary2)}.btn-secondary{background:var(--border);color:white}.btn-danger{background:var(--danger);color:white}.btn-warning{background:var(--warn);color:#111}.btn-success{background:var(--ok);color:white}.btn-full{width:100%;padding:12px}.top{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}.brand h1{font-size:18px;color:var(--accent)}.brand p{font-size:12px;color:var(--muted)}.user-tag{font-size:12px;background:#0b1120;border:1px solid var(--border);padding:6px 10px;border-radius:20px}.tabs{display:flex;gap:7px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:14px}.tab{background:transparent;color:var(--muted);border:0;padding:8px 12px;border-radius:6px;cursor:pointer;font-weight:600;font-size:13px}.tab.active{background:var(--primary);color:#fff}.view{display:none}.view.active{display:block}.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:17px;margin-bottom:15px}.title{font-size:15px;font-weight:700;color:var(--accent);margin-bottom:13px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px;margin-bottom:13px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:12px;min-width:900px}th{background:#0b1120;color:var(--muted);text-align:left;padding:9px;border-bottom:1px solid var(--border);position:sticky;top:0}td{padding:9px;border-bottom:1px solid var(--border);vertical-align:middle}.badge{display:inline-block;padding:3px 7px;border-radius:4px;font-size:10px;font-weight:700}.ok{background:#10b98122;color:var(--ok)}.warn{background:#f59e0b22;color:var(--warn)}.danger{background:#ef444422;color:var(--danger)}.info{background:#38bdf822;color:var(--accent)}.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:11px;margin-bottom:15px}.metric{background:#0b1120;border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center}.metric .n{font-size:24px;font-weight:800;margin:4px 0}.metric .l{font-size:11px;color:var(--muted)}.subtabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}.subtab{border:1px solid var(--border);background:#0b1120;color:var(--muted);padding:7px 10px;border-radius:6px;cursor:pointer}.subtab.active{background:var(--primary);color:#fff}.subview{display:none}.subview.active{display:block}.hint{font-size:12px;color:var(--muted);line-height:1.5}.checkbox{width:18px;height:18px;accent-color:var(--primary);cursor:pointer}.searchbar{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;margin-bottom:12px}.scroll-list{max-height:600px;overflow:auto}.danger-text{color:var(--danger)}.success-text{color:var(--ok)}.admin-status{margin-top:10px;padding:10px;border:1px solid var(--border);border-radius:7px;background:#0b1120;font-size:12px}.unit-item{padding:12px;border:1px solid var(--border);border-radius:8px;margin-bottom:10px;background:#0b1120}.unit-head{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}.chart-box{background:#0b1120;border:1px solid var(--border);border-radius:8px;padding:14px}.bar-row{display:grid;grid-template-columns:150px 1fr 50px;gap:8px;align-items:center;margin:8px 0;font-size:11px}.bar-track{height:12px;background:#1e293b;border-radius:20px;overflow:hidden}.bar-fill{height:100%;background:var(--primary);border-radius:20px}.donut{width:150px;height:150px;border-radius:50%;margin:8px auto;display:flex;align-items:center;justify-content:center}.donut-inner{width:105px;height:105px;border-radius:50%;background:#0b1120;display:flex;flex-direction:column;align-items:center;justify-content:center}.donut-inner strong{font-size:25px}.small-note{font-size:11px;color:var(--muted);margin-top:6px}.sector-row{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}.line-chart{width:100%;min-height:280px;overflow:auto}.line-chart svg{width:100%;min-width:760px;height:300px}.line-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:8px}.legend-item{display:flex;align-items:center;gap:5px}.legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block}.multi-years{display:flex;gap:8px;flex-wrap:wrap}.year-chip{display:flex;align-items:center;gap:5px;padding:5px 8px;border:1px solid var(--border);border-radius:6px;background:#0b1120;font-size:11px}.indicator-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}.indicator-item{background:#0b1120;border:1px solid var(--border);border-radius:7px;padding:10px}.indicator-head{display:flex;justify-content:space-between;gap:8px;font-size:12px}.indicator-bar{height:10px;background:#1e293b;border-radius:20px;overflow:hidden;margin-top:7px}.indicator-bar>div{height:100%;background:var(--primary);border-radius:20px}
@@ -82,7 +82,7 @@
   <button type="button" class="btn btn-primary" onclick="salvarColaboradorIndividual()">Inserir colaborador</button>
   <div id="cad-colab-status" class="admin-status" style="display:none"></div>
  </div>
- <div class="card"><div class="title">Importar lista mensal de colaboradores</div><div class="grid"><div class="field"><label>Mês da lista</label><input id="imp-mes" type="month" required></div><div class="field"><label>Listagem Ativos EP (todos os funcionários)</label><input id="file-colab" type="file" accept=".csv,.xlsx,.xls"></div><div class="field"><label>Alocações — Profissionais (médicos)</label><input id="file-alocacoes" type="file" accept=".csv,.xlsx,.xls"></div></div><p class="hint">As duas fontes são consolidadas no mesmo indicador mensal. Os médicos PJ usam CRM como identificador (CRM-...) e recebem setores próprios com prefixo MÉDICO —, criados durante a importação quando necessário. Situação A = ativo e V = aviso prévio: ambos são considerados nos indicadores de treinamento. F = férias: entra apenas na Gestão de Faltosos e não entra no indicador de treinamento. E = licença, D = demissão, U = outros e P = previdência social: ficam fora dos indicadores e não são tratados como faltosos de treinamento.</p><div id="imp-colab-status" class="hint" style="display:none;margin-top:10px;font-weight:700"></div><div style="margin-top:10px"><button id="btn-importar-colab" type="button" class="btn btn-primary">Importar / Atualizar mês</button></div></div>
+ <div class="card"><div class="title">Importar lista mensal de colaboradores</div><div class="grid"><div class="field"><label>Mês da lista</label><input id="imp-mes" type="month" required></div><div class="field"><label>1. Listagem Ativos EP</label><input id="file-colab" type="file" accept=".csv,.xlsx,.xls"></div><div class="field"><label>2. Alocações — médicos PJ</label><input id="file-alocacoes" type="file" accept=".csv,.xlsx,.xls"></div><div class="field"><label>3. Terceirizados — Nutrição</label><input id="file-nutricao" type="file" accept=".csv,.xlsx,.xls"></div><div class="field"><label>4. Terceirizados — Hemodiálise (PDF ou planilha)</label><input id="file-dialise" type="file" accept=".pdf,.csv,.xlsx,.xls"></div></div><p class="hint">Selecione uma ou mais fontes por vez: não é necessário importar os quatro arquivos juntos. Cada importação acrescenta/atualiza os registros da competência e não exclui pessoas que já estavam na lista. Ativos EP usam Chapa; médicos usam CRM; terceirizados recebem identificador interno gerado a partir de nome, função e setor. CPF não é utilizado nem armazenado. Situação A = ativo e V = aviso prévio entram nos indicadores; F = férias entra apenas na Gestão de Faltosos; E, D, U e P ficam fora dos indicadores.</p><div id="imp-colab-status" class="hint" style="display:none;margin-top:10px;font-weight:700"></div><div style="margin-top:10px"><button id="btn-importar-colab" type="button" class="btn btn-primary">Importar / Atualizar mês</button></div></div>
  <div class="card"><div class="title">Checklist Mensal da Equipe <div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn btn-secondary" onclick="baixarChecklistExcel()">Baixar Excel</button></div></div><div class="grid"><div class="field"><label>Mês/ano</label><select id="check-mes" onchange="loadMesChecklist()"></select></div><div class="field"><label>Setor</label><select id="check-setor" onchange="renderChecklist()"></select></div></div><div class="searchbar"><input id="check-busca" placeholder="Buscar por nome ou matrícula/chapa" oninput="renderChecklist()"><select id="check-tipo-filtro" onchange="renderChecklist()"><option value="todos">Todos</option><option value="Transversal NEP">Transversal NEP</option><option value="Institucional">Institucional</option><option value="Intrasetorial LNT">Intrasetorial LNT</option><option value="Intrasetorial Adicional">Intrasetorial Adicional</option></select><select id="check-ferias" onchange="renderChecklist()"><option value="todos">Todos</option><option value="ferias">Férias</option><option value="naoferias">Não férias</option></select></div><div class="table-wrap"><table><thead><tr><th>Matrícula/Chapa</th><th>Nome</th><th>Função</th><th>Descrição de Seção</th><th>Situação</th><th>Férias</th><th>Transversal NEP</th><th>Institucional</th><th>Intrasetorial LNT</th><th>Intrasetorial Adicional</th><th>Ação</th></tr></thead><tbody id="check-tbody"></tbody></table></div></div>
 </section>
 
@@ -132,6 +132,7 @@
 </section>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL='https://yzykqqowbzakaeetccii.supabase.co';
@@ -532,120 +533,64 @@ async function importarArquivoColab(){
   const mostrar=(msg,erro=false)=>{if(status){status.style.display='block';status.style.color=erro?'var(--danger)':'var(--ok)';status.textContent=msg;}if(erro)toast(msg);};
   const limpar=(v)=>String(v??'').trim();
   const soDigitos=(v)=>String(v??'').replace(/\D/g,'');
-  const chaveNome=(v)=>norm(String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,''));
+  const chaveNome=(v)=>norm(String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'')).replace(/\s+/g,' ');
+  const hashInterno=(txt)=>{let h=2166136261;for(let i=0;i<txt.length;i++){h^=txt.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0).toString(36).toUpperCase()};
+  const campos=(row,aliases)=>{const keys=Object.keys(row||{});const i=encontrar(keys,aliases);return i<0?'':row[keys[i]]??''};
+  const arquivoPorId=(id)=>document.getElementById(id)?.files?.[0]||null;
   try{
     if(!hasFullDataAccess()&&!currentProfile?.setor_ids?.length)return mostrar('Seu usuário precisa ter um setor responsável cadastrado.',true);
-    const file=document.getElementById('file-colab')?.files?.[0];
-    const fileAloc=document.getElementById('file-alocacoes')?.files?.[0];
+    const file=arquivoPorId('file-colab'),fileAloc=arquivoPorId('file-alocacoes'),fileNut=arquivoPorId('file-nutricao'),fileDial=arquivoPorId('file-dialise');
     const competencia=document.getElementById('imp-mes')?.value;
-    if(!file||!fileAloc||!competencia)return mostrar('Informe o mês e selecione os dois arquivos: Listagem Ativos EP e Alocações — Profissionais.',true);
+    const selecionados=[file,fileAloc,fileNut,fileDial].filter(Boolean);
+    if(!competencia||!selecionados.length)return mostrar('Informe o mês e selecione pelo menos uma fonte de profissionais.',true);
     if(btn){btn.disabled=true;btn.textContent='Lendo arquivos...';}
-    mostrar('Lendo as duas fontes e preparando os colaboradores...');
-    const rows=await lerArquivo(file);
-    const alocRows=await lerArquivo(fileAloc);
-    if(!rows.length)return mostrar('Nenhum registro encontrado na Listagem Ativos EP.',true);
-    if(!alocRows.length)return mostrar('Nenhum registro encontrado no arquivo de Alocações.',true);
-    const headers=Object.keys(rows[0]);
-    const iNome=encontrar(headers,['Nome']);
-    const iMat=encontrar(headers,['Chapa','Matrícula','Matricula']);
-    const iCargo=encontrar(headers,['Nome Funcão','Nome Função','Cargo','NOME FUNÇÃO']);
-    const iSec=encontrar(headers,['Descrição Seção','Descrição da Seção','DESCRIÇAO DA SEÇÃO','DESCRIÇÃO DA SEÇÃO','DESCRIÇÃO SEÇÃO']);
-    const iSit=encontrar(headers,['Situação','SITUAÇÃO','SITUACAO']);
-    if(iNome<0||iMat<0)return mostrar('A Listagem Ativos EP precisa conter as colunas Nome e Chapa.',true);
-    const ah=Object.keys(alocRows[0]);
-    const aNome=encontrar(ah,['Profissional Fixo','Profissional','Nome']);
-    const aCRM=encontrar(ah,['CRM Prof. Fixo','CRM','CRM Profissional']);
-    const aEscala=encontrar(ah,['Escala','Alocação','Alocacao']);
-    if(aNome<0||aCRM<0)return mostrar('O arquivo de Alocações precisa conter as colunas Profissional e CRM.',true);
+    mostrar('Lendo as fontes selecionadas e preparando a lista consolidada...');
     const setores=unidades.flatMap(u=>(u.setores||[]).map(s=>({...s,unidade_id:u.id,unidade_nome:u.nome})));
-    const porMatricula=new Map(), nomesPrincipais=new Map();let duplicados=0,semSetor=0,medicosAdicionados=0,medicosJaListados=0,semCRM=0;
+    const unidadeHospital=unidades.find(u=>norm(u.nome).includes('dom helder'))||unidades[0];
+    const porMatricula=new Map();let duplicados=0,semSetor=0,medicosAdicionados=0,medicosJaListados=0,semCRM=0,terceirosAdicionados=0,ignorados=0;
     const prepararSetor=(sec)=>{
-      let setor=setores.find(x=>norm(x.nome)===norm(sec));
-      if(!setor&&sec){const kw=norm(sec);setor=setores.find(x=>kw.includes(norm(x.nome))||norm(x.nome).includes(kw));}
-      if(!setor&&sec){const tokens=norm(sec).split(/\s+/).filter(x=>x.length>=3);let melhor=null,scoreMax=0;for(const cand of setores){const ct=norm(cand.nome).split(/\s+/).filter(x=>x.length>=3);const score=ct.reduce((n,t)=>n+(tokens.includes(t)?1:0),0);if(score>scoreMax){scoreMax=score;melhor=cand;}}if(scoreMax>0)setor=melhor;}
+      const alvo=norm(sec);let setor=setores.find(x=>norm(x.nome)===alvo);
+      if(!setor&&alvo){setor=setores.find(x=>alvo.includes(norm(x.nome))||norm(x.nome).includes(alvo));}
+      if(!setor&&alvo){const tokens=alvo.split(/\s+/).filter(x=>x.length>=3);let melhor=null,scoreMax=0;for(const cand of setores){const ct=norm(cand.nome).split(/\s+/).filter(x=>x.length>=3);const score=ct.reduce((n,t)=>n+(tokens.includes(t)?1:0),0);if(score>scoreMax){scoreMax=score;melhor=cand;}}if(scoreMax>0)setor=melhor;}
       if(!setor&&currentProfile?.setor_ids?.length)setor=setores.find(x=>currentProfile.setor_ids.some(id=>String(id)===String(x.id)));
       return setor;
     };
-    const unidadeMedica=unidades.find(u=>norm(u.nome).includes('dom helder'))||unidades[0];
-    const limparEscalaMedica=(escala)=>String(escala||'').replace(/\s*-\s*Coord\.:.*$/i,'').trim();
-    const obterSetorMedico=async(escala)=>{
-      const nome='MÉDICO — '+limparEscalaMedica(escala);
-      if(!unidadeMedica?.id)throw new Error('Cadastre a unidade Hospital Dom Helder Câmara antes de importar as alocações médicas.');
-      let setor=setores.find(x=>String(x.unidade_id)===String(unidadeMedica.id)&&norm(x.nome)===norm(nome));
-      if(setor)return setor;
-      const {data,error}=await db.from('setores').insert({unidade_id:unidadeMedica.id,nome}).select('id,nome,unidade_id').single();
-      if(error){
-        // Se outro processo já criou o setor, busca novamente; não faz equivalência aproximada.
-        const q=await db.from('setores').select('id,nome,unidade_id').eq('unidade_id',unidadeMedica.id).eq('nome',nome).maybeSingle();
-        if(q.error||!q.data)throw new Error('Não foi possível criar o setor médico "'+nome+'": '+error.message);
-        setor={...q.data,unidade_nome:unidadeMedica.nome};
-      }else setor={...data,unidade_nome:unidadeMedica.nome};
-      setores.push(setor);
-      const u=unidades.find(x=>String(x.id)===String(unidadeMedica.id));if(u&&!u.setores.some(x=>String(x.id)===String(setor.id)))u.setores.push(setor);
-      return setor;
+    const obterSetor=async(nomeSetor)=>{
+      const nome=limpar(nomeSetor)||'TERCEIRIZADOS';let setor=setores.find(x=>norm(x.nome)===norm(nome));if(setor)return setor;
+      if(!unidadeHospital?.id)throw new Error('Cadastre a unidade Hospital Metropolitano Sul Dom Hélder Câmara antes de importar os terceirizados.');
+      const {data,error}=await db.from('setores').insert({unidade_id:unidadeHospital.id,nome}).select('id,nome,unidade_id').single();
+      if(error){const q=await db.from('setores').select('id,nome,unidade_id').eq('unidade_id',unidadeHospital.id).eq('nome',nome).maybeSingle();if(q.error||!q.data)throw new Error('Não foi possível criar/localizar o setor '+nome+': '+error.message);setor={...q.data,unidade_nome:unidadeHospital.nome};}
+      else setor={...data,unidade_nome:unidadeHospital.nome};
+      setores.push(setor);const u=unidades.find(x=>String(x.id)===String(unidadeHospital.id));if(u&&!u.setores.some(x=>String(x.id)===String(setor.id)))u.setores.push(setor);return setor;
     };
-    for(const row of rows){
-      const vals=headers.map(h=>row[h]??'');
-      const nome=limpar(vals[iNome]),matricula=limpar(vals[iMat]);
-      if(!nome||!matricula)continue;
-      const cargo=iCargo>=0?limpar(vals[iCargo]):'';
-      const sec=iSec>=0?limpar(vals[iSec]):'';
-      const situ=iSit>=0?limpar(vals[iSit]).toUpperCase():'';
-      const setor=prepararSetor(sec);
-      if(!setor)semSetor++;
-      const payload={competencia:competencia+'-01',matricula,nome,cargo,descricao_secao:sec,unidade_id:setor?.unidade_id?Number(setor.unidade_id):(unidades[0]?.id?Number(unidades[0].id):null),setor_id:setor?.id?Number(setor.id):null,situacao:situ,ferias:codigoSituacao(situ)==='F',origem_arquivo:file.name+' + '+fileAloc.name,criado_por:currentUser.id};
-      if(porMatricula.has(matricula))duplicados++;
-      porMatricula.set(matricula,payload);
-      const kn=chaveNome(nome);if(!nomesPrincipais.has(kn))nomesPrincipais.set(kn,payload);
-    }
-    for(const row of alocRows){
-      const nome=limpar(row[ah[aNome]]);
-      const crm=soDigitos(row[ah[aCRM]]);
-      if(!nome)continue;
-      const kn=chaveNome(nome);
-      if(nomesPrincipais.has(kn)){medicosJaListados++;continue;}
-      if(!crm){semCRM++;continue;}
-      // CRM é usado como identificador alternativo para médicos sem matrícula.
-      const matricula='CRM-'+crm;
-      const sec=limpar(aEscala>=0?row[ah[aEscala]]:'');
-      let setor;try{setor=await obterSetorMedico(sec)}catch(err){return mostrar(err.message,true)}
-      // Prefixo CRM evita colisão acidental com chapas numéricas da lista EP.
-      const chaveCRM='CRM-'+crm;
-      const payload={competencia:competencia+'-01',matricula:chaveCRM,nome,cargo:'MÉDICO PJ',descricao_secao:sec,unidade_id:Number(setor.unidade_id),setor_id:Number(setor.id),situacao:'A',ferias:false,origem_arquivo:file.name+' + '+fileAloc.name,criado_por:currentUser.id};
-      if(porMatricula.has(matricula)){
-        // Se já existe essa chave, não sobrescreve o funcionário da lista principal.
-        medicosJaListados++;continue;
-      }
-      porMatricula.set(matricula,payload);nomesPrincipais.set(kn,payload);medicosAdicionados++;
-    }
-    const payload=[...porMatricula.values()];
-    if(!payload.length)return mostrar('Nenhum registro pôde ser preparado. Verifique as colunas dos dois arquivos.',true);
-    const resumo='Competência: '+competencia+'\nFuncionários da Listagem Ativos EP: '+rows.length+'\nMédicos novos por CRM: '+medicosAdicionados+'\nMédicos já encontrados na lista principal: '+medicosJaListados+'\nRegistros preparados para importar: '+payload.length+'\nLinhas repetidas consolidadas: '+duplicados+'\nRegistros sem CRM ignorados: '+semCRM+'\nRegistros sem setor vinculado: '+semSetor+'\n\nDeseja continuar e gravar esses dados no mês selecionado?';
+    const origem=(f,rotulo)=>rotulo+' — '+f.name;
+    const adicionar=(payload)=>{if(porMatricula.has(payload.matricula))duplicados++;porMatricula.set(payload.matricula,payload)};
+    // 1) Listagem Ativos EP: matrícula/chapa é a chave oficial.
+    if(file){const rows=await lerArquivo(file);if(!rows.length)throw new Error('Nenhum registro encontrado na Listagem Ativos EP.');const headers=Object.keys(rows[0]);const iNome=encontrar(headers,['Nome','Nome Completo']);const iMat=encontrar(headers,['Chapa','Matrícula','Matricula']);const iCargo=encontrar(headers,['Nome Funcão','Nome Função','Cargo','NOME FUNÇÃO','Função']);const iSec=encontrar(headers,['Descrição Seção','Descrição da Seção','DESCRIÇAO DA SEÇÃO','DESCRIÇÃO DA SEÇÃO','DESCRIÇÃO SEÇÃO']);const iSit=encontrar(headers,['Situação','SITUAÇÃO','SITUACAO']);if(iNome<0||iMat<0)throw new Error('A Listagem Ativos EP precisa conter as colunas Nome e Chapa.');for(const row of rows){const nome=limpar(row[headers[iNome]]),matricula=limpar(row[headers[iMat]]);if(!nome||!matricula){ignorados++;continue;}const cargo=iCargo>=0?limpar(row[headers[iCargo]]):'',sec=iSec>=0?limpar(row[headers[iSec]]):'',situ=iSit>=0?limpar(row[headers[iSit]]).toUpperCase():'';const setor=prepararSetor(sec);if(!setor)semSetor++;adicionar({competencia:competencia+'-01',matricula,nome,cargo,descricao_secao:sec,unidade_id:setor?.unidade_id?Number(setor.unidade_id):(unidades[0]?.id?Number(unidades[0].id):null),setor_id:setor?.id?Number(setor.id):null,situacao:situ,ferias:codigoSituacao(situ)==='F',origem_arquivo:origem(file,'Ativos EP'),criado_por:currentUser.id});}}
+    // 2) Médicos: CRM identifica o profissional e evita colisão com chapas.
+    if(fileAloc){const rows=await lerArquivo(fileAloc);if(!rows.length)throw new Error('Nenhum registro encontrado no arquivo de Alocações.');const h=Object.keys(rows[0]);const nomeKey=h[encontrar(h,['Profissional Fixo','Profissional','Nome'])]||'',crmKey=h[encontrar(h,['CRM Prof. Fixo','CRM','CRM Profissional'])]||'',escKey=h[encontrar(h,['Escala','Alocação','Alocacao'])]||'';if(!nomeKey||!crmKey)throw new Error('Alocações precisa conter as colunas Profissional e CRM.');for(const row of rows){const nome=limpar(row[nomeKey]),crm=soDigitos(row[crmKey]);if(!nome)continue;if(!crm){semCRM++;continue;}const matricula='CRM-'+crm;if(porMatricula.has(matricula)){medicosJaListados++;continue;}const sec=limpar(row[escKey]);const setor=await obterSetor('MÉDICO — '+sec.replace(/\s*-\s*Coord\.:.*$/i,'').trim());adicionar({competencia:competencia+'-01',matricula,nome,cargo:'MÉDICO PJ',descricao_secao:sec,unidade_id:Number(setor.unidade_id),setor_id:Number(setor.id),situacao:'A',ferias:false,origem_arquivo:origem(fileAloc,'Alocações médicas'),criado_por:currentUser.id});medicosAdicionados++;}}
+    // 3) Terceirizados de Nutrição: nunca lê nem armazena CPF.
+    const importarTerceiros=async(f,tipo,setorPadrao,rotulo,rowsProntos=null)=>{if(!f)return;const rows=rowsProntos||await lerArquivo(f);if(!rows.length)throw new Error('Nenhum registro encontrado em '+rotulo+'.');const headers=Object.keys(rows[0]);const iNome=encontrar(headers,['Nome','Nome completo','Colaborador','Funcionário','Funcionario','Nome do funcionário','Nome do colaborador']);const iCargo=encontrar(headers,['Função','Funcao','Cargo','Função do colaborador','Cargo/Função']);const iSetor=encontrar(headers,['Setor','Área','Area','Local','Posto']);const iSit=encontrar(headers,['Situação','Situacao','Status']);if(iNome<0)throw new Error(rotulo+' precisa conter uma coluna de nome.');for(const row of rows){const nome=limpar(row[headers[iNome]]);if(!nome||norm(nome)==='nome')continue;const cargo=iCargo>=0?limpar(row[headers[iCargo]]):'',sec=iSetor>=0?limpar(row[headers[iSetor]]):setorPadrao,situ=iSit>=0?limpar(row[headers[iSit]]).toUpperCase():'A';const setor=await obterSetor(sec||setorPadrao);const base=chaveNome(nome)+'|'+chaveNome(cargo)+'|'+chaveNome(sec||setorPadrao);const matricula='EXT-'+hashInterno(base);adicionar({competencia:competencia+'-01',matricula,nome,cargo,descricao_secao:sec||setorPadrao,unidade_id:Number(setor.unidade_id),setor_id:Number(setor.id),situacao:situ||'A',ferias:codigoSituacao(situ)==='F',origem_arquivo:origem(f,tipo),criado_por:currentUser.id});terceirosAdicionados++;}};
+    if(fileNut)await importarTerceiros(fileNut,'Terceirizados Nutrição','NUTRIÇÃO','Terceirizados — Nutrição');
+    // 4) Hemodiálise: PDF pesquisável ou planilha. Extrai apenas nome/setor/função; CPF, telefone e e-mail são descartados.
+    if(fileDial){let rows=[];if(fileDial.name.toLowerCase().endsWith('.pdf')){if(!window.pdfjsLib)throw new Error('O leitor de PDF não carregou. Use uma planilha/CSV ou tente novamente com conexão à internet.');pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';const pdf=await pdfjsLib.getDocument({data:await fileDial.arrayBuffer()}).promise;for(let pn=1;pn<=pdf.numPages;pn++){const page=await pdf.getPage(pn),content=await page.getTextContent();const lines=new Map();for(const it of content.items){if(!it.str||!it.str.trim())continue;const y=Math.round(it.transform[5]);if(!lines.has(y))lines.set(y,[]);lines.get(y).push({x:it.transform[4],t:it.str});}for(const [y,items] of [...lines.entries()].sort((a,b)=>b[0]-a[0])){const line=items.sort((a,b)=>a.x-b.x).map(z=>z.t).join(' ').replace(/\s+/g,' ').trim();if(!/^\d+\s+/.test(line)||!/\bDI.ALISE\b/i.test(line))continue;const m=line.match(/^\s*\d+\s+(.+?)\s+DI.ALISE\s+(.+?)\s+[\w.+-]+@[\w.-]+\.[A-Z]{2,}/i);if(m)rows.push({'NOME':m[1].trim(),'SETOR':'DIÁLISE','FUNÇÃO':m[2].trim()});}}if(!rows.length)throw new Error('Não consegui ler os nomes do PDF. Se ele for escaneado ou tiver colunas desalinhadas, envie uma versão pesquisável ou uma planilha.');}else rows=await lerArquivo(fileDial);await importarTerceiros(fileDial,'Terceirizados Hemodiálise','DIÁLISE','Terceirizados — Hemodiálise',rows);}
+    const payload=[...porMatricula.values()];if(!payload.length)return mostrar('Nenhum registro pôde ser preparado. Confira as colunas dos arquivos.',true);
+    const resumo='Competência: '+competencia+'\nFontes selecionadas: '+selecionados.map(f=>f.name).join(', ')+'\nRegistros preparados: '+payload.length+'\nMédicos PJ novos: '+medicosAdicionados+'\nTerceirizados processados: '+terceirosAdicionados+'\nRegistros repetidos consolidados: '+duplicados+'\nMédicos sem CRM ignorados: '+semCRM+'\nRegistros sem setor vinculado: '+semSetor+'\nLinhas incompletas ignoradas: '+ignorados+'\n\nA importação é aditiva e não exclui registros existentes. Deseja continuar?';
     if(!confirm(resumo))return mostrar('Importação cancelada. Nenhum dado foi gravado.');
-    if(btn)btn.textContent='Gravando no mês...';
-    mostrar('Gravando '+payload.length+' colaboradores em '+competencia+'...');
-    const {error}=await db.from('colaboradores_mensal').upsert(payload,{onConflict:'competencia,matricula'});
-    if(error)return mostrar('Erro ao importar o mês: '+error.message,true);
-    if(btn)btn.textContent='Criando checklist...';
-    const mesRows=[];const pageSizeIds=1000;
-    for(let from=0;;from+=pageSizeIds){
-      const {data:page,error:loadErr}=await db.from('colaboradores_mensal').select('id').eq('competencia',competencia+'-01').order('id').range(from,from+pageSizeIds-1);
-      if(loadErr)return mostrar('Importação concluída, mas não foi possível preparar o checklist: '+loadErr.message,true);
-      if(page?.length)mesRows.push(...page);
-      if(!page||page.length<pageSizeIds)break;
-    }
-    for(const r of mesRows){
-      const q=await db.from('checklist_mensal').select('tipo').eq('colaborador_mensal_id',r.id);
-      if(q.error)continue;
-      const existentes=new Set((q.data||[]).map(x=>x.tipo));
-      const faltantes=TIPOS.filter(tipo=>!existentes.has(tipo)).map(tipo=>({colaborador_mensal_id:r.id,tipo,realizado:false}));
-      if(faltantes.length)await db.from('checklist_mensal').insert(faltantes);
-    }
-    document.getElementById('file-colab').value='';document.getElementById('file-alocacoes').value='';
+    if(btn)btn.textContent='Gravando registros...';
+    // Upsert em lotes evita limite de payload e atende listas de até 6.000 profissionais.
+    for(let i=0;i<payload.length;i+=400){const lote=payload.slice(i,i+400);const {error}=await db.from('colaboradores_mensal').upsert(lote,{onConflict:'competencia,matricula'});if(error)throw new Error('Erro ao gravar lote '+(Math.floor(i/400)+1)+': '+error.message);}
+    if(btn)btn.textContent='Preparando checklist...';
+    const ids=[];for(let from=0;;from+=1000){const {data,error}=await db.from('colaboradores_mensal').select('id').eq('competencia',competencia+'-01').order('id').range(from,from+999);if(error)throw new Error('Dados gravados, mas não foi possível carregar os IDs para o checklist: '+error.message);if(data?.length)ids.push(...data.map(r=>r.id));if(!data||data.length<1000)break;}
+    // Consultas e inserções em lotes substituem milhares de consultas individuais.
+    const existentes=new Map();for(let i=0;i<ids.length;i+=400){const loteIds=ids.slice(i,i+400);const {data,error}=await db.from('checklist_mensal').select('colaborador_mensal_id,tipo').in('colaborador_mensal_id',loteIds);if(error)throw new Error('Dados gravados, mas não foi possível consultar o checklist: '+error.message);for(const r of data||[]){if(!existentes.has(String(r.colaborador_mensal_id)))existentes.set(String(r.colaborador_mensal_id),new Set());existentes.get(String(r.colaborador_mensal_id)).add(r.tipo);}}
+    const faltantes=[];for(const id of ids){const have=existentes.get(String(id))||new Set();for(const tipo of TIPOS)if(!have.has(tipo))faltantes.push({colaborador_mensal_id:id,tipo,realizado:false});}
+    for(let i=0;i<faltantes.length;i+=500){const {error}=await db.from('checklist_mensal').upsert(faltantes.slice(i,i+500),{onConflict:'colaborador_mensal_id,tipo',ignoreDuplicates:true});if(error)throw new Error('Dados gravados, mas houve erro ao completar o checklist: '+error.message);}
+    ['file-colab','file-alocacoes','file-nutricao','file-dialise'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
     const dashMes=document.getElementById('dash-mes');if(dashMes)dashMes.value=competencia;const checkMes=document.getElementById('check-mes');if(checkMes)checkMes.value=competencia;
     await loadMesChecklist();await loadDashboard();
-    mostrar(payload.length+' registros importados para '+competencia+'. '+medicosAdicionados+' médicos PJ complementados pelo CRM e vinculados a setores médicos próprios. '+medicosJaListados+' médicos já constavam na lista principal e não foram duplicados. '+(semSetor?semSetor+' registros sem setor vinculado. ':'')+'O histórico dos outros meses foi preservado.');
-  }catch(err){console.error('ERRO IMPORTAÇÃO COLABORADORES',err);mostrar('Erro inesperado na importação: '+(err?.message||err),true);}
+    mostrar('Importação concluída: '+payload.length+' registros processados na competência '+competencia+'. '+medicosAdicionados+' médicos PJ adicionados; '+terceirosAdicionados+' registros de terceirizados processados. '+duplicados+' duplicidades dentro dos arquivos consolidadas. Os outros meses e o histórico de treinamentos foram preservados.');
+  }catch(err){console.error('ERRO IMPORTAÇÃO COLABORADORES',err);mostrar('Erro na importação: '+(err?.message||err),true);}
   finally{if(btn){btn.disabled=false;btn.textContent='Importar / Atualizar mês';}}
 }
 
