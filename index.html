@@ -117,14 +117,14 @@
  <form onsubmit="criarUsuario(event)"><div class="grid">
   <div class="field"><label>Nome</label><input id="u-nome" required></div>
   <div class="field"><label>E-mail</label><input id="u-email" type="email" required></div>
-  <div class="field"><label>Perfil / acesso</label><select id="u-perfil" onchange="preencherSetoresUsuario('u-unidade','u-setores')"><option value="gestor">Gestor</option><option value="gestor_medico">Gestor Médico</option><option value="equipe">Acesso comum</option><option value="administrador_nep">Administrador NEP</option><option value="administrador">Administrador</option></select></div>
+  <div class="field"><label>Perfil / acesso</label><select id="u-perfil" onchange="preencherSetoresUsuario('u-unidade','u-setores')"><option value="gestor">Gestor</option><option value="gestor_medico">Gestor Médico</option><option value="cadastro_lnt">Cadastro LNT</option><option value="equipe">Acesso comum</option><option value="administrador_nep">Administrador NEP</option><option value="administrador">Administrador</option></select></div>
   <div class="field"><label>Unidade</label><select id="u-unidade" required onchange="preencherSetoresUsuario('u-unidade','u-setores')"></select></div>
   <div class="field"><label>Setores responsáveis</label><select id="u-setores" multiple size="6" required></select><div class="small-note">Segure Ctrl para selecionar mais de um setor.</div></div>
   <div class="field"><label>Senha inicial</label><input id="u-senha" type="password" minlength="8" required></div>
  </div><button class="btn btn-primary" type="submit">Cadastrar Usuário</button></form></div>
  <div class="card" id="editar-usuario-card" style="display:none"><div class="title">Alterar acesso do usuário</div><div class="grid">
   <div class="field"><label>Usuário</label><input id="ed-nome" readonly></div>
-  <div class="field"><label>Perfil / acesso</label><select id="ed-perfil" onchange="preencherSetoresUsuario('ed-unidade','ed-setores')"><option value="gestor">Gestor</option><option value="gestor_medico">Gestor Médico</option><option value="equipe">Acesso comum</option><option value="administrador_nep">Administrador NEP</option><option value="administrador">Administrador</option></select></div>
+  <div class="field"><label>Perfil / acesso</label><select id="ed-perfil" onchange="preencherSetoresUsuario('ed-unidade','ed-setores')"><option value="gestor">Gestor</option><option value="gestor_medico">Gestor Médico</option><option value="cadastro_lnt">Cadastro LNT</option><option value="equipe">Acesso comum</option><option value="administrador_nep">Administrador NEP</option><option value="administrador">Administrador</option></select></div>
   <div class="field"><label>Unidade</label><select id="ed-unidade" onchange="preencherSetoresUsuario('ed-unidade','ed-setores')"></select></div>
   <div class="field"><label>Setores responsáveis</label><select id="ed-setores" multiple size="6"></select></div>
  </div><input type="hidden" id="ed-id"><button type="button" class="btn btn-primary" onclick="salvarEdicaoUsuario()">Salvar alterações</button> <button type="button" class="btn btn-secondary" onclick="cancelarEdicaoUsuario()">Cancelar</button><div id="ed-status" class="small-note"></div></div>
@@ -150,13 +150,14 @@ function hasFullDataAccess(){return isAdmin()||isAdminNEP()}
 function canManageUsers(){return isAdmin()||isAdminNEP()}
 function isGestor(){return currentProfile?.perfil==='gestor'}
 function isGestorMedico(){return currentProfile?.perfil==='gestor_medico'}
+function isCadastroLNT(){return currentProfile?.perfil==='cadastro_lnt'}
 function isMedicoPJ(r){return norm(r?.cargo)==='medico'||norm(r?.cargo)==='medico pj'||String(r?.matricula||'').startsWith('CRM-')}
 function isSetorMedico(s){return norm(s?.nome).startsWith('medico —')||norm(s?.nome).startsWith('medico -')}
 function roleSetorFilter(ss,perfil){return perfil==='gestor_medico'?ss.filter(isSetorMedico):ss}
 function isComum(){return currentProfile?.perfil==='equipe'}
 function canUseSector(){return !!currentProfile}
 function setorPermitido(id){return hasFullDataAccess()||!!currentProfile?.setor_ids?.length?.some(x=>String(x)===String(id))}
-function roleLabel(r){return ({administrador:'Administrador',administrador_nep:'Administrador NEP',gestor:'Gestor',gestor_medico:'Gestor Médico',equipe:'Acesso comum'}[r]||r||'')}
+function roleLabel(r){return ({administrador:'Administrador',administrador_nep:'Administrador NEP',gestor:'Gestor',gestor_medico:'Gestor Médico',equipe:'Acesso comum',cadastro_lnt:'Cadastro LNT'}[r]||r||'')}
 function toast(msg){alert(msg)}
 function ymDate(ym){const s=String(ym||'').trim();return /^\d{4}-\d{2}$/.test(s)?s+'-01':s}
 function currentYM(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`}
@@ -208,20 +209,31 @@ async function onSignedIn(session){
   await initData()
 }
 function aplicarPermissoes(){
-  const full=hasFullDataAccess(), gestor=isGestor()||isGestorMedico(), comum=isComum();
+  const full=hasFullDataAccess(), gestor=isGestor()||isGestorMedico(), comum=isComum(), lnt=isCadastroLNT();
   document.getElementById('tab-dashboard').style.display=(full||gestor)?'block':'none';
-  document.getElementById('tab-gestao').style.display='block';
-  document.getElementById('tab-atas').style.display=(full||gestor)?'block':'none';
+  document.getElementById('tab-gestao').style.display=lnt?'none':'block';
+  document.getElementById('tab-atas').style.display=(full||gestor||lnt)?'block':'none';
   document.getElementById('tab-colab').style.display=full?'block':'none';
   document.getElementById('tab-unidades').style.display=isAdmin()?'block':'none';
   document.getElementById('tab-usuarios').style.display=canManageUsers()?'block':'none';
-  const cadastro=document.querySelector("#view-atas .subtabs button[onclick*=\"cadastro-treinamentos\"]");
-  if(cadastro) cadastro.style.display=full?'inline-block':'none';
+  document.querySelectorAll('#view-atas .subtabs button').forEach(btn=>{
+    const training=btn.getAttribute('onclick')?.includes('cadastro-treinamentos');
+    btn.style.display=full?(training?'inline-block':'inline-block'):(lnt&&training?'inline-block':'none');
+  });
   if(comum){
     document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
     document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
     document.getElementById('tab-gestao')?.classList.add('active');
     document.getElementById('view-gestao')?.classList.add('active');
+  }else if(lnt){
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+    document.getElementById('tab-atas')?.classList.add('active');
+    document.getElementById('view-atas')?.classList.add('active');
+    document.querySelectorAll('#view-atas .subtab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('#view-atas .subview').forEach(x=>x.classList.remove('active'));
+    document.querySelector('#view-atas .subtabs button[onclick*="cadastro-treinamentos"]')?.classList.add('active');
+    document.getElementById('sub-atas-cadastro-treinamentos')?.classList.add('active');
   }else{
     document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
     document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
@@ -334,8 +346,8 @@ function populateFilters(){
 }
 function updateDashSectors(){const u=document.getElementById('dash-unidade')?.value||'todos';let ss=unidades.flatMap(x=>x.setores.map(s=>({...s,unidade_id:x.id}))).filter(s=>u==='todos'||String(s.unidade_id)===String(u));if(isGestorMedico())ss=ss.filter(s=>isSetorMedico(s)&&currentProfile?.setor_ids?.some(id=>String(id)===String(s.id)));document.getElementById('dash-setor').innerHTML='<option value="todos">Todos os Setores</option>'+ss.map(s=>`<option value="${s.id}">${esc(s.nome)}</option>`).join('')}
 function carregarSetores(unitId,sectorId){const u=document.getElementById(unitId)?.value;const ss=unidades.find(x=>String(x.id)===String(u))?.setores||[];const el=document.getElementById(sectorId);if(el)el.innerHTML='<option value="">Selecione</option>'+ss.map(s=>`<option value="${s.id}">${esc(s.nome)}</option>`).join('')}
-async function switchTab(view){const permitido=(view==='gestao')||(view==='dashboard'&&(hasFullDataAccess()||isGestor()||isGestorMedico()))||(view==='atas'&&(hasFullDataAccess()||isGestor()||isGestorMedico()))||(view==='colaboradores'&&hasFullDataAccess())||(view==='unidades'&&isAdmin())||(view==='usuarios'&&canManageUsers());if(!permitido){toast('Seu perfil não possui acesso a esta área.');return}if(!document.getElementById('view-'+view))return;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.getElementById('tab-'+view)?.classList.add('active');document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+view)?.classList.add('active');if(view==='dashboard')await loadDashboard();if(view==='gestao')await loadGestaoVista();if(view==='colaboradores')await loadMesChecklist();if(view==='atas'){await loadTreinamentos();await renderHistoricoAtas();await renderHistoricoEmentas()}if(view==='usuarios')renderUsuarios()}
-function switchSub(group,name,btn){if(group==='atas'&&name==='cadastro-treinamentos'&&!hasFullDataAccess()){toast('Seu perfil não possui acesso ao cadastro de treinamentos.');return;}const target=document.getElementById('sub-'+group+'-'+name);if(!target)return;document.querySelectorAll('#view-'+group+' .subtab').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');document.querySelectorAll('#view-'+group+' .subview').forEach(x=>x.classList.remove('active'));target.classList.add('active')}
+async function switchTab(view){const permitido=(view==='gestao')||(view==='dashboard'&&(hasFullDataAccess()||isGestor()||isGestorMedico()))||(view==='atas'&&(hasFullDataAccess()||isGestor()||isGestorMedico()||isCadastroLNT()))||(view==='colaboradores'&&hasFullDataAccess())||(view==='unidades'&&isAdmin())||(view==='usuarios'&&canManageUsers());if(!permitido){toast('Seu perfil não possui acesso a esta área.');return}if(!document.getElementById('view-'+view))return;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.getElementById('tab-'+view)?.classList.add('active');document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+view)?.classList.add('active');if(view==='dashboard')await loadDashboard();if(view==='gestao')await loadGestaoVista();if(view==='colaboradores')await loadMesChecklist();if(view==='atas'){await loadTreinamentos();await renderHistoricoAtas();await renderHistoricoEmentas()}if(view==='usuarios')renderUsuarios()}
+function switchSub(group,name,btn){if(group==='atas'&&name==='cadastro-treinamentos'&&!(hasFullDataAccess()||isCadastroLNT())){toast('Seu perfil não possui acesso ao cadastro de treinamentos.');return;}if(group==='atas'&&isCadastroLNT()&&name!=='cadastro-treinamentos'){toast('O perfil Cadastro LNT só pode acessar Cadastro de Treinamentos.');return;}const target=document.getElementById('sub-'+group+'-'+name);if(!target)return;document.querySelectorAll('#view-'+group+' .subtab').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');document.querySelectorAll('#view-'+group+' .subview').forEach(x=>x.classList.remove('active'));target.classList.add('active')}
 async function loadDashboard(){
  if(isGestorMedico()&&!currentProfile?.setor_ids?.length){dashboardRows=[];renderDashboard();return}
  const months=intervaloMeses('dash');let base=db.from('colaboradores_mensal').select('id,competencia,matricula,nome,cargo,descricao_secao,unidade_id,setor_id,situacao,ferias,ferias_marcada,checklist_mensal(tipo,realizado),setores(nome),unidades(nome)').gte('competencia',ymDate(months[0])).lte('competencia',ymDate(months[months.length-1])).order('competencia').order('nome').order('id');
