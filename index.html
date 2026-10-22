@@ -82,8 +82,8 @@
   <button type="button" class="btn btn-primary" onclick="salvarColaboradorIndividual()">Inserir colaborador</button>
   <div id="cad-colab-status" class="admin-status" style="display:none"></div>
  </div>
- <div class="card"><div class="title">Importar lista mensal de colaboradores</div><div class="grid"><div class="field"><label>Mês da lista</label><input id="imp-mes" type="month" required></div><div class="field"><label>1. Listagem Ativos EP</label><input id="file-colab" type="file" accept=".csv,.xlsx,.xls"></div><div class="field"><label>2. Alocações — médicos PJ</label><input id="file-alocacoes" type="file" accept=".csv,.xlsx,.xls"></div><div class="field"><label>3. Terceirizados — Nutrição</label><input id="file-nutricao" type="file" accept=".csv,.xlsx,.xls"></div><div class="field"><label>4. Terceirizados — Hemodiálise (PDF ou planilha)</label><input id="file-dialise" type="file" accept=".pdf,.csv,.xlsx,.xls"></div></div><p class="hint">Selecione uma ou mais fontes por vez: não é necessário importar os quatro arquivos juntos. Cada importação acrescenta/atualiza os registros da competência e não exclui pessoas que já estavam na lista. Ativos EP usam Chapa; médicos usam CRM; terceirizados recebem identificador interno gerado a partir de nome, função e setor. CPF não é utilizado nem armazenado. Situação A = ativo e V = aviso prévio entram nos indicadores; F = férias entra apenas na Gestão de Faltosos; E, D, U e P ficam fora dos indicadores.</p><div id="imp-colab-status" class="hint" style="display:none;margin-top:10px;font-weight:700"></div><div style="margin-top:10px"><button id="btn-importar-colab" type="button" class="btn btn-primary">Importar / Atualizar mês</button></div></div>
- <div class="card"><div class="title">Checklist Mensal da Equipe <div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn btn-secondary" onclick="baixarChecklistExcel()">Baixar Excel</button></div></div><div class="grid"><div class="field"><label>Mês/ano</label><select id="check-mes" onchange="loadMesChecklist()"></select></div><div class="field"><label>Setor</label><select id="check-setor" onchange="renderChecklist()"></select></div></div><div class="searchbar"><input id="check-busca" placeholder="Buscar por nome ou matrícula/chapa" oninput="renderChecklist()"><select id="check-tipo-filtro" onchange="renderChecklist()"><option value="todos">Todos</option><option value="Transversal NEP">Transversal NEP</option><option value="Institucional">Institucional</option><option value="Intrasetorial LNT">Intrasetorial LNT</option><option value="Intrasetorial Adicional">Intrasetorial Adicional</option></select><select id="check-ferias" onchange="renderChecklist()"><option value="todos">Todos</option><option value="ferias">Férias</option><option value="naoferias">Não férias</option></select></div><div class="table-wrap"><table><thead><tr><th>Matrícula/Chapa</th><th>Nome</th><th>Função</th><th>Descrição de Seção</th><th>Situação</th><th>Férias</th><th>Transversal NEP</th><th>Institucional</th><th>Intrasetorial LNT</th><th>Intrasetorial Adicional</th><th>Ação</th></tr></thead><tbody id="check-tbody"></tbody></table></div></div>
+ <div class="card"><div class="title">Importar lista mensal de colaboradores</div><div class="grid"><div class="field"><label>Mês da lista</label><input id="imp-mes" type="month" required></div><div class="field"><label>1. Listagem Ativos EP</label><input id="file-colab" type="file" accept=".csv,.xlsx,.xls"></div><div class="field"><label>2. Alocações — médicos PJ</label><input id="file-alocacoes" type="file" accept=".csv,.xlsx,.xls"></div><div class="field"><label>3. Terceirizados — Nutrição</label><input id="file-nutricao" type="file" accept=".csv,.xlsx,.xls"></div><div class="field"><label>4. Terceirizados — Hemodiálise (PDF ou planilha)</label><input id="file-dialise" type="file" accept=".pdf,.csv,.xlsx,.xls"></div></div><p class="hint">Selecione uma ou mais fontes por vez: não é necessário importar os quatro arquivos juntos. Cada importação acrescenta/atualiza os registros da competência e não exclui pessoas que já estavam na lista. Ativos EP usam Chapa; médicos usam CRM; terceirizados recebem identificador interno gerado a partir de nome, função e setor. CPF não é utilizado nem armazenado. Situação A = ativo e V = aviso prévio entram nos indicadores; F = férias entra apenas na Gestão de Faltosos; E, D, U e P ficam fora dos indicadores.</p><div id="imp-colab-status" class="hint" style="display:none;margin-top:10px;font-weight:700"></div><div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button id="btn-importar-colab" type="button" class="btn btn-primary">Importar / Atualizar mês</button><button type="button" class="btn btn-danger" onclick="excluirListaMensalCompleta()">Excluir lista inteira do mês</button></div><p class="hint" style="margin-top:8px">A exclusão remove todos os colaboradores e seus registros de checklist da competência selecionada. Os demais meses serão preservados.</p></div>
+ <div class="card"><div class="title">Checklist Mensal da Equipe <div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn btn-secondary" onclick="baixarChecklistExcel()">Baixar Excel</button><button type="button" class="btn btn-danger" onclick="limparChecklistMensal()">Limpar checklist do mês/setor</button></div></div><div class="grid"><div class="field"><label>Mês/ano</label><select id="check-mes" onchange="loadMesChecklist()"></select></div><div class="field"><label>Setor</label><select id="check-setor" onchange="renderChecklist()"></select></div></div><div class="searchbar"><input id="check-busca" placeholder="Buscar por nome ou matrícula/chapa" oninput="renderChecklist()"><select id="check-tipo-filtro" onchange="renderChecklist()"><option value="todos">Todos</option><option value="Transversal NEP">Transversal NEP</option><option value="Institucional">Institucional</option><option value="Intrasetorial LNT">Intrasetorial LNT</option><option value="Intrasetorial Adicional">Intrasetorial Adicional</option></select><select id="check-ferias" onchange="renderChecklist()"><option value="todos">Todos</option><option value="ferias">Férias</option><option value="naoferias">Não férias</option></select></div><div class="table-wrap"><table><thead><tr><th>Matrícula/Chapa</th><th>Nome</th><th>Função</th><th>Descrição de Seção</th><th>Situação</th><th>Férias</th><th>Transversal NEP</th><th>Institucional</th><th>Intrasetorial LNT</th><th>Intrasetorial Adicional</th><th>Ação</th></tr></thead><tbody id="check-tbody"></tbody></table></div></div>
 </section>
 
 <section id="view-unidades" class="view">
@@ -648,6 +648,56 @@ function renderChecklist(){
    const acao=hasFullDataAccess()?`<button type="button" class="btn btn-danger" onclick="excluirColaboradorMensal('${r.id}')">Excluir</button>`:'—';
    return `<tr><td>${esc(r.matricula)}</td><td><strong>${esc(r.nome)}</strong></td><td>${esc(r.cargo)}</td><td>${esc(r.descricao_secao)}</td><td>${esc(r.situacao||'')}</td><td>${r.ferias?`<label style="display:flex;align-items:center;gap:6px"><input class="checkbox" type="checkbox" ${r.ferias_marcada?'checked':''} onchange="marcarFerias('${r.id}',this.checked)"><span>${r.ferias_marcada?'MARCADAS':'PENDENTE'}</span></label>`:'—'}</td>${TIPOS.map(tp=>{const c=r.checklist_mensal?.find(x=>x.tipo===tp);return `<td><input class="checkbox" type="checkbox" ${c?.realizado?'checked':''} ${r.status_codigo&&r.status_codigo!=='A'&&r.status_codigo!=='V'?'disabled':''} onchange="marcarChecklist('${r.id}','${tp}',this.checked)"></td>`}).join('')}<td>${acao}</td></tr>`;
  }).join('')||'<tr><td colspan="11">Nenhum colaborador para o período/filtro selecionado.</td></tr>';
+}
+
+async function excluirListaMensalCompleta(){
+ if(!hasFullDataAccess())return toast('Apenas administradores podem excluir a lista mensal.');
+ const competencia=document.getElementById('imp-mes')?.value;
+ if(!competencia)return toast('Selecione o mês da lista que deseja excluir.');
+ const dataCompetencia=competencia+'-01';
+ if(!confirm('ATENÇÃO: excluir TODOS os colaboradores e os registros de checklist de '+competencia+'? Esta ação não pode ser desfeita. Os demais meses serão preservados.'))return;
+ const btn=document.querySelector('button[onclick="excluirListaMensalCompleta()"]');
+ if(btn){btn.disabled=true;btn.textContent='Excluindo...';}
+ try{
+  const ids=[];
+  for(let from=0;;from+=1000){
+   const {data,error}=await db.from('colaboradores_mensal').select('id').eq('competencia',dataCompetencia).order('id').range(from,from+999);
+   if(error)throw new Error('Não foi possível localizar a lista: '+error.message);
+   const page=data||[];ids.push(...page.map(x=>x.id));if(page.length<1000)break;
+  }
+  if(!ids.length){toast('Não há colaboradores cadastrados nessa competência.');return;}
+  for(let i=0;i<ids.length;i+=300){
+   const lote=ids.slice(i,i+300);
+   const {error}=await db.from('checklist_mensal').delete().in('colaborador_mensal_id',lote);
+   if(error)throw new Error('Falha ao excluir registros do checklist: '+error.message);
+  }
+  const {error}=await db.from('colaboradores_mensal').delete().eq('competencia',dataCompetencia);
+  if(error)throw new Error('Falha ao excluir colaboradores: '+error.message);
+  await loadMesChecklist();await loadDashboard();
+  toast('Lista mensal e checklists excluídos para '+competencia+'.');
+ }catch(err){console.error(err);toast(err.message||'Não foi possível excluir a lista. Verifique as permissões no Supabase.');}
+ finally{if(btn){btn.disabled=false;btn.textContent='Excluir lista inteira do mês';}}
+}
+async function limparChecklistMensal(){
+ if(!hasFullDataAccess())return toast('Apenas administradores podem limpar o checklist mensal.');
+ const mes=document.getElementById('check-mes')?.value||currentYM();
+ const setor=document.getElementById('check-setor')?.value||'todos';
+ let rows=checkRows.filter(r=>setor==='todos'||String(r.setor_id)===String(setor));
+ const ids=rows.map(r=>r.id);
+ const setorLabel=setor==='todos'?'todos os setores':(unidades.flatMap(u=>u.setores||[]).find(x=>String(x.id)===String(setor))?.nome||'setor selecionado');
+ if(!ids.length)return toast('Não há registros de checklist para limpar nessa seleção.');
+ if(!confirm('Limpar os registros de checklist de '+mes+' para '+setorLabel+'? A lista de colaboradores será mantida; os outros meses e setores serão preservados.'))return;
+ const btn=document.querySelector('button[onclick="limparChecklistMensal()"]');
+ if(btn){btn.disabled=true;btn.textContent='Limpando...';}
+ try{
+  for(let i=0;i<ids.length;i+=300){
+   const {error}=await db.from('checklist_mensal').delete().in('colaborador_mensal_id',ids.slice(i,i+300));
+   if(error)throw new Error('Não foi possível limpar o checklist: '+error.message);
+  }
+  await loadMesChecklist();await loadDashboard();
+  toast('Checklist limpo para '+mes+' — '+setorLabel+'. A lista de colaboradores foi mantida.');
+ }catch(err){console.error(err);toast(err.message||'Não foi possível limpar o checklist. Verifique as permissões no Supabase.');}
+ finally{if(btn){btn.disabled=false;btn.textContent='Limpar checklist do mês/setor';}}
 }
 async function excluirColaboradorMensal(colabId){if(!hasFullDataAccess())return toast('Apenas administradores podem excluir colaboradores da lista mensal.');const row=checkRows.find(x=>String(x.id)===String(colabId));const nome=row?.nome||'este colaborador';if(!confirm('Excluir '+nome+' deste mês? Os outros meses permanecem preservados.'))return;const {error:ec}=await db.from('checklist_mensal').delete().eq('colaborador_mensal_id',colabId);if(ec)return toast('Não foi possível excluir o checklist: '+ec.message);const {error}=await db.from('colaboradores_mensal').delete().eq('id',colabId);if(error)return toast('Não foi possível excluir o colaborador: '+error.message);await loadMesChecklist();await loadDashboard();toast('Colaborador excluído apenas deste mês.')}
 async function marcarFerias(colabId,valor){const {error}=await db.from('colaboradores_mensal').update({ferias_marcada:valor}).eq('id',colabId);if(error)return toast('Não foi possível atualizar as férias: '+error.message);await loadMesChecklist();await loadDashboard()}
