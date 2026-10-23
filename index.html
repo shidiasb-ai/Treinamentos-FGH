@@ -641,13 +641,32 @@ async function loadMesChecklist(){
  renderChecklist();
 }
 function renderChecklist(){
- const b=norm(document.getElementById('check-busca')?.value),s=document.getElementById('check-setor')?.value||'todos',t=document.getElementById('check-tipo-filtro')?.value||'todos',f=document.getElementById('check-ferias')?.value||'todos';
- let rows=checkRows.filter(r=>(s==='todos'||String(r.setor_id)===String(s))&&(!b||norm(r.nome).includes(b)||norm(r.matricula).includes(b))&&(f==='todos'||(f==='ferias'?r.ferias:!r.ferias)));
- if(t!=='todos')rows=rows.filter(r=>r.checklist_mensal?.some(c=>c.tipo===t));
- document.getElementById('check-tbody').innerHTML=rows.map(r=>{
-   const acao=hasFullDataAccess()?`<button type="button" class="btn btn-danger" onclick="excluirColaboradorMensal('${r.id}')">Excluir</button>`:'—';
-   return `<tr><td>${esc(r.matricula)}</td><td><strong>${esc(r.nome)}</strong></td><td>${esc(r.cargo)}</td><td>${esc(r.descricao_secao)}</td><td>${esc(r.situacao||'')}</td><td>${r.ferias?`<label style="display:flex;align-items:center;gap:6px"><input class="checkbox" type="checkbox" ${r.ferias_marcada?'checked':''} onchange="marcarFerias('${r.id}',this.checked)"><span>${r.ferias_marcada?'MARCADAS':'PENDENTE'}</span></label>`:'—'}</td>${TIPOS.map(tp=>{const c=r.checklist_mensal?.find(x=>x.tipo===tp);return `<td><input class="checkbox" type="checkbox" ${c?.realizado?'checked':''} ${r.status_codigo&&r.status_codigo!=='A'&&r.status_codigo!=='V'?'disabled':''} onchange="marcarChecklist('${r.id}','${tp}',this.checked)"></td>`}).join('')}<td>${acao}</td></tr>`;
- }).join('')||'<tr><td colspan="11">Nenhum colaborador para o período/filtro selecionado.</td></tr>';
+  const b=norm(document.getElementById('check-busca')?.value),s=document.getElementById('check-setor')?.value||'todos',t=document.getElementById('check-tipo-filtro')?.value||'todos',f=document.getElementById('check-ferias')?.value||'todos';
+  let rows=checkRows.filter(r=>(s==='todos'||String(r.setor_id)===String(s))&&(!b||norm(r.nome).includes(b)||norm(r.matricula).includes(b))&&(f==='todos'||(f==='ferias'?r.ferias:!r.ferias)));
+  if(t!=='todos')rows=rows.filter(r=>r.checklist_mensal?.some(c=>c.tipo===t));
+  const opcoesSituacao=[['A','A — Ativo'],['F','F — Férias'],['V','V — Aviso prévio'],['E','E — Licença/afastamento'],['D','D — Demissão'],['U','U — Outros'],['P','P — Previdência Social']];
+  document.getElementById('check-tbody').innerHTML=rows.map(r=>{
+    const acao=hasFullDataAccess()?`<div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap"><select id="situacao-${esc(r.id)}" aria-label="Corrigir situação de ${esc(r.nome)}" style="min-width:150px"><option value="">Selecionar situação...</option>${opcoesSituacao.map(([cod,label])=>`<option value="${cod}" ${r.status_codigo===cod?'selected':''}>${label}</option>`).join('')}</select><button type="button" class="btn btn-primary" onclick="salvarSituacaoColaborador('${r.id}')">Salvar situação</button><button type="button" class="btn btn-danger" onclick="excluirColaboradorMensal('${r.id}')">Excluir</button></div>`:'—';
+    return `<tr><td>${esc(r.matricula)}</td><td><strong>${esc(r.nome)}</strong></td><td>${esc(r.cargo)}</td><td>${esc(r.descricao_secao)}</td><td>${esc(r.situacao||'')}</td><td>${r.ferias?`<label style="display:flex;align-items:center;gap:6px"><input class="checkbox" type="checkbox" ${r.ferias_marcada?'checked':''} onchange="marcarFerias('${r.id}',this.checked)"><span>${r.ferias_marcada?'MARCADAS':'PENDENTE'}</span></label>`:'—'}</td>${TIPOS.map(tp=>{const c=r.checklist_mensal?.find(x=>x.tipo===tp);return `<td><input class="checkbox" type="checkbox" ${c?.realizado?'checked':''} ${r.status_codigo&&r.status_codigo!=='A'&&r.status_codigo!=='V'?'disabled':''} onchange="marcarChecklist('${r.id}','${tp}',this.checked)"></td>`}).join('')}<td>${acao}</td></tr>`;
+  }).join('')||'<tr><td colspan="11">Nenhum colaborador para o período/filtro selecionado.</td></tr>';
+}
+
+async function salvarSituacaoColaborador(colabId){
+  if(!hasFullDataAccess())return toast('Apenas administradores podem corrigir a situação funcional.');
+  const select=document.getElementById('situacao-'+colabId);
+  const codigo=select?.value||'';
+  const opcoes={A:'A - Ativo',F:'F - Férias',V:'V - Aviso prévio',E:'E - Licença/afastamento',D:'D - Demissão',U:'U - Outros',P:'P - Previdência Social'};
+  if(!opcoes[codigo])return toast('Selecione a situação correta antes de salvar.');
+  const registro=checkRows.find(r=>String(r.id)===String(colabId));
+  if(!registro)return toast('Não foi possível localizar o colaborador no checklist atual.');
+  const payload={situacao:opcoes[codigo],ferias:codigo==='F'};
+  if(codigo!=='F')payload.ferias_marcada=false;
+  const {error}=await db.from('colaboradores_mensal').update(payload).eq('id',colabId);
+  if(error){console.error('Erro ao corrigir situação funcional:',error);return toast('Não foi possível corrigir a situação: '+error.message);}
+  toast('Situação funcional atualizada. Os indicadores serão recalculados.');
+  await loadMesChecklist();
+  await loadDashboard();
+  if(typeof loadGestaoVista==='function')await loadGestaoVista();
 }
 
 async function excluirListaMensalCompleta(){
