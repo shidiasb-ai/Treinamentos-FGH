@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="app-version" content="2026-10-16-v32-importacao-multifonte-6000">
-<title>Sistema de Gestão de Treinamentos FGH — V32 Importação Multifonte</title>
+<meta name="app-version" content="2026-10-22-v37-isolamento-navegacao-login">
+<title>Sistema de Gestão de Treinamentos FGH — V37 Isolamento de Navegação por Login</title>
 <style>
 :root{--bg:#0f172a;--card:#1e293b;--border:#334155;--primary:#0284c7;--primary2:#0369a1;--accent:#38bdf8;--text:#f8fafc;--muted:#94a3b8;--ok:#10b981;--warn:#f59e0b;--danger:#ef4444}
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}body{background:var(--bg);color:var(--text);padding:16px;min-height:100vh}.container{max-width:1400px;margin:auto;display:none}.login{position:fixed;inset:0;background:#0f172a;display:flex;align-items:center;justify-content:center;z-index:99}.login-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:32px;width:min(400px,92vw);box-shadow:0 10px 30px #0008}.login-card h2{color:var(--accent);margin-bottom:6px}.login-card p{color:var(--muted);font-size:13px;margin-bottom:22px}.field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}.field label{font-size:12px;color:var(--muted)}input,select,textarea{width:100%;padding:9px 10px;border:1px solid var(--border);border-radius:6px;background:#0b1120;color:var(--text);font-size:13px}textarea{min-height:90px;resize:vertical}.btn{padding:8px 13px;border:0;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer}.btn-primary{background:var(--primary);color:white}.btn-primary:hover{background:var(--primary2)}.btn-secondary{background:var(--border);color:white}.btn-danger{background:var(--danger);color:white}.btn-warning{background:var(--warn);color:#111}.btn-success{background:var(--ok);color:white}.btn-full{width:100%;padding:12px}.top{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}.brand h1{font-size:18px;color:var(--accent)}.brand p{font-size:12px;color:var(--muted)}.user-tag{font-size:12px;background:#0b1120;border:1px solid var(--border);padding:6px 10px;border-radius:20px}.tabs{display:flex;gap:7px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:14px}.tab{background:transparent;color:var(--muted);border:0;padding:8px 12px;border-radius:6px;cursor:pointer;font-weight:600;font-size:13px}.tab.active{background:var(--primary);color:#fff}.view{display:none}.view.active{display:block}.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:17px;margin-bottom:15px}.title{font-size:15px;font-weight:700;color:var(--accent);margin-bottom:13px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px;margin-bottom:13px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:12px;min-width:900px}th{background:#0b1120;color:var(--muted);text-align:left;padding:9px;border-bottom:1px solid var(--border);position:sticky;top:0}td{padding:9px;border-bottom:1px solid var(--border);vertical-align:middle}.badge{display:inline-block;padding:3px 7px;border-radius:4px;font-size:10px;font-weight:700}.ok{background:#10b98122;color:var(--ok)}.warn{background:#f59e0b22;color:var(--warn)}.danger{background:#ef444422;color:var(--danger)}.info{background:#38bdf822;color:var(--accent)}.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:11px;margin-bottom:15px}.metric{background:#0b1120;border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center}.metric .n{font-size:24px;font-weight:800;margin:4px 0}.metric .l{font-size:11px;color:var(--muted)}.subtabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}.subtab{border:1px solid var(--border);background:#0b1120;color:var(--muted);padding:7px 10px;border-radius:6px;cursor:pointer}.subtab.active{background:var(--primary);color:#fff}.subview{display:none}.subview.active{display:block}.hint{font-size:12px;color:var(--muted);line-height:1.5}.checkbox{width:18px;height:18px;accent-color:var(--primary);cursor:pointer}.searchbar{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;margin-bottom:12px}.scroll-list{max-height:600px;overflow:auto}.danger-text{color:var(--danger)}.success-text{color:var(--ok)}.admin-status{margin-top:10px;padding:10px;border:1px solid var(--border);border-radius:7px;background:#0b1120;font-size:12px}.unit-item{padding:12px;border:1px solid var(--border);border-radius:8px;margin-bottom:10px;background:#0b1120}.unit-head{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}.chart-box{background:#0b1120;border:1px solid var(--border);border-radius:8px;padding:14px}.bar-row{display:grid;grid-template-columns:150px 1fr 50px;gap:8px;align-items:center;margin:8px 0;font-size:11px}.bar-track{height:12px;background:#1e293b;border-radius:20px;overflow:hidden}.bar-fill{height:100%;background:var(--primary);border-radius:20px}.donut{width:150px;height:150px;border-radius:50%;margin:8px auto;display:flex;align-items:center;justify-content:center}.donut-inner{width:105px;height:105px;border-radius:50%;background:#0b1120;display:flex;flex-direction:column;align-items:center;justify-content:center}.donut-inner strong{font-size:25px}.small-note{font-size:11px;color:var(--muted);margin-top:6px}.sector-row{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}.line-chart{width:100%;min-height:280px;overflow:auto}.line-chart svg{width:100%;min-width:760px;height:300px}.line-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:8px}.legend-item{display:flex;align-items:center;gap:5px}.legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block}.multi-years{display:flex;gap:8px;flex-wrap:wrap}.year-chip{display:flex;align-items:center;gap:5px;padding:5px 8px;border:1px solid var(--border);border-radius:6px;background:#0b1120;font-size:11px}.indicator-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}.indicator-item{background:#0b1120;border:1px solid var(--border);border-radius:7px;padding:10px}.indicator-head{display:flex;justify-content:space-between;gap:8px;font-size:12px}.indicator-bar{height:10px;background:#1e293b;border-radius:20px;overflow:hidden;margin-top:7px}.indicator-bar>div{height:100%;background:var(--primary);border-radius:20px}
@@ -177,6 +177,8 @@ async function boot(){
       if(e==='SIGNED_IN'&&s){setTimeout(()=>onSignedIn(s),0)}
       if(e==='SIGNED_OUT'){
         currentUser=null;currentProfile=null;initializedUserId=null;
+        unidades=[];colaboradores=[];atas=[];ementas=[];treinamentos=[];perfis=[];dashboardRows=[];checkRows=[];
+        resetNavegacaoUsuario(true);
         document.querySelector('.container').style.display='none';
         document.getElementById('login').style.display='flex';
       }
@@ -195,6 +197,11 @@ async function login(e){
   if(error){console.error(error);toast('Não foi possível entrar. Verifique o e-mail e a senha.')}
 }
 async function logout(){if(db)await db.auth.signOut()}
+function resetNavegacaoUsuario(limparFormularios=false){
+  document.querySelectorAll('.tab,.view,.subtab,.subview').forEach(el=>el.classList.remove('active'));
+  if(limparFormularios)document.querySelectorAll('form').forEach(form=>{try{form.reset()}catch(e){}});
+  const login=document.getElementById('login');if(login)login.style.display='flex';
+}
 async function onSignedIn(session){
   currentUser=session.user;
   if(initializedUserId===currentUser.id && currentProfile) return;
@@ -202,6 +209,7 @@ async function onSignedIn(session){
   if(error||!profile){await db.auth.signOut();return toast('Sua conta foi autenticada, mas não possui perfil cadastrado. Solicite ao administrador.')}
   currentProfile={...profile,setor_ids:[...(profile.perfil_setores||[]).map(x=>x.setor_id),...(profile.setor_id?[profile.setor_id]:[])].filter((x,i,a)=>x!=null&&a.findIndex(y=>String(y)===String(x))===i)};
   initializedUserId=currentUser.id;
+  resetNavegacaoUsuario(false);
   document.querySelector('.container').style.display='block';
   document.getElementById('login').style.display='none';
   document.getElementById('user-display').textContent=`${profile.nome||currentUser.email} — ${roleLabel(profile.perfil)}`;
@@ -210,6 +218,8 @@ async function onSignedIn(session){
 }
 function aplicarPermissoes(){
   const full=hasFullDataAccess(), gestor=isGestor()||isGestorMedico(), comum=isComum(), lnt=isCadastroLNT();
+  // Cada login começa em uma navegação limpa, sem herdar a aba/subaba do usuário anterior.
+  document.querySelectorAll('.tab,.view,.subtab,.subview').forEach(el=>el.classList.remove('active'));
   document.getElementById('tab-dashboard').style.display=(full||gestor)?'block':'none';
   document.getElementById('tab-gestao').style.display=lnt?'none':'block';
   document.getElementById('tab-atas').style.display=(full||gestor||lnt)?'block':'none';
@@ -235,11 +245,14 @@ function aplicarPermissoes(){
     document.querySelector('#view-atas .subtabs button[onclick*="cadastro-treinamentos"]')?.classList.add('active');
     document.getElementById('sub-atas-cadastro-treinamentos')?.classList.add('active');
   }else{
-    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-    document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
     document.getElementById('tab-dashboard')?.classList.add('active');
     document.getElementById('view-dashboard')?.classList.add('active');
   }
+  // Ao abrir Atas, o usuário começa na subaba permitida para seu perfil.
+  const subDefault=lnt?'cadastro-treinamentos':'registrar-ata';
+  const subButton=document.querySelector(`#view-atas .subtabs button[onclick*="${subDefault}"]`);
+  const subView=document.getElementById('sub-atas-'+subDefault);
+  if(subButton&&subView){subButton.classList.add('active');subView.classList.add('active')}
 }
 
 async function initData(){fillRangeSelects('dash-inicio','dash-fim');fillRangeSelects('gv-inicio','gv-fim');fillMonthSelect('imp-mes');fillMonthSelect('check-mes');fillMonthOnly('hist-ata-mes');fillYearOnly('hist-ata-ano');fillMonthOnly('hist-ementa-mes');fillYearOnly('hist-ementa-ano');await Promise.all([loadUnits(),loadProfiles(),loadAtas(),loadEmentas(),loadTreinamentos()]);preencherFormularioUsuario('u-unidade','u-setores');preencherFormularioUsuario('ed-unidade','ed-setores');populateFilters();await loadDashboard();await loadMesChecklist();renderUsuarios();renderUnidades();renderTreinamentos();renderHistoricoAtas();renderHistoricoEmentas()}
